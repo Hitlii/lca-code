@@ -5,11 +5,10 @@ const { ApolloServer} = require('apollo-server-express');
 const express = require('express');
 const expressJwt = require('express-jwt');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 
 const resolvers = require('./src/graphql/resolvers');
 const typeDefs = require('./src/graphql/typeDefs');
-
+const {verifyUser} = require('./src/graphql/helper/context');
 const app = express();
 
 // Mongoose connection configuration options
@@ -23,16 +22,17 @@ app.use(
     expressJwt({
         secret: process.env.SUPER_SECRET,
         algorithms: ["HS256"],
-        credentialsIsRequired: false
+        credentialsRequired: false
     })
-)
+);
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({req}) => {
-        const user = req.user || null;
-        return {user};
+    context: async ({ req }) => {
+        await verifyUser(req);
+        
+        return { email: req.email};
     }
 })
 
