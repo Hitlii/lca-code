@@ -1,14 +1,14 @@
 import { useState, useContext } from 'react'    
 import { gql, useMutation} from '@apollo/client'
 import { useRouter } from 'next/router'
-import { AuthContext } from '../context/auth'
+import { AuthContext } from '../../context/auth'
 
-import {green, grey6} from '../public/colors.js'
-import styles from '../styles/Login.module.css'
+import {green, grey6} from '../../public/colors.js'
+import styles from '../../styles/Login.module.css'
 
-import Button from './components/Button'
-import Input from './components/Input'
-import Checkbox from './components/Checkbox'
+import Button from '../components/Button'
+import Input from '../components/Input'
+import Checkbox from '../components/Checkbox'
 import Link from 'next/link'
 
 function Login() {

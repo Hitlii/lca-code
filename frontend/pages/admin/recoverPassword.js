@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Button from './components/Button'
-import Input from './components/Input'
-import {green, grey6} from '../public/colors.js'
-import styles from '../styles/Login.module.css'
+import Button from '../components/Button'
+import Input from '../components/Input'
+import {green, grey6} from '../../public/colors.js'
+import styles from '../../styles/Login.module.css'
 
 function recoverPassword() {
 
