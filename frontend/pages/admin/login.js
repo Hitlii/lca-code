@@ -39,7 +39,7 @@ function Login() {
         rememberMe: false
     })
 
-    const [erros, setErrors] = useState({})
+    const [errors, setErrors] = useState({})
 
     const [loginAdmin] = useMutation(LOGIN_ADMIN, {
         update(

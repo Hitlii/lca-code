@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {green, grey6} from '../../public/colors.js'
 import Grid from '@material-ui/core/Grid'
 import Collapse from '@material-ui/core/Collapse';
+import { useRouter } from 'next/router'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,23 +47,43 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const ShowInformaction = ({showInformationCheck}) => {
+
     const classes = useStyles()
+    const router = useRouter()
+
+    const onClickAboutUs = () => {
+        router.push('/aboutUs')
+    }
+    const onClickServices = () => {
+        router.push('/services')
+    }
 
     return (
         <Container maxWidth="lg" className={classes.container}>
             <Collapse in={showInformationCheck} className={classes.collapseStyle}>
                 
                 <Grid container justify="center">
-                    <Button variant="contained" xs={6}
-                            className={classes.appButtonStyle} >Nostros</Button>
+                    <Button 
+                        variant="contained" 
+                        xs={6}
+                        className={classes.appButtonStyle} 
+                        onClick={onClickAboutUs}
+                    >   Nosotros
+                    </Button>
         
-                    <Button variant="contained" xs={6}
-                            className={classes.appButtonStyle} >Servicios</Button>
+                    <Button 
+                        variant="contained" 
+                        xs={6}
+                        className={classes.appButtonStyle} 
+                        onClick={onClickServices}
+                    >   Servicios
+                    </Button>
                 </Grid>
 
                 <Grid container  justify="center">
                     <Button variant="contained" xs={12} text=''
-                            className={classes.sellButtonStyle} >Vender Propiedad</Button>
+                            className={classes.sellButtonStyle} 
+                            >Vender Propiedad</Button>
                     
                 </Grid>
                 

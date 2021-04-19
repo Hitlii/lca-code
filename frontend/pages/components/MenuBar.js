@@ -1,14 +1,15 @@
-import {React,useState,useEffect } from 'react'
-import {CardMedia, Typography,Button, Container} from '@material-ui/core'
+import { React ,useState } from 'react'
+import { CardMedia, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 
+import Link from 'next/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SearchIcon from '@material-ui/icons/Search'
 import PhoneIcon from '@material-ui/icons/Phone'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Grid from '@material-ui/core/Grid'
 import ShowContact from './ShowContact'
-import ShowInformaction from './ShowInformaction'
+import ShowInformation from './ShowInformation'
 
 const useStyles = makeStyles((theme) => ({
     root:{ 
@@ -70,7 +71,9 @@ function MenuBar() {
         <Grid container  justify="center">
         <Grid container justify="center">
             <Grid item xs={6}>
-                <CardMedia className={classes.logoStyle} image='/LogoOriginalSF.png'/>
+                <Link href='/'>
+                    <CardMedia className={classes.logoStyle} image='/LogoOriginalSF.png'/>
+                </Link>
             </Grid>
         
             <Grid item xs={2} >
@@ -81,20 +84,20 @@ function MenuBar() {
 
             <Grid item xs={2}>
                 <IconButton  className={classes.buttonStyle} onClick={hanleShowContactButton}>
-                <PhoneIcon/>
+                    <PhoneIcon/>
                 </IconButton>
             </Grid>
 
             <Grid item xs={2}>
                 <IconButton  className={classes.buttonStyle} onClick={hanleShowInformationButton}>
-                <ExpandMoreIcon/>
+                    <ExpandMoreIcon/>
                 </IconButton> 
             
             </Grid>
         </Grid>
 
         <ShowContact showContactCheck={showContactCheck}/>
-        <ShowInformaction showInformationCheck={showInformationCheck}/>
+        <ShowInformation showInformationCheck={showInformationCheck}/>
 
         </Grid>
         </Container>
