@@ -7,7 +7,7 @@ function aboutUs() {
             <MenuBar/>
             <div>
                 <h1>Nosotros</h1>
-                <p>LCA Biees Raices y Asistencia Profesional, SAS de C.V. , “Juntos por tu patrimonio”. Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil e industrial.</p>
+                <p>LCA Bienes Raices y Asistencia Profesional, SAS de C.V. , “Juntos por tu patrimonio”. Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil e industrial.</p>
                 <p>En LCA Bienes Raíces te asesoramos de manera personalizada y te aclaramos tus dudas antes de iniciar con los trámites de compra o venta de tus bienes…también te acompañamos de inicio a fin en las instituciones correspondientes.</p>
                 <h2>Misión:</h2>
                 <p>Ofrecer servicios inmobiliarios y de asistencia profesional de vanguardia que cumplan con las expectativas de nuestros clientes, estableciendo así bases sólidas y estables de servicio.</p>
