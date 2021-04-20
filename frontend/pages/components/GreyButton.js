@@ -7,7 +7,9 @@ const useStyles = makeStyles((theme)=>({
         height: 40,
         width: 340,
         marginBottom: 10,
-        backgroundColor: '#F2F2F2'
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        border: 10,
     }
 }))
 

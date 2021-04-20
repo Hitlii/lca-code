@@ -90,7 +90,7 @@ function Login() {
                     onClick={onSubmit}
                 />
             </form>
-            <Link href='/recoverPassword'>Recuperar contraseña</Link>
+            <Link href='/admin/recoverPassword'>Recuperar contraseña</Link>
         </div>
     )
 }

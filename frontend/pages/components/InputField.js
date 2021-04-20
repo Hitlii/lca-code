@@ -7,7 +7,8 @@ const useStyles = makeStyles((theme) => ({
     input: {
         width: 340,
         height: 40,
-        marginBottom: 30,  
+        marginBottom: 30, 
+        border: '1px solid #4CAF50'
     }
 }))
 
