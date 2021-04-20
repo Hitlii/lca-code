@@ -1,10 +1,11 @@
-
-import {ardMedia, Typography,Button, Container} from '@material-ui/core'
+import {useEffect} from 'react'
+import {CardMedia, Typography,Button, Container} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { FaWhatsapp,FaFacebookMessenger } from 'react-icons/fa';
 import Grid from '@material-ui/core/Grid'
 import Collapse from '@material-ui/core/Collapse';
 import {green, grey6} from '../../public/colors.js'
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
     
@@ -46,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
     container:{
         padding:0,
         margin:0,
+    },
+    link: {
+        textDecoration:'none'
     }
   }));
 
@@ -60,15 +64,22 @@ const ShowContact = ({showContactCheck}) => {
                 <Typography variant="h6" className={classes.contactTextStyle}>Contactar por</Typography>
                 <Grid container justify="center">
                     
-                    <Button variant="text" xs={6} 
+                    <a className={classes.link} target='_blank' href='https://api.whatsapp.com/send?phone=+526653922230&text=hola,%20qu%C3%A9%20tal?' rel='noopener noreferrer'>
+                        <Button variant="text" xs={6} 
                             className={classes.appButtonStyle} 
-                            startIcon={<FaWhatsapp className={classes.whatsappIconStyle}/>}>Whatsapp</Button>
+                            startIcon={<FaWhatsapp className={classes.whatsappIconStyle}/>}
+                        > Whatsapp
+                        </Button>
+                    </a>
                     
-                    
-                    <Button variant="text" xs={6} 
+                    <a className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
+                        <Button 
+                            variant="text" xs={6} 
                             className={classes.appButtonStyle} 
                             startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
-                    >Message </Button>
+                        > Message 
+                        </Button>
+                    </a>
                     
                 </Grid>
                 

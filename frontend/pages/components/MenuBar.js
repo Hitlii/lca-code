@@ -1,8 +1,9 @@
+
 import { React ,useState } from 'react'
 import { CardMedia, Container } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
+import Link from 'next/link'
 
-import Link from 'next/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SearchIcon from '@material-ui/icons/Search'
 import PhoneIcon from '@material-ui/icons/Phone'
