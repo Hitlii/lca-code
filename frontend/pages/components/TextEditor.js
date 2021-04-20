@@ -10,8 +10,8 @@ import { Editor, Transforms, Text } from 'slate'
 
 import Typography from '@material-ui/core/Typography';
 
-export default function addProperty() {
 
+function TextEditor() {
     const editor = useMemo(() => withReact(createEditor()), [])
 
     const [value, setValue] = useState([
@@ -102,6 +102,8 @@ export default function addProperty() {
                 }}
             />
         </Slate>
-    );
+    )
 }
+
+export default TextEditor
 

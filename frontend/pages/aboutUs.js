@@ -1,11 +1,21 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/core/styles';
 import MenuBar from './components/MenuBar'
+import Paper from '@material-ui/core/Paper'
+
+const useStyles = makeStyles({
+    root: {
+    }
+})
 
 function aboutUs() {
+
+    const classes = useStyles()
+
     return (
         <div>
             <MenuBar/>
-            <div>
+            <Paper>
                 <h1>Nosotros</h1>
                 <p>LCA Bienes Raices y Asistencia Profesional, SAS de C.V. , “Juntos por tu patrimonio”. Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil e industrial.</p>
                 <p>En LCA Bienes Raíces te asesoramos de manera personalizada y te aclaramos tus dudas antes de iniciar con los trámites de compra o venta de tus bienes…también te acompañamos de inicio a fin en las instituciones correspondientes.</p>
@@ -33,7 +43,7 @@ function aboutUs() {
                 <p>Esta compañía no venderá, cederá ni distribuirá la información personal que es recopilada sin su consentimiento, salvo que sea requerido por un juez con un orden judicial.</p>
                 <p>LCA Bienes Raices Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier momento.</p>
                 <p>Esta politica de privacidad se han generado en politicadeprivacidadplantilla.com.</p>
-            </div>
+            </Paper>
         </div>
     )
 }

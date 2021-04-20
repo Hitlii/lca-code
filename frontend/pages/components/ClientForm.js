@@ -1,45 +1,31 @@
-import {React,useState} from 'react'
+import React, { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Collapse from '@material-ui/core/Collapse';
-import MenuItem from '@material-ui/core/MenuItem'
-import Input from '../components/Input'
-import { makeStyles } from '@material-ui/core/styles';
-import { green, grey6 } from '../../public/colors'
-import Select from '@material-ui/core/Select';
-import styles from '../../styles/ClientForm.module.css'
+import GreenButton from './GreenButton'
+import GreyButton from './GreyButton'
+import InputField from './InputField'
+import useForm from '../../hooks/useForm'
 
-const useStyles = makeStyles(theme=>({
+const useStyles = makeStyles((theme)=>({
     formContainer: {
-        margin:0,
-        padding:0,
-        textAlign: 'center'
+        padding: 0,
+        margin: 0,
+        textAlign: 'center',
     },
-    buttonAdd: {
-        width:340,
-        height:40,
-        borderRadius: 15,
-        backgroundColor: '#4CAF50',
-        marginBottom: 20
-    },
-    buttonCancel: {
-        width:340,
-        height:40,
-        borderRadius: 15,
-        backgroundColor: '#F2F2F2'
+    headers: {
+        marginBottom: 10,    
     }
 }))
 
+function ClientForm() {
 
-const ClientForm = () => {
+    const classes = useStyles()
 
-    const classes=useStyles()
-    
-    const [client, setClient] = useState({
+    const [errors, setErrors] = useState({})
+
+    const { onChange, onSubmit, values } = useForm(addClientCallback, {
         name: '',
-        dob: new Date(),
+        dob: '',
         gender: '',
         profession: '',
         email: '',
@@ -48,113 +34,86 @@ const ClientForm = () => {
         address: ''
     })
 
-    const genders = ['Hombre','Mujer','Otro']
-
-    const onSubmit = () => {
-        console.log(client)
+    function addClientCallback() {
+        
     }
 
-    return (
-        <Container maxWidth="xs" className={classes.formContainer}>
-            
-            <form className={classes.formContainer}> 
-                <p><strong>Información del cliente</strong></p>
-                <input
-                    className={styles.input_style}
-                    type='text'
-                    placeholder='Nombre Completo'
-                    value={client.name}
-                    onChange={(e) => setClient({...client, name:e.target.value})}
-                    color={grey6}
-                />
+    const genders = ['Hombre','Mujer','Otro']
 
-                <input
-                    className={styles.input_style}
+    return(
+        <Container maxWidth='sm' className={classes.formContainer}>
+            <form className={classes.formContainer}>
+                <p className={classes.headers}><strong>Informacion del cliente</strong></p>
+                <InputField
+                    placeholder='Nombre completo'
+                    type='text'
+                    value={values.name}
+                    name='name'
+                    onChange={onChange}
+                />
+                <InputField
                     type='date'
-                    placeholder='Fecha De Nacimiento dd/mm/yyyy'
-                    value={client.dob}
-                    onChange={(e) => setClient({...client, dob:e.target.value})}
-                    color={grey6}
+                    value={values.dob}
+                    name='dob'
+                    onChange={onChange}
                 />
-                
-                <Select
-                    className={styles.input_style}
-                    id="gender"   
-                    placeholder='Genero'
-                    variant='outlined'
-                    value={client.gender}
-                    onChange={(e) => setClient({...client, gender:e.target.value})}
-                >
-            
-                {genders.map((gender)=>(
-                    <MenuItem key={gender} value={gender}>
-                        {gender}
-                    </MenuItem>
-                ))}
-                </Select>    
-                
-                
-                <input
-                    className={styles.input_style}
+                <InputField
+                    select
+                    object={genders}
+                    placeholder='Género'
                     type='text'
-                    placeholder='Profesión'
-                    value={client.profession}
-                    onChange={(e) => setClient({...client, profession:e.target.value})}
-                    color={grey6}
+                    value={values.gender}
+                    name='gender'
+                    onChange={onChange}
+                />
+                <InputField
+                    type='text'
+                    value={values.profession}
+                    name='profession'
+                    onChange={onChange}
                 />
 
-                <p><strong>Contacto</strong></p>
-                <input
-                    className={styles.input_style}
-                    type='email'
+                <p className={classes.headers}><strong>Contacto</strong></p>
+                <InputField
                     placeholder='Email'
-                    value={client.email}
-                    onChange={(e) => setClient({...client, email:e.target.value})}
-                    color={grey6}
+                    type='email'
+                    value={values.email}
+                    name='email'
+                    onChange={onChange}
                 />
-                 <input
-                    className={styles.input_style}
+                <InputField
+                    placeholder='Teléfono'
                     type='text'
-                    placeholder='Telefóno'
-                    value={client.phone}
-                    onChange={(e) => setClient({...client, phone:e.target.value})}
-                    color={grey6}
+                    value={values.phone}
+                    name='phone'
+                    onChange={onChange}
                 />
 
-                <p><strong>Ubicación</strong></p>
-                <input
-                    className={styles.input_style}
-                    type='text'
+                <p className={classes.headers}><strong>Ubicación</strong></p>
+                <InputField
                     placeholder='Localidad'
-                    value={client.location}
-                    onChange={(e) => setClient({...client, location:e.target.value})}
-                    color={grey6}
-                />
-                 <input
-                    className={styles.input_style}
                     type='text'
-                    placeholder='Dirección'
-                    value={client.address}
-                    onChange={(e) => setClient({...client, address:e.target.value})}
-                    color={grey6}
+                    value={values.location}
+                    name='location'
+                    onChange={onChange}
                 />
-
-                <Button
-                    className={classes.buttonAdd}
-                    variant='contained'
+                <InputField
+                    placeholder='Dirección'
+                    type='text'
+                    value={values.address}
+                    name='address'
+                    onChange={onChange}
+                />
+                <GreenButton 
                     onClick={onSubmit}
-                >
-                    Agregar
-                </Button>
-                <Button
-                    className={classes.buttonCancel}
-                    variant='contained'
-                >
-                    Cancelar
-                </Button>
+                    text='Aceptar'
+                />
+                <GreyButton 
+                    text='Cancelar'
+                />
             </form>
-
-        </Container>
+        </Container>  
+        
     )
 }
 
