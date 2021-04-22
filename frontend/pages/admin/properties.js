@@ -49,7 +49,7 @@ export default function addProperty() {
                     <SearchIcon />
                 </IconButton>
             </Paper>
-            <TextEditor />
+            
             <NavBar />
         </div>
     )

@@ -11,11 +11,8 @@
     "@apollo/client": "^3.3.14",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-<<<<<<< Updated upstream
     "emotion": "^11.0.0",
-=======
     "@react-google-maps/api": "^2.1.1",
->>>>>>> Stashed changes
     "graphql": "^15.5.0",
     "is-hotkey": "^0.2.0",
     "jwt-decode": "^3.1.2",

@@ -28,12 +28,20 @@ import isHotkey from 'is-hotkey'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        padding: 0
+        padding: 0,
+        textAlign: 'left',
+        maxWidth: 540,
+        marginBottom: 10
     },
     toolbar: {
         padding: 0,
         justifyContent: 'space-between',
         backgroundColor: '#f2f2f2'
+    },
+    editable: {
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingTop: 5,
     }
 }))
 
@@ -45,31 +53,33 @@ const HOTKEYS = {
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
 
-function TextEditor() {
+function TextEditor({ value, onChange }) {
     const classes = useStyles()
-    const [value, setValue] = useState(initialValue)
+    //const [value, setValue] = useState(initialValue)
     const renderElement = useCallback(props => <Element {...props} />, [])
     const renderLeaf = useCallback(props => <Leaf {...props} />, [])
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
 
     return (
-        <Paper elevation={0} className={classes.root}>
-            <Toolbar className={classes.toolbar}>
-                <MarkButton editor={editor} format='bold' icon='bold'/>
-                <MarkButton editor={editor} format='italic' icon='italic'/>
-                <MarkButton editor={editor} format='underline' icon='underline'/>
-                <BlockButton editor={editor} format="heading-one" icon='looks_one' />
-                <BlockButton editor={editor} format="heading-two" icon='looks_two' />
-                <BlockButton editor={editor} format="numbered-list" icon='list_numbered' />
-                <BlockButton editor={editor} format="bulleted-list" icon='list' />
-            </Toolbar>
+        <Paper elevation={0} variant='outlined' className={classes.root}>
             <Slate
                 editor={editor}
                 value={value}
-                onChange={newValue => setValue(newValue)}
+                onChange={onChange}
             >
+                <Toolbar className={classes.toolbar}>
+                  <MarkButton editor={editor} format='bold' icon='bold'/>
+                  <MarkButton editor={editor} format='italic' icon='italic'/>
+                  <MarkButton editor={editor} format='underline' icon='underline'/>
+                  <BlockButton editor={editor} format="heading-one" icon='looks_one' />
+                  <BlockButton editor={editor} format="heading-two" icon='looks_two' />
+                  <BlockButton editor={editor} format="numbered-list" icon='list_numbered' />
+                  <BlockButton editor={editor} format="bulleted-list" icon='list' />
+                </Toolbar>
                 <Editable
+                    className={classes.editable}
+                    placeholder='Ingresa la descripcion aqui...'
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
                 />
@@ -205,6 +215,7 @@ const Leaf = ({ attributes, children, leaf }) => {
     return <span {...attributes}>{children}</span>
 }
 
+/*
 const initialValue = [
     {
         type: 'paragraph',
@@ -213,6 +224,7 @@ const initialValue = [
         ]
     },
 ]
+*/
 
 export default TextEditor
 
