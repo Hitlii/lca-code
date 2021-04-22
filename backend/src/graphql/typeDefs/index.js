@@ -1,5 +1,6 @@
 const userTypeDefs = require('./user');
 const clientTypeDefs = require('./client');
+const propertyTypeDefs = require('./property');
 
 const { gql  } = require('apollo-server-express');
 
@@ -8,6 +9,12 @@ const { gql  } = require('apollo-server-express');
 // because a typo cannot be extended if it is empty
 const typeDefs = gql`
 
+    "Interface of Location, used in Client and Property types"
+    interface Location {
+        city: String
+        state: String
+        address: String
+    }
     type Query{
         _ : String
     }
@@ -20,5 +27,6 @@ const typeDefs = gql`
 module.exports = [
     typeDefs,
     userTypeDefs,
-    clientTypeDefs
+    clientTypeDefs,
+    propertyTypeDefs,
 ]

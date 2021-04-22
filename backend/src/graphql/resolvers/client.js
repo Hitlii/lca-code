@@ -23,22 +23,22 @@ module.exports = {
         }
     },
     Mutation: {
-        createClient: async (_, args) => {
+        createClient: async (_, {name, gender, birthday, email, phone, city, state,address}) => {
             const client = new Client({
-                name: args.name,
-                gender: args.gender,
-                birthday: args.birthday,
+                name,
+                gender,
+                birthday,
                 contact: {
-                    email: args.email,
-                    phone: args.phone
+                    email,
+                    phone
                 },
                 location: {
-                    city: args.city,
-                    state: args.state,
-                    address: args.address
+                    city,
+                    state,
+                    address
                 }
             });
-
+            // DB Client Creation
             const newClient = await client.save();
             return newClient;
         },
