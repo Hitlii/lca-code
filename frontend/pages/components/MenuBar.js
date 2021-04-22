@@ -22,20 +22,28 @@ const useStyles = makeStyles((theme) => ({
         width:40,
         height:40,
         backgroundColor:'#F2F2F2',
+        marginRight:'auto',
         borderRadius:'50%',
         '&:hover':{
             backgroundColor:'grey'
-        }
+        },
+        ['@media (max-width:320px)']: { // eslint-disable-line no-useless-computed-key
+            margin:5,
+            marginTop:10,
+          }
     },
     logoStyle:{
         width:87,
         height:40,
         margin:10,
+        
     },
     container:{
-        padding:0,
-        margin:0,
-        justify:'center',
+        
+        [theme.breakpoints.only('xs')]:{
+            padding:0,
+            margin:0,
+        }
 
     }
     
@@ -69,27 +77,27 @@ function MenuBar() {
 
     return (
         <Container maxWidth="lg" className={classes.container} >
-        <Grid container  justify="center">
-        <Grid container justify="center">
-            <Grid item xs={6}>
+        <Grid container justify="center"  direction='row'>
+        
+            <Grid item xs={6} >
                 <Link href='/'>
                     <CardMedia className={classes.logoStyle} image='/LogoOriginalSF.png'/>
                 </Link>
             </Grid>
         
-            <Grid item xs={2} >
+            <Grid  >
                 <IconButton  className={classes.buttonStyle}>
                 <SearchIcon/>
                 </IconButton>
             </Grid>
 
-            <Grid item xs={2}>
+            <Grid >
                 <IconButton  className={classes.buttonStyle} onClick={hanleShowContactButton}>
                     <PhoneIcon/>
                 </IconButton>
             </Grid>
 
-            <Grid item xs={2}>
+            <Grid >
                 <IconButton  className={classes.buttonStyle} onClick={hanleShowInformationButton}>
                     <ExpandMoreIcon/>
                 </IconButton> 
@@ -100,7 +108,7 @@ function MenuBar() {
         <ShowContact showContactCheck={showContactCheck}/>
         <ShowInformation showInformationCheck={showInformationCheck}/>
 
-        </Grid>
+        
         </Container>
     )
 }

@@ -58,7 +58,7 @@ const ShowContact = ({showContactCheck}) => {
 
     return (
         
-        <Container maxWidth="lg" className={classes.container} >
+        <Container  className={classes.container} >
             <Collapse in={showContactCheck} className={classes.collapseStyle}>
                 
                 <Typography variant="h6" className={classes.contactTextStyle}>Contactar por</Typography>
