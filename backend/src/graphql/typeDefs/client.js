@@ -32,7 +32,7 @@ module.exports = gql`
         "Mutation to create a new client, returns the created client"
         createClient(name: String!, gender: String, birthday: String, email: String, phone: String, city: String, state: String, address: String): Client
         "Mutation to update the details of a client, returns the updated client"
-        updateClient(id:ID!, name: String, gender: String, birthday: String, email: String, phone: String, city: String, state: String, address: String): Client
+        updateClient(id: ID!, name: String, gender: String, birthday: String, email: String, phone: String, city: String, state: String, address: String): Client
         "Mutation to delete an existing client by ID, returns a boolean to indicate whether the operation was succesful or not"
         deleteClient(id: ID!): Boolean
     }

@@ -23,7 +23,7 @@ module.exports = {
         }
     },
     Mutation: {
-        createClient: async (_, {name, gender, birthday, email, phone, city, state,address}) => {
+        createClient: async (_, {name, gender, birthday, email, phone, city, state, address}) => {
             const client = new Client({
                 name,
                 gender,
@@ -38,20 +38,59 @@ module.exports = {
                     address
                 }
             });
-            // DB Client Creation
-            const newClient = await client.save();
-            return newClient;
+
+            try {
+                // DB Client Creation
+                const newClient = await client.save();
+                return newClient;
+            } catch(error) {
+                console.log(error);
+                throw error;
+            }
         },
         updateClient: async (_, args) => {
-            return;
-        },
-        deleteClient: async (_, { name }) => {
-            return Client.findOneAndDelete(
-                { name },
-                (err) => {
-                    if(err) throw new UserInputError("Hubo un problema borrando al cliente");
+            // Set fields to update
+            const tempClient = {
+                name: args.name,
+                gender: args.gender,
+                birthday: args.birthday,
+                contact: {
+                    email: args.email,
+                    phone: args.phone
+                },
+                location: {
+                    city: args.city,
+                    state: args.state,
+                    address: args.address
                 }
-            );
+            };
+            
+            try {
+                // Wait for update operation
+                const updatedClient = await Client.findByIdAndUpdate(
+                    args.id, 
+                    { $set: tempClient }, 
+                    { new: true }
+                );
+                // Return updated fields
+                return updatedClient;
+            } catch(error) {
+                console.log(error);
+                throw error;
+            }
+        },
+        deleteClient: async (_, { id }) => {
+            // Find client to delete
+            const client = await Client.findById(id);
+            try {
+                // Wait for delete operation
+                await client.deleteOne();
+                // Indicate correct deletion
+                return true;
+            } catch(error) {
+                console.log(error);
+                throw error;
+            }
         }
     }
 }

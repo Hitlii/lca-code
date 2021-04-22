@@ -16,7 +16,7 @@ module.exports = {
                 return user || null;
             } catch (error) {
                 console.log(error);
-                throw error
+                throw error;
             }
         })
     },
@@ -45,7 +45,7 @@ module.exports = {
                 return { token };
 
             } catch (error) {
-                console.log(error)
+                console.log(error);
 
                 throw error;
             }

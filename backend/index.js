@@ -15,7 +15,8 @@ const app = express();
 let mongooseOptions = {
     useNewUrlParser:true, 
     useUnifiedTopology:true, 
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }
 
 app.use(
