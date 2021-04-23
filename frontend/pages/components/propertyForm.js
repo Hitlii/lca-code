@@ -3,6 +3,7 @@ import usePropertyForm from '../../hooks/usePropertyForm'
 
 import GreenButton from './GreenButton'
 import GreyButton from './GreyButton'
+import ImageHandler from './ImageHandler'
 import InputField from './InputField'
 import Paper from '@material-ui/core/Paper'
 import TextEditor from './Slate/TextEditor'
@@ -20,7 +21,7 @@ function propertyForm() {
 
     const classes = useStyles()
 
-    const { onChange, onChangeDescription, onSubmit, property } = usePropertyForm(addPropertyCallback)
+    const { onChange, onChangeDescription, onChangeImages, onDeleteImage, onSubmit, property } = usePropertyForm(addPropertyCallback)
 
     function addPropertyCallback() {
 
@@ -38,6 +39,11 @@ function propertyForm() {
             <TextEditor 
                 value={property.description}
                 onChange={onChangeDescription}
+            />
+            <ImageHandler 
+                values={property.images}
+                onChangeImages ={onChangeImages}
+                onDeleteImage={onDeleteImage}
             />
             <GreenButton 
                 onClick={onSubmit}

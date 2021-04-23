@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const ShowImageFile = ({selectImages,handleImage}) => {
-    
+const ShowImageFile = ({ values, handleImage }) => {
     
     const classes = useStyles()
+
     return (
         <Container >
                 <Paper>
-                {selectImages.map((photo)=>{
+                {values && values.map((photo)=>{
                     return <button 
                     className={classes.imgButtonStyle}
                     key={photo.key} 
