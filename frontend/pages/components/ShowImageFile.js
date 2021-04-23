@@ -31,8 +31,8 @@ const ShowImageFile = ({ values, handleImage }) => {
     return (
         <Container >
                 <Paper>
-                {values && values.map((photo)=>{
-                    return <button 
+                {values && values.map((photo)=>
+                    <button 
                     className={classes.imgButtonStyle}
                     key={photo.key} 
                     onClick={handleImage}>
@@ -40,7 +40,7 @@ const ShowImageFile = ({ values, handleImage }) => {
                         data-index={photo.key} 
                         className={classes.imgStyle}/>
                     </button>
-                })}
+                )}
                 </Paper>
                
         </Container>

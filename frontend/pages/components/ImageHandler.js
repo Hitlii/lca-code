@@ -55,9 +55,9 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const ImageHandler = ({ values, onChangeImages, onDeleteImage }) => {
+const ImageHandler = ({ auxImages, setAuxImages,changeImages }) => {
     const classes = useStyles()
-    const [arrayImage,setArrayImage]=useState(values)
+    // const [arrayImage,setArrayImage]=useState([])
     const [deleteMode,setDeleteMode] = useState(false)
     const [changeMode,setChangeMode] = useState(false)
     const [indexElement,setIndexElement] = useState(-1)
@@ -67,8 +67,8 @@ const ImageHandler = ({ values, onChangeImages, onDeleteImage }) => {
     const imageHandleChange=(e)=>{
         setChangeMode(false)
         setDeleteMode(false)
-        onChangeImages(e.target.files)
-        /*
+        // onChangeImages(e.target.files)
+        
         if(e.target.files){
             const fileArray = Array.from(e.target.files)
             console.log(fileArray)
@@ -79,39 +79,38 @@ const ImageHandler = ({ values, onChangeImages, onDeleteImage }) => {
                         key:uuidv4(),
                         url:reader.result
                     }
-                    setArrayImage(oldImages => [...oldImages, variable])
-                    console.log(variable)
-                    onChangeImages(variable)      
+                    setAuxImages(preview => [...preview, variable])
+  
                 }
                 reader.readAsDataURL(preview)
             })    
             
         }
-        */
+        
     }
     
     const handleImage =(e)=>{
         
         if(deleteMode){  
-            onDeleteImage(e)
+            setAuxImages(auxImages.filter((image) => image.key !== e.target.getAttribute('data-index')))
         }else if(changeMode){
             if(indexElement < 0){
-                let initIndex=arrayImage.findIndex(element => element.key ===e.target.getAttribute("data-index"))
+                let initIndex=auxImages.findIndex(element => element.key ===e.target.getAttribute("data-index"))
                 setIndexElement(initIndex)
                 
             } else if(indexElement >=0 ){
                 
-                let finalIndex=arrayImage.findIndex(element => element.key ===e.target.getAttribute("data-index"))
+                let finalIndex=auxImages.findIndex(element => element.key ===e.target.getAttribute("data-index"))
                 if(indexElement === finalIndex){
                     setIndexElement(-1)
                 }else{ 
                     
-                    let initElement = arrayImage[indexElement]
-                    let images = Array.from(arrayImage)   
-                    images.splice(indexElement,1,arrayImage[finalIndex])
+                    let initElement = auxImages[indexElement]
+                    let images = Array.from(auxImages)   
+                    images.splice(indexElement,1,auxImages[finalIndex])
                     images.splice(finalIndex,1,initElement)
-                    setArrayImage(images)
-                    onChangeImages(arrayImage)
+                    setAuxImages(images)
+                    // onChangeImages(arrayImage)
                     setIndexElement(-1)
                     
                 }
@@ -165,7 +164,7 @@ const ImageHandler = ({ values, onChangeImages, onDeleteImage }) => {
                     </IconButton>
                 </Grid>
             
-                <ContainerImageFile values={values} handleImage={handleImage}/>
+                <ContainerImageFile values={auxImages} handleImage={handleImage}/>
             </Paper>   
     )
 }

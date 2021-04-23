@@ -21,7 +21,7 @@ function propertyForm() {
 
     const classes = useStyles()
 
-    const { onChange, onChangeDescription, onChangeImages, onDeleteImage, onSubmit, property } = usePropertyForm(addPropertyCallback)
+    const { onChange, onChangeDescription, onChangeImages, onDeleteImage, onSubmit, property,auxImages,setAuxImages } = usePropertyForm(addPropertyCallback)
 
     function addPropertyCallback() {
 
@@ -41,9 +41,11 @@ function propertyForm() {
                 onChange={onChangeDescription}
             />
             <ImageHandler 
-                values={property.images}
-                onChangeImages ={onChangeImages}
-                onDeleteImage={onDeleteImage}
+                //values={property.images}
+                // onChangeImages ={onChangeImages}
+                // onDeleteImage={onDeleteImage}
+                auxImages={auxImages}
+                setAuxImages={setAuxImages}
             />
             <GreenButton 
                 onClick={onSubmit}

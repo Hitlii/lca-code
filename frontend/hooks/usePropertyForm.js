@@ -16,7 +16,7 @@ const usePropertyForm = (callback) => {
                     ]
                 }
             ],
-            images: [],
+            
         }
     )
 
@@ -28,29 +28,7 @@ const usePropertyForm = (callback) => {
         setProperty({...property, description: newDesc})
     }
 
-    //const onChangeImages = (newImage) => {
-    //    setProperty({...property, images: [...property.images,newImage]})
-    //}
 
-    const onChangeImages = (files) => {
-        if(files) {
-            const fileArray = Array.from(files)
-            fileArray.map((file) => {
-                const reader = new FileReader()
-                reader.onload = () => {
-                    const newImage = {
-                        key: uuidv4(),
-                        url: reader.result
-                    }
-                    setProperty({...property, images: (oldImages) => [...oldImages, newImage]})
-                    console.log(property.images)
-                    //setAuxImages(oldImages => [...oldImages, newImage])
-                    //console.log(auxImages)
-                }
-                reader.readAsDataURL(file)
-            })
-        }
-    }
 
     const onDeleteImage = (e) => {
         setProperty({...property, images: property.images.filter((image) => image.key !== e.target.getAttribute('data-index'))})
@@ -58,7 +36,8 @@ const usePropertyForm = (callback) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        console.log(property)
+        //setProperty({...property,images:Array.from(auxImages)})
+        console.log(auxImages)
         callback()
     }
 
@@ -69,6 +48,8 @@ const usePropertyForm = (callback) => {
         onDeleteImage,
         onSubmit,
         property,
+        auxImages,
+        setAuxImages,
     }
 }
 
