@@ -1,14 +1,12 @@
 import React from 'react'
 import MenuBar from './components/MenuBar'
 
-
 const Home = () => {
-    
-    return ( 
-        <div >       
+  return (
+        <div >
           <MenuBar/>
         </div>
-    )
+  )
 }
 
 export default Home

@@ -2,11 +2,11 @@ import React from 'react'
 import ClientForm from '../components/ClientForm'
 
 const createClient = () => {
-    return (
+  return (
         <div>
             <ClientForm />
         </div>
-    )
+  )
 }
 
 export default createClient

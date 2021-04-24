@@ -2,21 +2,20 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme)=>({
-    button: {
-        height: 40,
-        width: 340,
-        marginBottom: 10,
-        backgroundColor: '#4CAF50',
-        borderRadius: 15
-    }
+const useStyles = makeStyles((theme) => ({
+  button: {
+    height: 40,
+    width: 340,
+    marginBottom: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius: 15
+  }
 }))
 
-function GreenButton({ onClick, text }) {
+function GreenButton ({ onClick, text }) {
+  const classes = useStyles()
 
-    const classes = useStyles()
-
-    return (
+  return (
         <Button
             className={classes.button}
             variant='contained'
@@ -24,7 +23,7 @@ function GreenButton({ onClick, text }) {
         >
             {text}
         </Button>
-    )
+  )
 }
 
 export default GreenButton

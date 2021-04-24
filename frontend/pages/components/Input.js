@@ -1,19 +1,19 @@
 import React from 'react'
 import styles from '../../styles/Input.module.css'
 
-function Input({ type, placeholder, value, onChange, color}) {
-    return (
+function Input ({ type, placeholder, value, onChange, color }) {
+  return (
         <div>
-            <input 
+            <input
                 className={styles.input_comp}
                 type={type}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                style={{backgroundColor:color}}
+                style={{ backgroundColor: color }}
             />
         </div>
-    )
+  )
 }
 
 export default Input
