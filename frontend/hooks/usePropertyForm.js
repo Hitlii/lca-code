@@ -2,7 +2,6 @@ import { useState } from 'react'
 const { v4: uuidv4 } = require('uuid')
 
 const usePropertyForm = (callback) => {
-  const [auxImages, setAuxImages] = useState([])
 
   const [property, setProperty] = useState(
     {
@@ -33,8 +32,8 @@ const usePropertyForm = (callback) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    // setProperty({...property,images:Array.from(auxImages)})
-    console.log(auxImages)
+
+    
     callback()
   }
 
@@ -44,8 +43,6 @@ const usePropertyForm = (callback) => {
     onDeleteImage,
     onSubmit,
     property,
-    auxImages,
-    setAuxImages
   }
 }
 
