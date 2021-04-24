@@ -7,42 +7,39 @@ import NavBar from '../components/NavBar'
 import Paper from '@material-ui/core/Paper'
 import TextEditor from '../components/Slate/TextEditor'
 
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from '@material-ui/icons/Search'
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        margin: 10,
-        padding: '2px 4px',
-        display: 'flex',
-        alignItems: 'center',
-        width: 340,
-        height: 40,
-        backgroundColor: '#f2f2f2'
-    },
-    input: {
-        marginLeft: theme.spacing(1),
-        flex: 1,
-        color: 'black'
-    },
-    iconButton: {
-        padding: 10,
-    },
-    divider: {
-        height: 28,
-        margin: 4,
-    },
-  }));
+  root: {
+    margin: 10,
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: 340,
+    height: 40,
+    backgroundColor: '#f2f2f2'
+  },
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+    color: 'black'
+  },
+  iconButton: {
+    padding: 10
+  },
+  divider: {
+    height: 28,
+    margin: 4
+  }
+}))
 
-export default function addProperty() {
+export default function addProperty () {
+  const classes = useStyles()
 
-    const classes = useStyles()
-
-    
-
-    return (
+  return (
         <div>
             <Paper className={classes.root}>
-                <InputBase 
+                <InputBase
                     className={classes.input}
                     placeholder='Buscar Propiedad'
                     variant='outlined'
@@ -51,9 +48,8 @@ export default function addProperty() {
                     <SearchIcon />
                 </IconButton>
             </Paper>
-            
+
             <NavBar />
         </div>
-    )
+  )
 }
-

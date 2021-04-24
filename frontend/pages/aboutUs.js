@@ -1,18 +1,17 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 import MenuBar from './components/MenuBar'
 import Paper from '@material-ui/core/Paper'
 
 const useStyles = makeStyles({
-    root: {
-    }
+  root: {
+  }
 })
 
-function aboutUs() {
+function aboutUs () {
+  const classes = useStyles()
 
-    const classes = useStyles()
-
-    return (
+  return (
         <div>
             <MenuBar/>
             <Paper>
@@ -45,7 +44,7 @@ function aboutUs() {
                 <p>Esta politica de privacidad se han generado en politicadeprivacidadplantilla.com.</p>
             </Paper>
         </div>
-    )
+  )
 }
 
 export default aboutUs

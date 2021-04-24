@@ -6,41 +6,40 @@ import GreyButton from './GreyButton'
 import InputField from './InputField'
 import useForm from '../../hooks/useForm'
 
-const useStyles = makeStyles((theme)=>({
-    formContainer: {
-        padding: 0,
-        margin: 0,
-        textAlign: 'center',
-    },
-    headers: {
-        marginBottom: 10,    
-    }
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    padding: 0,
+    margin: 0,
+    textAlign: 'center'
+  },
+  headers: {
+    marginBottom: 10
+  }
 }))
 
-function ClientForm() {
+function ClientForm () {
+  const classes = useStyles()
 
-    const classes = useStyles()
+  const [errors, setErrors] = useState({})
 
-    const [errors, setErrors] = useState({})
+  const { onChange, onSubmit, values } = useForm(addClientCallback, {
+    name: '',
+    dob: '',
+    gender: '',
+    profession: '',
+    email: '',
+    phone: '',
+    location: '',
+    address: ''
+  })
 
-    const { onChange, onSubmit, values } = useForm(addClientCallback, {
-        name: '',
-        dob: '',
-        gender: '',
-        profession: '',
-        email: '',
-        phone: '',
-        location: '',
-        address: ''
-    })
+  function addClientCallback () {
 
-    function addClientCallback() {
-        
-    }
+  }
 
-    const genders = ['Hombre','Mujer','Otro']
+  const genders = ['Hombre', 'Mujer', 'Otro']
 
-    return(
+  return (
         <Container maxWidth='sm' className={classes.formContainer}>
             <form className={classes.formContainer}>
                 <p className={classes.headers}><strong>Informacion del cliente</strong></p>
@@ -104,17 +103,17 @@ function ClientForm() {
                     name='address'
                     onChange={onChange}
                 />
-                <GreenButton 
+                <GreenButton
                     onClick={onSubmit}
                     text='Aceptar'
                 />
-                <GreyButton 
+                <GreyButton
                     text='Cancelar'
                 />
             </form>
-        </Container>  
-        
-    )
+        </Container>
+
+  )
 }
 
 export default ClientForm

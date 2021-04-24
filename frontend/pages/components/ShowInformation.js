@@ -1,95 +1,93 @@
 
-import { Typography,Button, Container} from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
-import {green, grey6} from '../../public/colors.js'
+import { Typography, Button, Container } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { green, grey6 } from '../../public/colors.js'
 import Grid from '@material-ui/core/Grid'
-import Collapse from '@material-ui/core/Collapse';
+import Collapse from '@material-ui/core/Collapse'
 import { useRouter } from 'next/router'
 
-
 const useStyles = makeStyles((theme) => ({
-    
-    contactTextStyle:{
-        fontSize:18,
-        margin:'1em',
-        marginBottom:0,
-        [theme.breakpoints.only('xs')]:{
-            fontSize:18,
-        }
-    },
-    appButtonStyle:{
-        width:150,
-        height:40,
-        margin:5,
-        borderRadius:15,
-        backgroundColor:grey6,
-        fontSize:16,
-    },
-    sellButtonStyle:{
-        width:320,
-        height:40,
-        margin:20,
-        borderRadius:15,
-        backgroundColor:green,
-        color:'white',
-        fontSize:16,
-    },
-    collapseStyle:{
 
-        borderRadius:15,
-        boxShadow: '0 4px 2px -2px grey',
-    },
-    container:{
-        padding:0,
-        margin:0,
-        
+  contactTextStyle: {
+    fontSize: 18,
+    margin: '1em',
+    marginBottom: 0,
+    [theme.breakpoints.only('xs')]: {
+      fontSize: 18
     }
-  }));
+  },
+  appButtonStyle: {
+    width: 150,
+    height: 40,
+    margin: 5,
+    borderRadius: 15,
+    backgroundColor: grey6,
+    fontSize: 16
+  },
+  sellButtonStyle: {
+    width: 320,
+    height: 40,
+    margin: 20,
+    borderRadius: 15,
+    backgroundColor: green,
+    color: 'white',
+    fontSize: 16
+  },
+  collapseStyle: {
 
-const ShowInformaction = ({showInformationCheck}) => {
+    borderRadius: 15,
+    boxShadow: '0 4px 2px -2px grey'
+  },
+  container: {
+    padding: 0,
+    margin: 0
 
-    const classes = useStyles()
-    const router = useRouter()
+  }
+}))
 
-    const onClickAboutUs = () => {
-        router.push('/aboutUs')
-    }
-    const onClickServices = () => {
-        router.push('/services')
-    }
+const ShowInformaction = ({ showInformationCheck }) => {
+  const classes = useStyles()
+  const router = useRouter()
 
-    return (
+  const onClickAboutUs = () => {
+    router.push('/aboutUs')
+  }
+  const onClickServices = () => {
+    router.push('/services')
+  }
+
+  return (
         <Container maxWidth="lg" className={classes.container}>
             <Collapse in={showInformationCheck} className={classes.collapseStyle}>
-                
+
                 <Grid container justify="center">
-                    <Button 
-                        variant="contained" 
+                    <Button
+                        variant="contained"
                         xs={6}
-                        className={classes.appButtonStyle} 
+                        className={classes.appButtonStyle}
                         onClick={onClickAboutUs}
                     >   Nosotros
                     </Button>
-        
-                    <Button 
-                        variant="contained" 
+
+                    <Button
+                        variant="contained"
                         xs={6}
-                        className={classes.appButtonStyle} 
+                        className={classes.appButtonStyle}
                         onClick={onClickServices}
                     >   Servicios
                     </Button>
                 </Grid>
 
-                <Grid container  justify="center">
+                <Grid container justify="center">
                     <Button variant="contained" xs={12} text=''
-                            className={classes.sellButtonStyle} 
+                            className={classes.sellButtonStyle}
                             >Vender Propiedad</Button>
-                    
+
                 </Grid>
-                
-             </Collapse> 
+
+             </Collapse>
         </Container>
-    )
+  )
 }
 
 export default ShowInformaction

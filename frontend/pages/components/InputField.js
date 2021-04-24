@@ -4,19 +4,18 @@ import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
 
 const useStyles = makeStyles((theme) => ({
-    input: {
-        width: 340,
-        height: 40,
-        marginBottom: 30, 
-    }
+  input: {
+    width: 340,
+    height: 40,
+    marginBottom: 30
+  }
 }))
 
-function InputField({ id, select, object, placeholder, type, value, name, onChange}) {
+function InputField ({ id, select, object, placeholder, type, value, name, onChange }) {
+  const classes = useStyles()
 
-    const classes = useStyles()
-
-    if(select){
-        return (
+  if (select) {
+    return (
             <TextField
                 className={classes.input}
                 id={id}
@@ -28,16 +27,16 @@ function InputField({ id, select, object, placeholder, type, value, name, onChan
                 name={name}
                 onChange={onChange}
             >
-                {object.map((value => (
+                {object.map(value => (
                     <MenuItem key={value} value={value}>
                         {value}
                     </MenuItem>
-                )))}
+                ))}
             </TextField>
-        )
-    }
+    )
+  }
 
-    return (
+  return (
         <TextField
             className={classes.input}
             id={id}
@@ -48,8 +47,8 @@ function InputField({ id, select, object, placeholder, type, value, name, onChan
             name={name}
             onChange={onChange}
         />
-        
-    )
+
+  )
 }
 
 export default InputField
