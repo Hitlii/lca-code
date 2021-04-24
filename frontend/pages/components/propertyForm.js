@@ -19,10 +19,14 @@ const useStyles = makeStyles({
 })
 
 function propertyForm () {
+
   const classes = useStyles()
 
-  const { onChange, onChangeDescription, onDeleteImage, onSubmit, property } = usePropertyForm()
-  const { images, updateImages, orderImages, deleteImages, resetImages } = useImageState([])
+  const { onChange, onChangeDescription, onDeleteImage, onSubmit, property } = usePropertyForm(addPropertyCallback)
+  const { images, updateImages, orderImages, deleteImage, resetImages } = useImageState([])
+  function addPropertyCallback(){
+    
+  }
 
   return (
         <Paper className={classes.root} variant='outlined' elevation={0}>
@@ -38,11 +42,10 @@ function propertyForm () {
                 onChange={onChangeDescription}
             />
             <ImageHandler
-                // values={property.images}
-                // onChangeImages ={onChangeImages}
-                // onDeleteImage={onDeleteImage}
                 images={images}
                 updateImages={updateImages}
+                deleteImage={deleteImage}
+                orderImages={orderImages}
             />
             <GreenButton
                 onClick={onSubmit}

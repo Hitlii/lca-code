@@ -29,8 +29,12 @@ function useImageState(initialVal) {
                 const fileArray = Array.from(e.target.files);
                 let readedImage = null;
                 for (let i = 0; i < fileArray.length; ++i){
-                    let contentURL =  await readFileAsync(fileArray[i])
-                    newImages.push(contentURL);
+                    // validation to image input
+                    if(fileArray[i].type.substring(0,5) === 'image'){
+                        let contentURL =  await readFileAsync(fileArray[i])
+                        newImages.push(contentURL);
+                    }
+                    
                 }
                 setImages([...images, ...newImages]);
             }
@@ -52,7 +56,7 @@ function useImageState(initialVal) {
                 })
             }
             reader.onerror = reject;
-
+            
             reader.readAsDataURL(file);
         })
     }
@@ -61,13 +65,20 @@ function useImageState(initialVal) {
 
 
     // Handler when image is ordered
-     function orderImages( event ){
-         console.log(event)
+     function orderImages( initialPosition, finalPosition){
+        let initialImage=images[initialPosition]
+        let arrayImage=images
+        arrayImage.splice(initialPosition, 1, images[finalPosition])
+        arrayImage.splice(finalPosition, 1, initialImage)
+        setImages(arrayImage)
+
+         //console.log(event)
      }
 
     // Handler when an image is deleted from the array
      function deleteImage( event ){
          console.log(event.target)
+         setImages(images.filter((image) => image.key !== event.target.getAttribute('data-index')))
      }
 
     function reset (){

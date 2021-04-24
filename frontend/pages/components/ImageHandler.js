@@ -55,56 +55,32 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const ImageHandler = ({ images, updateImages }) => {
+const ImageHandler = ({ images, updateImages,deleteImage,orderImages}) => {
   const classes = useStyles()
-  // const [arrayImage,setArrayImage]=useState([])
+
   const [deleteMode, setDeleteMode] = useState(false)
   const [changeMode, setChangeMode] = useState(false)
-  const [indexElement, setIndexElement] = useState(-1)
+  const [initialPositionImage, setInitialPositionImage] = useState(-1)
 
   const handleChangeImages = e => {
     updateImages(e)
   }
 
-  const imageHandleChange = (e) => {
-    setChangeMode(false)
-    setDeleteMode(false)
-    // onChangeImages(e.target.files)
-
-    if (e.target.files) {
-      const fileArray = Array.from(e.target.files)
-      fileArray.map(preview => {
-        const reader = new FileReader()
-        reader.onload = () => {
-          const variable = {
-            key: uuidv4(),
-            url: reader.result
-          }
-        }
-        reader.readAsDataURL(preview)
-      })
-    }
-  }
 
   const handleImage = (e) => {
     if (deleteMode) {
-      setAuxImages(auxImages.filter((image) => image.key !== e.target.getAttribute('data-index')))
+      deleteImage(e)
     } else if (changeMode) {
-      if (indexElement < 0) {
-        const initIndex = auxImages.findIndex(element => element.key === e.target.getAttribute('data-index'))
-        setIndexElement(initIndex)
-      } else if (indexElement >= 0) {
-        const finalIndex = auxImages.findIndex(element => element.key === e.target.getAttribute('data-index'))
-        if (indexElement === finalIndex) {
-          setIndexElement(-1)
+      if (initialPositionImage < 0) {
+        const firstPositionImage = images.findIndex(element => element.key === e.target.getAttribute('data-index'))
+        setInitialPositionImage(firstPositionImage)
+      } else if (initialPositionImage >= 0) {
+        const finalPositionImage = images.findIndex(element => element.key === e.target.getAttribute('data-index'))
+        if (initialPositionImage === finalPositionImage) {
+          setInitialPositionImage(-1)
         } else {
-          const initElement = auxImages[indexElement]
-          const images = Array.from(auxImages)
-          images.splice(indexElement, 1, auxImages[finalIndex])
-          images.splice(finalIndex, 1, initElement)
-          setAuxImages(images)
-          // onChangeImages(arrayImage)
-          setIndexElement(-1)
+          orderImages(initialPositionImage,finalPositionImage)
+          setInitialPositionImage(-1)
         }
       }
     }
@@ -134,24 +110,21 @@ const ImageHandler = ({ images, updateImages }) => {
                                 id="contained-button-file"
                                 multiple
                                 type="file"
-                                onChange={handleChangeImages}
-                            />
+                                onChange={handleChangeImages}/>
                         <AddPhotoAlternateIcon/>
                     </IconButton>
 
                     <IconButton
                         className={classes.button}
                         color={deleteMode ? 'inherit' : 'default'}
-                        onClick={handleDeleteButton}
-                    >
+                        onClick={handleDeleteButton}>
                         <DeleteIcon/>
                     </IconButton>
 
                     <IconButton
                         className={classes.button}
                         color={changeMode ? 'inherit' : 'default'}
-                        onClick={handleChangeButton}
-                    >
+                        onClick={handleChangeButton}>
                         <ViewModuleIcon/>
                     </IconButton>
                 </Grid>
