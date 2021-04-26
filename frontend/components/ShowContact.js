@@ -1,11 +1,9 @@
-import { useEffect } from 'react'
-import { CardMedia, Typography, Button, Container } from '@material-ui/core'
+import { Typography, Button, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { FaWhatsapp, FaFacebookMessenger } from 'react-icons/fa'
 import Grid from '@material-ui/core/Grid'
 import Collapse from '@material-ui/core/Collapse'
-import { green, grey6 } from '../../public/colors.js'
-import Link from 'next/link'
+import { green, grey6 } from '../public/colors'
 
 const useStyles = makeStyles((theme) => ({
 

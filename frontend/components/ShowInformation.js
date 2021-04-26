@@ -1,7 +1,7 @@
 
-import { Typography, Button, Container } from '@material-ui/core'
+import { Button, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { green, grey6 } from '../../public/colors.js'
+import { green, grey6 } from '../public/colors.js'
 import Grid from '@material-ui/core/Grid'
 import Collapse from '@material-ui/core/Collapse'
 import { useRouter } from 'next/router'

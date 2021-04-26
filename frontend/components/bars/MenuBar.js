@@ -9,8 +9,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import PhoneIcon from '@material-ui/icons/Phone'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Grid from '@material-ui/core/Grid'
-import ShowContact from './ShowContact'
-import ShowInformation from './ShowInformation'
+import ShowContact from '../ShowContact'
+import ShowInformation from '../ShowInformation'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
       margin: 0
     }
 
+  },
+  image: {
+    cursor: 'pointer'
   }
 
 }))
@@ -74,8 +77,8 @@ function MenuBar () {
         <Container maxWidth="lg" className={classes.container} >
         <Grid container justify="center" direction='row'>
 
-            <Grid item xs={6} >
-                <Link href='/'>
+            <Grid item xs={6}>
+                <Link href='/' className={classes.image}>
                     <CardMedia className={classes.logoStyle} image='/LogoOriginalSF.png'/>
                 </Link>
             </Grid>

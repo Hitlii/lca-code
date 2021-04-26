@@ -30,8 +30,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: 0,
     textAlign: 'left',
-    maxWidth: 540,
-    marginBottom: 10
+    maxWidth: 340,
+    marginBottom: 10,
+    marginRight: 'auto',
+    marginLeft: 'auto',
   },
   toolbar: {
     padding: 0,

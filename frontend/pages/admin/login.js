@@ -6,9 +6,9 @@ import { AuthContext } from '../../context/auth'
 import { green, grey6 } from '../../public/colors.js'
 import styles from '../../styles/Login.module.css'
 
-import Button from '../components/Button'
-import Input from '../components/Input'
-import Checkbox from '../components/Checkbox'
+import Button from '../../components/buttons/Button'
+import Input from '../../components/inputs/Input'
+import Checkbox from '../../components/Checkbox'
 import Link from 'next/link'
 
 function Login () {

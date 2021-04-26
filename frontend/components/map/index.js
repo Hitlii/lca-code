@@ -25,18 +25,18 @@ const options = {
   styles: mapStyles
 }
 
-export default function Map () {
-  const [marker, setMarker] = useState({ lat: '', lng: '' })
+export default function Map ({ marker, handleChange }) {
+  //const [marker, setMarker] = useState({ lat: '', lng: '' })
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.googleMapsAPIKey
   })
 
-  function handleChange (event) {
+  /*function handleChange (event) {
     setMarker({
       lat: event.latLng.lat(),
       lng: event.latLng.lng()
     })
-  }
+  }*/
 
   if (loadError) return 'Error Loading maps'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import ClientForm from '../components/ClientForm'
+import ClientForm from '../../components/forms/ClientForm'
 
 const createClient = () => {
   return (
