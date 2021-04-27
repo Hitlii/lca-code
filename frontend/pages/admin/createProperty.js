@@ -20,15 +20,18 @@ const useStyles = makeStyles({
     toolbar: {
         padding: 0,
         margin: 0,
-        backgroundColor: '#f2f2f2'
+        backgroundColor: 'white'
     },
     iconButton: {
-        margin: 0,
+        margin: 10,
         padding: 0,
+        width:40,
+        height:40,
+        backgroundColor: '#f2f2f2'
     },
     icon: {
-        width: 40,
-        height: 40
+        width: 20,
+        height: 20
     },
     typo: {
         color: 'black'

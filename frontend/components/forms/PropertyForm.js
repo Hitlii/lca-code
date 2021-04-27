@@ -66,7 +66,7 @@ function PropertyForm () {
   }
 
   return (
-        <Grid container>
+        <Grid container >
             <Grid item xs={12}>
               <Typography className={classes.headers}>
                 Información General
@@ -75,7 +75,7 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12}>
               <MultipleChoice
-                label='Estado'
+                label='Estado*'
                 object={states}
                 value={generalInfo.state}
                 name='state'
@@ -84,7 +84,7 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12}>
               <MultipleChoice
-                label='Zona'
+                label='Zona*'
                 object={zones}
                 value={generalInfo.zone}
                 name='zone'
@@ -93,7 +93,7 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12}>
               <MultipleChoice
-                label='Tipo'
+                label='Tipo*'
                 object={types}
                 value={generalInfo.type}
                 name='type'
@@ -108,7 +108,7 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12}>
               <MultipleChoice
-                label='Divisa'
+                label='Divisa*'
                 object={currencies}
                 value={priceAndArea.currency}
                 name='currency'
@@ -216,7 +216,7 @@ function PropertyForm () {
                   orderImages={orderImages}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <GreenButton
                   onClick={addPropertyCallback}
                   text='Crear Propiedad'
