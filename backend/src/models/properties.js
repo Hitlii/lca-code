@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 
 const PropertiesSchema = mongoose.Schema({
+    code: {
+        type: String,
+        required: true,
+        unique: true
+    },
     // i.e Venta, Renta, Vendido, Oculto 
     status: {
         type: String, 
@@ -46,12 +51,24 @@ const PropertiesSchema = mongoose.Schema({
     description: {
         isDeeded: Boolean,
         hasAllServices: Boolean,
-        text: String
+        text: {
+            type: String,
+            required: true
+        }
     },
     location: {
-        state: String,
-        city: String,
-        address: String, 
+        state: {
+            type: String,
+            required: true,
+        },
+        city: {
+            type: String,
+            required: true,
+        },
+        address: {
+            type: String,
+            required: true,
+        }, 
         coordinates: { // Google maps API
             lat: {
                 type: Number,
@@ -67,30 +84,38 @@ const PropertiesSchema = mongoose.Schema({
         images: {
             type: [String], 
             required: true,
-        }
-        thumbnail: { // Cards
-            type: String,
-            required: true
         },
         // Youtube video, optional
         video: String, 
-    }
+    },
 
     meta:{
-        description: String,
-        keywords: String,
-        url: String,
-        title: String
-    }
+        description: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        title: {
+            type: String,
+            required: true
+        }
+    },
 
     vendors:[
            { 
                 _id: {
-                    type: Schema.Types.ObjectId, 
+                    type: mongoose.Schema.Types.ObjectId, 
                     ref: 'clients', 
-                }
+                },
                 name: String,
-                phone: String
+                contact: {
+                     email: String, 
+                     phone: String, 
+                }
            }
         ],
     

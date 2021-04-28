@@ -9,7 +9,7 @@ module.exports = gql`
         contact: Contact
         location: Location
     }
-
+    
     type Contact{
         email: String
         phone: String

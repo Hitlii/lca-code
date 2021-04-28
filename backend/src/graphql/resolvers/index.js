@@ -1,6 +1,6 @@
 const userResolver  = require('./user');
 const clientResolver  = require('./client');
-
+const propertyResolver = require('./property');
 
 const interfaceResolver = {
     Location: {
@@ -14,6 +14,7 @@ const interfaceResolver = {
 module.exports = [
     interfaceResolver,
     userResolver,
-    clientResolver
+    clientResolver,
+    propertyResolver
 
 ]

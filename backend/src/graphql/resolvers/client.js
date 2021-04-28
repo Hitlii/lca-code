@@ -1,5 +1,5 @@
 const { UserInputError } = require("apollo-server-errors");
-const Client = require("../../models/client");
+const Client = require("../../models/clients");
 
 module.exports = {
     Query: {

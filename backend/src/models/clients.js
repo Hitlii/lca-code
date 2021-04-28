@@ -9,17 +9,39 @@ const ClientSchema = new Schema({
     name:{
         type: String,
         required: true,
-    }
-    genre: String, 
-    birthday: Date;
+    },
+    gender: {
+        type: String,
+        required: true,
+    }, 
+    birthday: {
+        type: Date,
+        required: true,
+    },
     contact:{
-        email: String,
-        phone: String,
-    }
-    location{
-        city: String,
-        state: String, // State abbreviation i.e B.C -> Baja California
-        addres: String,
+        email: {
+            type: String,
+            unique: true,
+        },
+        phone: {
+            type: String,
+            unique: true,
+            required: true
+        },
+    },
+    location: {
+        city: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        }, // State abbreviation i.e B.C -> Baja California
+        address: {
+            type: String,
+            required: true
+        },
     }
 })
 
