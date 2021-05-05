@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+
+
+
 function ClientForm () {
     const classes = useStyles()
 
@@ -53,8 +56,18 @@ function ClientForm () {
         variables: values
     })
 
+    async function validateForm() {
+        setErrors({})
+        validationSchema.validate(values, {abortEarly: false}).then(valid => {
+            console.log('valid:', valid)
+          }).catch(err => {
+            console.log('err:', err.errors)
+          })
+    }
     function addClientCallback () {
-        createClient()
+        validateForm()
+        //console.log(errors)
+        //createClient()
     }
 
   const genders = ['Hombre', 'Mujer', 'Otro']

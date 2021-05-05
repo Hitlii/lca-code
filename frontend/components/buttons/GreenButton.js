@@ -12,11 +12,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function GreenButton ({ onClick, text }) {
+function GreenButton ({ onClick, text,type}) {
   const classes = useStyles()
 
   return (
         <Button
+            type={type}
             className={classes.button}
             variant='contained'
             onClick={onClick}
