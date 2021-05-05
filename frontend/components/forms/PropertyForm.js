@@ -4,6 +4,9 @@ import useGeneralInfo from '../../hooks/useGeneralInfo'
 import usePriceAndArea from '../../hooks/usePriceAndArea'
 import useLocation from '../../hooks/useLocation'
 import useDescription from '../../hooks/useDescription'
+import useURL from '../../hooks/useURL'
+
+import { gql, useQuery } from '@apollo/client'
 
 import {
   Divider,
@@ -51,53 +54,94 @@ function PropertyForm () {
 
   const classes = useStyles()
 
-  const { generalInfo, onChangeGeneralInfo, states, zones, types } = useGeneralInfo()
-  const { priceAndArea, onChangePriceAndArea, currencies} = usePriceAndArea()
-  const { location, onChangeLocation, handleLocationChange, cities} = useLocation()
-  const { description, onChangeDescription, onChangeSlateEditor} = useDescription()
+  const { generalInfo, states, zones, types } = useGeneralInfo()
+  const { priceAndArea, currencies } = usePriceAndArea()
+  const { description } = useDescription()
+  const { location, cities} = useLocation()
+  const { URL } = useURL()
   const { images, updateImages, orderImages, deleteImage } = useImageState([])
 
+  const [slateEditor, setSlateEditor] = useState([
+    {
+      type: 'paragraph',
+      children: [
+        { text: '' }
+      ]
+    }
+  ])
+  const onChangeSlateEditor = (newDesc) => {
+    setSlateEditor(newDesc)
+  }
+
+  const [coordinates, setCoordinates] = useState({
+    lat: 0,
+    lng: 0
+  })
+
+  const onChangeCoordinates = (e) => {
+    setCoordinates({
+      lat: e.latLng.lat(), 
+      lng: e.latLng.lng()
+    })
+  }
+
   function addPropertyCallback(){
-    console.log(generalInfo)
-    console.log(location)
-    console.log(priceAndArea)
-    console.log(description)
+    generalInfo.handleSubmit()
+    priceAndArea.handleSubmit()
+    description.handleSubmit()
+    location.handleSubmit()
+    console.log(slateEditor)
+    console.log(coordinates)
+    URL.handleSubmit()
     console.log(images)
   }
 
   return (
-        <Grid container >
+        <Grid container>
             <Grid item xs={12}>
               <Typography className={classes.headers}>
                 Información General
               </Typography>
               <Divider className={classes.divider}/>
             </Grid>
+            <Grid item className={classes.gridItem} xs={12}>
+              <InputText
+                type='text'
+                placeholder='Código*'
+                value={generalInfo.values.code}
+                name='code'
+                onChange={generalInfo.handleChange}
+                error={generalInfo.touched.code && generalInfo.errors.code}
+              />
+            </Grid>
             <Grid item xs={12}>
               <MultipleChoice
                 label='Estado*'
                 object={states}
-                value={generalInfo.state}
+                value={generalInfo.values.status}
                 name='state'
-                onChange={onChangeGeneralInfo}
+                onChange={generalInfo.handleChange}
+                error={generalInfo.touched.status && generalInfo.errors.status}
               />
             </Grid>
             <Grid item xs={12}>
               <MultipleChoice
                 label='Zona*'
                 object={zones}
-                value={generalInfo.zone}
+                value={generalInfo.values.zone}
                 name='zone'
-                onChange={onChangeGeneralInfo}
+                onChange={generalInfo.handleChange}
+                error={generalInfo.touched.zone && generalInfo.errors.zone}
               />
             </Grid>
             <Grid item xs={12}>
               <MultipleChoice
                 label='Tipo*'
                 object={types}
-                value={generalInfo.type}
+                value={generalInfo.values.type}
                 name='type'
-                onChange={onChangeGeneralInfo}
+                onChange={generalInfo.handleChange}
+                error={generalInfo.touched.type && generalInfo.errors.type}
               />
             </Grid>
             <Grid item xs={12}>
@@ -110,45 +154,50 @@ function PropertyForm () {
               <MultipleChoice
                 label='Divisa*'
                 object={currencies}
-                value={priceAndArea.currency}
+                value={priceAndArea.values.currency}
                 name='currency'
-                onChange={onChangePriceAndArea}
+                onChange={priceAndArea.handleChange}
+                error={priceAndArea.touched.currency && priceAndArea.errors.currency}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
-                placeholder='Precio'
-                value={priceAndArea.price}
+                placeholder='Precio*'
+                value={priceAndArea.values.price}
                 name='price'
-                onChange={onChangePriceAndArea}
+                onChange={priceAndArea.handleChange}
+                error={priceAndArea.touched.price && priceAndArea.errors.price}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='Precio Especial'
-                value={priceAndArea.specialPrice}
+                value={priceAndArea.values.specialPrice}
                 name='specialPrice'
-                onChange={onChangePriceAndArea}
+                onChange={priceAndArea.handleChange}
+                error={priceAndArea.touched.specialPrice && priceAndArea.errors.specialPrice}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='Precio en Pagos'
-                value={priceAndArea.paymentPrice}
+                value={priceAndArea.values.paymentPrice}
                 name='paymentPrice'
-                onChange={onChangePriceAndArea}
+                onChange={priceAndArea.handleChange}
+                error={priceAndArea.touched.paymentPrice && priceAndArea.errors.paymentPrice}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
-                placeholder='Área(m^2)'
-                value={priceAndArea.area}
+                placeholder='Área(m^2)*'
+                value={priceAndArea.values.area}
                 name='area'
-                onChange={onChangePriceAndArea}
+                onChange={priceAndArea.handleChange}
+                error={priceAndArea.touched.area && priceAndArea.errors.area}
               />
             </Grid>
             <Grid item xs={12}>
@@ -161,14 +210,15 @@ function PropertyForm () {
               <InputText
                 type='text'
                 placeholder='Título de la propiedad'
-                value={description.title}
+                value={description.values.title}
                 name='title'
-                onChange={onChangeDescription}
+                onChange={description.handleChange}
+                error={description.touched.title && description.errors.title}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <TextEditor
-                value={description.slateEditor}
+                value={slateEditor}
                 onChange={onChangeSlateEditor}
               />
             </Grid>
@@ -179,34 +229,55 @@ function PropertyForm () {
               <Divider className={classes.divider}/>
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
+              <InputText
+                type='text'
+                placeholder='Estado'
+                value='Baja California'
+                name='state'
+                onChange={location.handleChange}
+                error={location.touched.state && location.errors.state}
+              />
               <InputSelect
                 object={cities}  
+                label='Ciudad'
                 placeholder='Ciudad'
-                value={location.city}
+                value={location.values.city}
                 name='city'
-                onChange={onChangeLocation}
+                onChange={location.handleChange}
+                error={location.touched.city && location.errors.city}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='Dirección'
-                value={location.address}
+                value={location.values.address}
                 name='address'
-                onChange={onChangeLocation}
+                onChange={location.handleChange}
+                error={location.touched.address && location.errors.address}
               />
             </Grid>
             <Grid item xs={12} className={classes.map}>
               <Map 
-                  marker={location.marker}
-                  handleChange={handleLocationChange}
+                  marker={coordinates}
+                  handleChange={onChangeCoordinates}
               />
             </Grid>
             <Grid item xs={12}>
               <Typography className={classes.headers}>
-                Imágenes
+                Media
               </Typography>
               <Divider className={classes.divider}/>
+            </Grid>
+            <Grid item className={classes.gridItem} xs={12}>
+              <InputText
+                type='text'
+                placeholder='URL'
+                value={URL.values.URL}
+                name='URL'
+                onChange={URL.handleChange}
+                error={URL.touched.URL && URL.errors.URL}
+              />
             </Grid>
             <Grid item xs={12}>
               <ImageHandler
@@ -215,6 +286,15 @@ function PropertyForm () {
                   deleteImage={deleteImage}
                   orderImages={orderImages}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography className={classes.headers}>
+                Cliente
+              </Typography>
+              <Divider className={classes.divider}/>
+            </Grid>
+            <Grid item className={classes.gridItem} xs={12}>
+              
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <GreenButton
@@ -225,5 +305,20 @@ function PropertyForm () {
         </Grid>
   )
 }
+
+const GET_CLIENTS = gql 
+`
+query getClient($name: String!)  {
+  getClient(name: $name) {
+    id
+    name
+    contact {
+      email
+      phone
+    }
+  }
+}
+
+`
 
 export default PropertyForm

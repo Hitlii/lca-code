@@ -6,6 +6,7 @@ import {
     FormLabel,
     Radio,
     RadioGroup,
+    Typography,
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -58,10 +59,13 @@ const useStyles = makeStyles(({
           backgroundColor: '#106ba3',
         },
     },
+    error: {
+        color: 'red',
+    }
 
 }))
 
-function MultipleChoice({ label, object, value, name, onChange }) {
+function MultipleChoice({ label, object, value, name, onChange, error }) {
 
     const classes = useStyles()
 
@@ -79,14 +83,21 @@ function MultipleChoice({ label, object, value, name, onChange }) {
     }
 
     return (
-        <FormControl component='fieldset' className={classes.root}>
-            <FormLabel className={classes.label} focused={false} component='legend'>{label}</FormLabel>
-            <RadioGroup value={value} name={name} onChange={onChange}>
-                {object.map(value => (
-                    <FormControlLabel key={value} label={value} value={value} control={<StyledRadio />}/>
-                ))}
-            </RadioGroup>
-        </FormControl>
+        <>
+
+            <FormControl component='fieldset' className={classes.root}>
+                {error ? 
+                    <FormLabel className={classes.error} focused={false} component='legend'>{label}</FormLabel>
+                       :
+                    <FormLabel className={classes.label} focused={false} component='legend'>{label}</FormLabel>
+                }
+                <RadioGroup value={value} name={name} onChange={onChange}>
+                    {object.map(value => (
+                        <FormControlLabel key={value} label={value} value={value} control={<StyledRadio />}/>
+                    ))}
+                </RadioGroup>
+            </FormControl>
+        </>
     )
 }
 

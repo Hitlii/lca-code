@@ -3,8 +3,10 @@ import React from 'react'
 import {
     FormControl,
     InputBase,
+    InputLabel,
     MenuItem,
     Select,
+    Typography,
 } from '@material-ui/core'
 
 import {
@@ -25,31 +27,42 @@ const Input = withStyles((theme) => ({
 }))(InputBase);
 
 const useStyles = makeStyles((theme) => ({
-    margin: {
-      marginBottom: 20
+    label: {
+        marginRight: 'auto'
     },
     select: {
         borderRadius: 15
-    }
+    },
+    error: {
+        margin: 0,
+        padding: 0,
+        marginTop: 5,
+        marginBottom: 20,
+        color: 'red',
+      }
 }));
 
-function InputSelect({ object, placeholder, value, name, onChange }) {
+function InputSelect({ object, label, value, name, onChange, error }) {
     const classes = useStyles()
 
     return (
-        <FormControl className={classes.margin}>
-        <Select
-            className={classes.select}
-            value={value}
-            name={name}
-            onChange={onChange}
-            input={<Input placeholder={placeholder}/>}
-        >
-        {object.map((value)=> (
-            <MenuItem key={value} value={value}>{value}</MenuItem>
-        ))}
-        </Select>
-      </FormControl>
+        <FormControl>
+            <Typography className={classes.label}>{label}</Typography>
+            <Select
+                className={classes.select}
+                value={value}
+                name={name}
+                onChange={onChange}
+                input={<Input/>}
+            >
+            {object.map((value)=> (
+                <MenuItem key={value} value={value}>{value}</MenuItem>
+            ))}
+            </Select>
+            <Typography className={classes.error}>
+                    {error}
+            </Typography>
+        </FormControl>
     )
 }
 
