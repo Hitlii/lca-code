@@ -1,4 +1,6 @@
-const { gql } = require('apollo-server-express')
+const { gql } = require('apollo-server-express');
+
+
 
 module.exports = gql`
   
@@ -36,4 +38,4 @@ module.exports = gql`
   }
 
 
-`
+`;
