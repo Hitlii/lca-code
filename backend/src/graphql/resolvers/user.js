@@ -11,8 +11,8 @@ module.exports = {
     // We combine the 'isAuthenticated' resolver middleware
     // to check if user is authenticated, if it is then the next resolver is executed
     user: combineResolvers(isAuthenticated, async (_, { id }, { email }) => {
-        const user = await User.findOne({ email })
-        return user || null
+      const user = await User.findOne({ email })
+      return user || null
     })
   },
   Mutation: {

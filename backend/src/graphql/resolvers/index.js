@@ -1,6 +1,8 @@
-const userResolver  = require('./user');
-const clientResolver  = require('./client');
-
+const userResolver = require('./user')
+const clientResolver = require('./client')
+const propertyResolver = require('./property')
+const ticketResolver = require('./ticket')
+const { GraphQLScalarType, Kind } = require('graphql')
 
 const interfaceResolver = {
   Location: {
