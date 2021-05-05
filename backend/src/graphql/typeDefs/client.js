@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+const { gql } = require('apollo-server-express')
 
 module.exports = gql`
     type Client {
@@ -7,12 +7,12 @@ module.exports = gql`
         gender: String
         birthday: String
         contact: Contact
-        location: Location
+        location: ClientLocation
     }
 
     type Contact{
         email: String
-        phone: String
+        phone: String!
     }
     
     type ClientLocation implements Location{
@@ -25,8 +25,29 @@ module.exports = gql`
         "Returns all registered clients"
         getClients: [Client]
         "Returns a client given its name"
-        getClient(name: String!): Client
+        getClient(id: ID!): Client
     }
+
+     input ClientInput {
+        id: ID
+        name: String!
+        gender: String
+        birthday: Date
+        contact: ContactInput
+        location: ClientLocationInput
+    }
+
+    input ContactInput{
+        email: String
+        phone: String!
+    }
+
+    input ClientLocationInput{
+        city: String!
+        state: String!
+        address: String! 
+    }
+
 
     extend type Mutation {
         "Mutation to create a new client, returns the created client"
@@ -36,4 +57,4 @@ module.exports = gql`
         "Mutation to delete an existing client by ID, returns a boolean to indicate whether the operation was succesful or not"
         deleteClient(id: ID!): Boolean
     }
-`;
+`

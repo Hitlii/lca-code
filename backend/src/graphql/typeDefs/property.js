@@ -1,14 +1,23 @@
-const {gql} = require('apollo-server-express');
+const { gql } = require('apollo-server-express')
 
 module.exports = gql`
    
     
     extend type Mutation {
         "Creates a property, returns the URL generated"
-        createProperty(input: createPropertyInput!):String!
-        "Deletes a property by ID, returns true if deleted or false if not"
-        deleteProperty(id: ID!): Boolean!
+        createProperty(property: createPropertyInput!, clients: [ClientInput!]!):CreatePropertyMutationResponse!
+        "Deletes a property by ID, returns string with message if deleted, error if not"
+        deleteProperty(id: ID!): DeleteMutationResponse!
+        
     }
+
+    type CreatePropertyMutationResponse implements MutationResponse{
+        message: String!
+        code: Float!
+        success: Boolean!
+        url: String
+    }
+
     input createPropertyInput{
         "ID of the property"
         id: ID!
@@ -42,9 +51,18 @@ module.exports = gql`
         media: mediaInput!
         "Meta descriptors, such as description, keywords, author, and URL"
         meta: metaInput!
-        "Property Vendors"
-        vendors: [String!] 
+
     }
+
+    input descriptionInput{
+        "Slate stringified description"
+        text: String!
+        isDeeded: Boolean
+        hasAllServices: Boolean
+    }
+
+    
+
     input mediaInput{
         "Images of the property in the carrousel/slider"
         images: [String!]
