@@ -61,9 +61,9 @@ const ShowContact = ({ showContactCheck }) => {
 
                 <Typography variant="h6" className={classes.contactTextStyle}>Contactar por</Typography>
                 <Grid container justify="center">
-
+                      
                     <a className={classes.link} target='_blank' href='https://api.whatsapp.com/send?phone=+526653922230&text=hola,%20qu%C3%A9%20tal?' rel='noopener noreferrer'>
-                        <Button variant="text" xs={6}
+                        <Button variant="text"
                             className={classes.appButtonStyle}
                             startIcon={<FaWhatsapp className={classes.whatsappIconStyle}/>}
                         > Whatsapp
@@ -72,7 +72,7 @@ const ShowContact = ({ showContactCheck }) => {
 
                     <a className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
                         <Button
-                            variant="text" xs={6}
+                            variant="text" 
                             className={classes.appButtonStyle}
                             startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
                         > Message

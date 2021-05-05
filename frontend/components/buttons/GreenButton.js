@@ -7,16 +7,18 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     width: 340,
     marginBottom: 10,
+    color: 'white',
     backgroundColor: '#4CAF50',
     borderRadius: 15
   }
 }))
 
-function GreenButton ({ onClick, text }) {
+function GreenButton ({ type, onClick, text }) {
   const classes = useStyles()
 
   return (
         <Button
+            type={type}
             className={classes.button}
             variant='contained'
             onClick={onClick}

@@ -1,33 +1,37 @@
-import { useState } from 'react'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
 const useLocation = () => {
-    const [location, setLocation] = useState({
-        city: '',
-        address: '',
-        marker: {
-            lat: 0,
-            lng: 0
+
+    const validationSchema = yup.object({
+        state: yup
+            .string()
+            .required('Estado es requerido'),
+        city: yup
+            .string()
+            .required('Ciudad es requerida'),
+        address: yup
+            .string()
+            .required('Dirección es requerida')
+            .max(20,'Muy largo!')
+    })
+
+    const location = useFormik({
+        initialValues: {
+            state:'Baja California',
+            city: '',
+            address: ''
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values)
         }
     })
 
     const cities = ['Tijuana', 'Tecate', 'San Quintin', 'Ensenada', 'Mexicali', 'Rosarito']
 
-    const onChangeLocation = (e) => {
-        setLocation({...location, [e.target.name]: e.target.value})
-    }
-
-    const handleLocationChange = (e) => {
-        setLocation({
-            ...location, 
-            lat: e.latLng.lat(), 
-            lng: e.latLng.lng()
-        })
-    }
-
     return {
         location,
-        onChangeLocation,
-        handleLocationChange,
         cities
     }
 }

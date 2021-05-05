@@ -1,45 +1,73 @@
 import React, { useState } from 'react'
-import Button from '../../components/buttons/Button'
-import Input from '../../components/inputs/Input'
-import { green, grey6 } from '../../public/colors.js'
-import styles from '../../styles/Login.module.css'
+
+import {
+  InputBase,
+  Button, 
+  Typography,
+} from '@material-ui/core'
+
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+import loginStyles from '../../styles/loginStyles'
 
 function newPassword () {
-  const [newPassword, setNewPassword] = useState({
-    password: '',
-    confirmPassword: ''
+
+  const classes = loginStyles()
+
+  const validationSchema =  yup.object({
+    password: yup.string().required('Password is required'),
+    confirmPassword: yup.string()
+       .oneOf([yup.ref('password'), null], 'Passwords must match')
+  });
+
+  const newPassword = useFormik({
+    initialValues: {
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values)
+    }
   })
 
-  const onSubmit = (e) => {
-    e.preventDefault()
-    console.log(newPassword)
-  }
-
   return (
-        <div className={styles.form_container}>
-            <img src='/LogoOriginalSF.png'/>
-            <form>
-                <p>Nueva contraseña:</p>
-                <Input
-                    type='password'
-                    placeholder='******'
-                    value={newPassword.password}
-                    onChange={(e) => setNewPassword({ ...newPassword, password: e.target.value })}
-                    color={grey6}
+        <div className={classes.formContainer}>
+            <img className={classes.img} src='/LogoOriginalSF.png'/>
+            <form onSubmit={newPassword.handleSubmit}>
+                <Typography className={classes.header}>Nueva contraseña:</Typography>
+                <InputBase
+                  className={classes.input}
+                  id='password'
+                  type='password'
+                  placeholder='******'
+                  name='password'
+                  value={newPassword.values.password}
+                  onChange={newPassword.handleChange}
                 />
-                <p>Confirmar contraseña:</p>
-                <Input
-                    type='password'
-                    placeholder='******'
-                    value={newPassword.confirmPassword}
-                    onChange={(e) => setNewPassword({ ...newPassword, confirmPassword: e.target.value })}
-                    color={grey6}
+                <Typography className={classes.error}>
+                  {newPassword.touched.password && newPassword.errors.password}
+                </Typography>
+                <Typography className={classes.header}>Confirmar contraseña:</Typography>
+                <InputBase
+                  className={classes.input}
+                  id='confirmPassword'
+                  type='password'
+                  placeholder='******'
+                  name='newPassword'
+                  value={newPassword.values.confirmPassword}
+                  onChange={newPassword.handleChange}
                 />
+                <Typography className={classes.error}>
+                  {newPassword.touched.confirmPassword && newPassword.errors.confirmPassword}
+                </Typography>
                 <Button
-                    color={green}
-                    text='Confirmar'
-                    onClick={onSubmit}
-                />
+                  className={classes.button}
+                  type='submit'
+                >
+                  Confirmar
+                </Button>
             </form>
         </div>
   )

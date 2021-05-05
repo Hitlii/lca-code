@@ -1,30 +1,27 @@
-import { useState } from 'react'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
 
 const useDescription = () => {
-    const [description, setDescription] = useState({
-        title: '',
-        slateEditor: [
-          {
-            type: 'paragraph',
-            children: [
-              { text: '' }
-            ]
-          }
-        ]
+  const validationSchema = yup.object({
+      title: yup 
+        .string()
+        .required('Título es requerido')
+        .max(70, 'Muy largo!'),
+      
     })
-    
-    const onChangeDescription = (e) => {
-        setDescription({ ...description, [e.target.name]: e.target.value })
-    }
-    
-    const onChangeSlateEditor = (newDesc) => {
-        setDescription({ ...description, slateEditor: newDesc })
-    }
+
+    const description = useFormik({
+      initialValues: {
+        title: ''
+      },
+      validationSchema: validationSchema,
+      onSubmit: (values) => {
+        console.log(v)
+      }
+    })
 
     return {
         description,
-        onChangeDescription,
-        onChangeSlateEditor
     }
 }
 
