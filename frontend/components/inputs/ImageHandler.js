@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import ContainerImageFile from './ShowImageFile'
+import ContainerImageFile from '../ShowImageFile'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'

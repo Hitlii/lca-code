@@ -5,26 +5,27 @@ import usePriceAndArea from '../../hooks/usePriceAndArea'
 import useLocation from '../../hooks/useLocation'
 import useDescription from '../../hooks/useDescription'
 import useURL from '../../hooks/useURL'
+import useMetaInfo from '../../hooks/useMetaInfo'
 
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 
 import {
   Divider,
   Grid,
+  TextField,
   Typography,
 } from '@material-ui/core'
 
 import GreenButton from '../buttons/GreenButton'
-import ImageHandler from '../ImageHandler'
+import ImageHandler from '../inputs/ImageHandler'
 import InputSelect from '../inputs/InputSelect'
 import InputText from '../inputs/InputText'
 import Map from '../map'
 import MultipleChoice from '../inputs/MultipleChoice'
-import TextEditor from '../TextEditor'
-
+import SearchClient from '../SearchClient'
+import TextEditor from '../inputs/TextEditor'
 
 import { makeStyles } from '@material-ui/core/styles'
-
 
 const useStyles = makeStyles({
   root: {
@@ -47,19 +48,25 @@ const useStyles = makeStyles({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginBottom: 20,
+  },
+  multiline: {
+    width: 320,
+    marginBottom: 20
   }
 })
 
 function PropertyForm () {
 
   const classes = useStyles()
+  const [errors, setErrors] = useState({})
 
-  const { generalInfo, states, zones, types } = useGeneralInfo()
+  const { generalInfo, status, zones, types } = useGeneralInfo()
   const { priceAndArea, currencies } = usePriceAndArea()
   const { description } = useDescription()
   const { location, cities} = useLocation()
   const { URL } = useURL()
   const { images, updateImages, orderImages, deleteImage } = useImageState([])
+  const { metaInfo } = useMetaInfo()
 
   const [slateEditor, setSlateEditor] = useState([
     {
@@ -85,15 +92,102 @@ function PropertyForm () {
     })
   }
 
+  const auxImages = ['unaimagen.jpg']
+
+  const [client, setClient] = useState(
+    {
+      name: '',
+      birthday: '',
+      gender: '',
+      contact: {
+        email: '',
+        phone: '',
+      },
+      location: {
+        state: '',
+        city: '',
+        address: ''
+      }
+    }
+  )
+
+  const onChangeClient = (_, value) => {
+    if(value) {
+      setClient({ 
+        name: value.name, 
+        birthday: value.birthday,
+        gender: value.gender,
+        contact: {
+          email: value.contact.email,
+          phone: value.contact.phone
+        },
+        location: {
+          state: value.location.state,
+          city: value.location.city,
+          address: value.location.address
+        }
+      })
+    } else {
+      setClient({})
+    }
+  }
+
+  const [createProperty] = useMutation(CREATE_PROPERTY, {
+    update (
+      _, 
+      { data }
+    ) {
+      console.log(data)
+    },
+    OnError (err) {
+      setErrors(err && err.graphQLErrors[0] ? err.graphQLErrors[0].extensions.exception.errors : {})
+      console.log(errors)
+    },
+    variables: {
+      status: generalInfo.values.status,
+      type: generalInfo.values.type,
+      zone: generalInfo.values.zone,
+      code: generalInfo.values.code,
+      price: priceAndArea.values.price,
+      specialPrice: priceAndArea.values.specialPrice,
+      onPayments: priceAndArea.values.paymentPrice,
+      currency: priceAndArea.values.currency,
+      area: priceAndArea.values.area,
+      title: description.values.title,
+      description: slateEditor,
+      state: location.values.state,
+      city: location.values.city,
+      address: location.values.address,
+      lat: coordinates.lat,
+      lng: coordinates.lng,
+      images: auxImages,
+      video: URL.values.URL,
+      metaTitle: metaInfo.values.title,
+      metaDescription: metaInfo.values.description,
+      metaURL: metaInfo.values.URL,
+      clients: [{
+        id: '6090a48f9ed22317648214c8',
+        name: 'John Doe',
+        contact: {
+          email: 'johnDoe@user.com',
+          phone: '+52662-393-7090'
+        }
+      }]
+    }
+  })
+
   function addPropertyCallback(){
     generalInfo.handleSubmit()
     priceAndArea.handleSubmit()
     description.handleSubmit()
-    location.handleSubmit()
     console.log(slateEditor)
+    location.handleSubmit()
     console.log(coordinates)
-    URL.handleSubmit()
     console.log(images)
+    URL.handleSubmit()
+    metaInfo.handleSubmit()
+    console.log(client)
+    createProperty()
   }
 
   return (
@@ -117,9 +211,9 @@ function PropertyForm () {
             <Grid item xs={12}>
               <MultipleChoice
                 label='Estado*'
-                object={states}
+                object={status}
                 value={generalInfo.values.status}
-                name='state'
+                name='status'
                 onChange={generalInfo.handleChange}
                 error={generalInfo.touched.status && generalInfo.errors.status}
               />
@@ -288,13 +382,55 @@ function PropertyForm () {
               />
             </Grid>
             <Grid item xs={12}>
+                <Typography className={classes.headers}>
+                  Meta
+                </Typography>
+              <Divider className={classes.divider}/>
+            </Grid>
+            <Grid item className={classes.gridItem} xs={12}>
+              <InputText
+                type='text'
+                placeholder='Meta-Título'
+                value={metaInfo.values.title}
+                name='title'
+                onChange={metaInfo.handleChange}
+                error={metaInfo.touched.title && metaInfo.errors.title}
+              />
+            </Grid>
+            <Grid item className={classes.gridItem} xs={12}>
+              <TextField
+                className={classes.multiline}
+                type='text'
+                multiline
+                placeholder='Meta-Descripción'
+                value={metaInfo.values.description}
+                name='description'
+                onChange={metaInfo.handleChange}
+                error={metaInfo.touched.description && Boolean(metaInfo.errors.description)}
+                helperText={metaInfo.touched.description && metaInfo.errors.description}
+              />
+            </Grid>
+            <Grid item className={classes.gridItem} xs={12}>
+              <InputText
+                type='text'
+                placeholder='Meta-URL'
+                value={metaInfo.values.URL}
+                name='URL'
+                onChange={metaInfo.handleChange}
+                error={metaInfo.touched.URL && metaInfo.errors.URL}
+              />
+            </Grid>
+            <Grid item xs={12}>
               <Typography className={classes.headers}>
                 Cliente
               </Typography>
               <Divider className={classes.divider}/>
             </Grid>
             <Grid item className={classes.gridItem} xs={12}>
-              
+              <SearchClient 
+                value={client}
+                onChange={onChangeClient}
+              />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <GreenButton
@@ -306,18 +442,69 @@ function PropertyForm () {
   )
 }
 
-const GET_CLIENTS = gql 
+const CREATE_PROPERTY = gql 
 `
-query getClient($name: String!)  {
-  getClient(name: $name) {
-    id
-    name
-    contact {
-      email
-      phone
+  mutation createProperty(
+    $status: String!
+    $type: String!
+    $zone: String!
+    $code: String!
+    $price: Float!
+    $specialPrice: String
+    $onPayments: String
+    $currency: String!
+    $area: Float!
+    $title: String!
+    $description: String!
+    $state: String!
+    $city: String!
+    $address: String!
+    $lat: Float!
+    $lng: Float!
+    $images: [String!]
+    $video: String
+    $metaTitle: String!
+    $metaDescription: String!
+    $metaURL: String
+    $clients: [String!]
+  ) {
+    createProperty(
+      property: {
+        status: $status
+        type: $type
+        zone: $zone  
+        code: $code  
+        price: $price  
+        specialPrice: $specialPrice
+        onPayments: $onPayments
+        currency: $currency 
+        area: $area 
+        title: $title  
+        description: $description
+        location: {
+          state: $state  
+          city: $city  
+          address: $address
+          coordinates: {
+            lat: $lat  
+            lng: $lng  
+          }
+        }
+        media: {
+          images: $images   
+          video: $video  
+        }
+        meta: {
+          title: $metaTitle
+          description: $metaDescription
+          url: $metaURL
+        }
+      }
+      clients: $clients
+    ) {
+      success
     }
   }
-}
 
 `
 

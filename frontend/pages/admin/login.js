@@ -8,7 +8,7 @@ import {
   InputBase, 
   Typography,
 } from '@material-ui/core'
-import Checkbox from '../../components/Checkbox'
+import Checkbox from '../../components/inputs/Checkbox'
 import StyledLink from '../../components/StyledLink'
 
 import { useFormik } from 'formik';
