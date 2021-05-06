@@ -1,19 +1,29 @@
-const userTypeDefs = require('./user');
-const clientTypeDefs = require('./client');
-const propertyTypeDefs = require('./property');
+const userTypeDefs = require('./user')
+const clientTypeDefs = require('./client')
+const propertyTypeDefs = require('./property')
+const ticketTypedefs = require('./ticket')
+const { gql } = require('apollo-server-express')
 
-const { gql  } = require('apollo-server-express');
-
-// Schema stiching to improve maintenance
-// As the type roots are unique, we 'extend' the type in the other files, we use '_: String' 
-// because a typo cannot be extended if it is empty
+// Schema stiching
 const typeDefs = gql`
-
+    scalar Date
     "Interface of Location, used in Client and Property types"
     interface Location {
         city: String
         state: String
         address: String
+    }
+
+    interface MutationResponse{
+        message: String!
+        code: Float!
+        success: Boolean!
+    }
+
+    type DeleteMutationResponse implements MutationResponse{
+        message: String!
+        code: Float!
+        success: Boolean!
     }
     type Query{
         _ : String
@@ -22,11 +32,12 @@ const typeDefs = gql`
     type Mutation{
         _ : String
     }
-`;
+`
 
 module.exports = [
-    typeDefs,
-    userTypeDefs,
-    clientTypeDefs,
-    propertyTypeDefs,
+  typeDefs,
+  userTypeDefs,
+  clientTypeDefs,
+  propertyTypeDefs,
+  ticketTypedefs
 ]
