@@ -27,7 +27,7 @@ import TextEditor from '../inputs/TextEditor'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: 10,
     textAlign: 'center'
@@ -39,8 +39,14 @@ const useStyles = makeStyles({
     marginBottom: 20
   },
   headers: {
-    marginLeft: 10,
-    fontSize: '18px'
+    marginLeft: '10%',
+    fontSize: '18px',
+    [theme.breakpoints.up('sm')]:{
+      marginLeft:'30%'
+    },
+    [theme.breakpoints.up('md')]:{
+      marginLeft:'40%'
+    },
   },
   divider: {
     width: 340,
@@ -53,7 +59,7 @@ const useStyles = makeStyles({
     width: 320,
     marginBottom: 20
   }
-})
+}))
 
 function PropertyForm () {
 
@@ -185,8 +191,8 @@ function PropertyForm () {
   }
 
   return (
-        <Grid container>
-            <Grid item xs={12}>
+        <Grid container justify='center'>
+            <Grid item xs={12} >
               <Typography className={classes.headers}>
                 Información General
               </Typography>
@@ -325,6 +331,8 @@ function PropertyForm () {
                 onChange={location.handleChange}
                 error={location.touched.state && location.errors.state}
               />
+            </Grid>
+            <Grid item xs={12} className={classes.gridItem}> 
               <InputSelect
                 object={cities}  
                 label='Ciudad'
@@ -367,7 +375,7 @@ function PropertyForm () {
                 error={URL.touched.URL && URL.errors.URL}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} classes={classes.gridItem}>
               <ImageHandler
                   images={images}
                   updateImages={updateImages}

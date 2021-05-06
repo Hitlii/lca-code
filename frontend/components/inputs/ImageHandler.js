@@ -14,7 +14,7 @@ const { v4: uuidv4 } = require('uuid')
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   button: {
     width: 40,

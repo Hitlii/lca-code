@@ -21,6 +21,10 @@ function Login () {
 
   const context = useContext(AuthContext)
   const router = useRouter()
+
+  if(context.user) {
+    router.push('/admin/properties')
+  }
   const classes = loginStyles()
 
   const [errors, setErrors] = useState({})

@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
+import { gql, useMutation } from '@apollo/client'
+
 import GreenButton from '../buttons/GreenButton'
 import GreyButton from '../buttons/GreyButton'
 import InputText from '../inputs/InputText'
 import InputSelect from '../inputs/InputSelect'
 import useForm from '../../hooks/useForm'
+
+import Divider from '@material-ui/core/Divider'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { gql, useMutation } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -15,9 +18,22 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   headers: {
-    marginLeft: 20,
-    marginBottom: 10
-  }, 
+    marginLeft: '10%',
+    fontSize: '18px',
+    [theme.breakpoints.up('sm')]:{
+      marginLeft:'30%'
+    },
+    [theme.breakpoints.up('md')]:{
+        marginLeft:'40%'
+    },
+  },
+  divider: {
+    width: 340,
+    color: '#f2f2f2',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 20,
+  },
   gridItem: {
       textAlign: 'center'
   }
@@ -62,9 +78,10 @@ function ClientForm () {
     return (
             <Grid container className={classes.formContainer}>
                     <Grid item xs={12}>
-                        <Typography variant='h6' className={classes.headers}>
+                        <Typography className={classes.headers}>
                             Informacion del cliente
                         </Typography>
+                        <Divider className={classes.divider}/>
                     </Grid>
                     <Grid item xs={12} className={classes.gridItem}>
                         <InputText
@@ -96,9 +113,10 @@ function ClientForm () {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant='h6' className={classes.headers}>
+                        <Typography className={classes.headers}>
                             Contacto
                         </Typography>
+                        <Divider className={classes.divider}/>
                     </Grid>
                     <Grid item xs={12} className={classes.gridItem}>
                         <InputText
@@ -121,9 +139,10 @@ function ClientForm () {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant='h6' className={classes.headers}>
+                        <Typography className={classes.headers}>
                             Ubicación
                         </Typography>
+                        <Divider className={classes.divider}/>
                     </Grid>
                     <Grid item xs={12} className={classes.gridItem}>
                         <InputText

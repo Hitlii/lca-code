@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { 
+    Container,
     FormControl,
     FormControlLabel,
     FormLabel,
     Radio,
     RadioGroup,
-    Typography,
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -14,8 +14,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 
 const useStyles = makeStyles(({
+    container: {
+        padding:0,
+        width: 340, 
+    },
     root: {
-        marginLeft: 20,
+        marginLeft: 10,
         marginBottom: 20,
     },
     label: {
@@ -83,12 +87,11 @@ function MultipleChoice({ label, object, value, name, onChange, error }) {
     }
 
     return (
-        <>
-
+        <Container className={classes.container}>
             <FormControl component='fieldset' className={classes.root}>
                 {error ? 
                     <FormLabel className={classes.error} focused={false} component='legend'>{label}</FormLabel>
-                       :
+                        :
                     <FormLabel className={classes.label} focused={false} component='legend'>{label}</FormLabel>
                 }
                 <RadioGroup value={value} name={name} onChange={onChange}>
@@ -97,7 +100,7 @@ function MultipleChoice({ label, object, value, name, onChange, error }) {
                     ))}
                 </RadioGroup>
             </FormControl>
-        </>
+        </Container>
     )
 }
 

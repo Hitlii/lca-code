@@ -85,7 +85,7 @@ function MenuBar () {
 
             <Grid >
                 <IconButton className={classes.buttonStyle}>
-                <SearchIcon/>
+                    <SearchIcon/>
                 </IconButton>
             </Grid>
 
