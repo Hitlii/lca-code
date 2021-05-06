@@ -102,6 +102,7 @@ function PropertyForm () {
 
   const [client, setClient] = useState(
     {
+      id:'',
       name: '',
       birthday: '',
       gender: '',
@@ -120,6 +121,7 @@ function PropertyForm () {
   const onChangeClient = (_, value) => {
     if(value) {
       setClient({ 
+        id: value.id,
         name: value.name, 
         birthday: value.birthday,
         gender: value.gender,
@@ -171,8 +173,10 @@ function PropertyForm () {
       metaTitle: metaInfo.values.title,
       metaDescription: metaInfo.values.description,
       metaURL: metaInfo.values.URL,
-      id: '6090a48f9ed22317648214c8',
-      name: 'John Doe',
+      id: '60872b9c572f8f19c0020b10',
+      name: client.name,
+      email: client.contact.email,
+      phone: client.contact.phone,
     }
   })
 
@@ -191,14 +195,14 @@ function PropertyForm () {
   }
 
   return (
-        <Grid container justify='center'>
+        <Grid container>
             <Grid item xs={12} >
               <Typography className={classes.headers}>
                 Información General
               </Typography>
               <Divider className={classes.divider}/>
             </Grid>
-            <Grid item className={classes.gridItem} xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='Código*'
@@ -365,7 +369,7 @@ function PropertyForm () {
               </Typography>
               <Divider className={classes.divider}/>
             </Grid>
-            <Grid item className={classes.gridItem} xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='URL'
@@ -375,7 +379,7 @@ function PropertyForm () {
                 error={URL.touched.URL && URL.errors.URL}
               />
             </Grid>
-            <Grid item xs={12} classes={classes.gridItem}>
+            <Grid item xs={12}>
               <ImageHandler
                   images={images}
                   updateImages={updateImages}
@@ -389,7 +393,7 @@ function PropertyForm () {
                 </Typography>
               <Divider className={classes.divider}/>
             </Grid>
-            <Grid item className={classes.gridItem} xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='Meta-Título'
@@ -399,7 +403,7 @@ function PropertyForm () {
                 error={metaInfo.touched.title && metaInfo.errors.title}
               />
             </Grid>
-            <Grid item className={classes.gridItem} xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <TextField
                 className={classes.multiline}
                 type='text'
@@ -412,7 +416,7 @@ function PropertyForm () {
                 helperText={metaInfo.touched.description && metaInfo.errors.description}
               />
             </Grid>
-            <Grid item className={classes.gridItem} xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='text'
                 placeholder='Meta-URL'
@@ -428,7 +432,7 @@ function PropertyForm () {
               </Typography>
               <Divider className={classes.divider}/>
             </Grid>
-            <Grid item className={classes.gridItem} xs={12}>
+            <Grid item xs={12} className={classes.gridItem}>
               <SearchClient 
                 value={client}
                 onChange={onChangeClient}
@@ -470,6 +474,8 @@ const CREATE_PROPERTY = gql
     $metaURL: String
     $id: ID!
     $name: String!
+    $email: String!
+    $phone: String!
   ) {
     createProperty(
       property: {
@@ -509,6 +515,10 @@ const CREATE_PROPERTY = gql
         {
           id: $id
           name: $name
+          contact: {
+            email: $email
+            phone: $phone
+          }
         }
       ]
     ) {

@@ -44,7 +44,7 @@ function createProperty() {
 
     return (
         <div>
-            <AppBar position='static' elevation={0}>
+            <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton className={classes.iconButton} href='/admin/properties'>
                         <ChevronLeftIcon className={classes.icon}/>
