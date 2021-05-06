@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography ,IconButton} from "@material-ui/core";
+import { Grid, Typography ,IconButton,Paper} from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
       marginLeft:10,
       display:'block',
       textAlign: 'center'
-    },messageStyle: {
+    },
+    messageStyle: {
         width: 300,
         height: 30,
         borderRadius: 15,
@@ -48,7 +49,9 @@ const ShowPromissory = ({promissory,deletePromissory}) => {
     const classes=useStyles()
   
   return (
+
     <Grid container justify='center'>
+      
       <Typography className={classes.typographyStyle}variant="body2" gutterBottom>
         Meses 
       </Typography>
@@ -58,21 +61,26 @@ const ShowPromissory = ({promissory,deletePromissory}) => {
       {promissory.length ? promissory.map((promissory, index) => {
         return (
           <Grid container key={index} justify='center'>
+            <IconButton className={classes.iconButton} >
+             {index+1}
+            </IconButton>
             <label className={classes.labelStyle}>{promissory.months}</label>
 
             <label className={classes.labelStyle}>{promissory.payment}</label> 
             <IconButton className={classes.iconButton} onClick={() => deletePromissory(index)}>
-                        <HighlightOffIcon/>
+              <HighlightOffIcon/>
             </IconButton>
           </Grid>
         );
       }):
-      <Grid container>
+      <Grid container justify='center'>
       <Typography className={classes.messageStyle}variant="body2" gutterBottom>
       No hay pagare
-        </Typography>
+      </Typography>
       </Grid>}
+      
     </Grid>
+
   );
 };
 
