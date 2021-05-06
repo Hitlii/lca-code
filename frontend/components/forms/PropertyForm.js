@@ -154,7 +154,7 @@ function PropertyForm () {
       currency: priceAndArea.values.currency,
       area: priceAndArea.values.area,
       title: description.values.title,
-      description: slateEditor,
+      description: slateEditor.toString(),
       state: location.values.state,
       city: location.values.city,
       address: location.values.address,
@@ -165,14 +165,8 @@ function PropertyForm () {
       metaTitle: metaInfo.values.title,
       metaDescription: metaInfo.values.description,
       metaURL: metaInfo.values.URL,
-      clients: [{
-        id: '6090a48f9ed22317648214c8',
-        name: 'John Doe',
-        contact: {
-          email: 'johnDoe@user.com',
-          phone: '+52662-393-7090'
-        }
-      }]
+      id: '6090a48f9ed22317648214c8',
+      name: 'John Doe',
     }
   })
 
@@ -256,7 +250,7 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
-                type='text'
+                type='number'
                 placeholder='Precio*'
                 value={priceAndArea.values.price}
                 name='price'
@@ -286,7 +280,7 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
-                type='text'
+                type='number'
                 placeholder='Área(m^2)*'
                 value={priceAndArea.values.area}
                 name='area'
@@ -466,7 +460,8 @@ const CREATE_PROPERTY = gql
     $metaTitle: String!
     $metaDescription: String!
     $metaURL: String
-    $clients: [String!]
+    $id: ID!
+    $name: String!
   ) {
     createProperty(
       property: {
@@ -480,7 +475,9 @@ const CREATE_PROPERTY = gql
         currency: $currency 
         area: $area 
         title: $title  
-        description: $description
+        description: {
+          text: $description
+        }
         location: {
           state: $state  
           city: $city  
@@ -500,7 +497,12 @@ const CREATE_PROPERTY = gql
           url: $metaURL
         }
       }
-      clients: $clients
+      clients: [
+        {
+          id: $id
+          name: $name
+        }
+      ]
     ) {
       success
     }

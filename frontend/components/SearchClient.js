@@ -49,7 +49,6 @@ function SearchClient({ value, onChange}) {
         )
     }
 
-
     if(error) {
         console.log(error)
     }
