@@ -48,27 +48,26 @@ module.exports = {
                 throw error;
             }
         },
-        updateClient: async (_, args) => {
+        updateClient: async (_, {id, name, gender, birthday, email, phone, city, state, address}) => {
             // Set fields to update
-            const tempClient = {
-                name: args.name,
-                gender: args.gender,
-                birthday: args.birthday,
-                contact: {
-                    email: args.email,
-                    phone: args.phone
-                },
-                location: {
-                    city: args.city,
-                    state: args.state,
-                    address: args.address
-                }
+            var tempClient = {
+                name,
+                gender,
+                birthday,
+                'contact.email': email,
+                'contact.phone': phone,
+                'location.city': city,
+                'location.state': state,
+                'location.address': address
             };
             
+            // Clean object by deleting null/undefined entries.
+            Object.keys(tempClient).forEach((k) => tempClient[k] == null && tempClient[k] == undefined && delete tempClient[k]);
+
             try {
                 // Wait for update operation
                 const updatedClient = await Client.findByIdAndUpdate(
-                    args.id, 
+                    { _id: id }, 
                     { $set: tempClient }, 
                     { new: true }
                 );
@@ -81,7 +80,7 @@ module.exports = {
         },
         deleteClient: async (_, { id }) => {
             // Find client to delete
-            const client = await Client.findById(id);
+            const client = await Client.findById( {_id: id});
             try {
                 // Wait for delete operation
                 await client.deleteOne();
