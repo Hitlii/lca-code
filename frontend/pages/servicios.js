@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-function services() {
+function Servicios() {
   const classes = useStyles();
   return (
     <div>
@@ -59,4 +59,4 @@ function services() {
   );
 }
 
-export default services;
+export default Servicios;

@@ -5,30 +5,12 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { gql, useQuery } from '@apollo/client'
-
-const GET_CLIENTS = gql 
-`
-query getClients  {
-  getClients {
-    id
-    name
-    birthday
-    gender
-    contact {
-      email
-      phone
-    }
-    location {
-        state
-        city
-        address
-    }
-  }
-}
-
-`
+import { GET_CLIENTS } from '../graphql/queries'
 
 const useStyles = makeStyles(({
+    auto: {
+        marginBottom: 20,
+    },
     textField: {
         width: 340,
         height: 40,
@@ -36,9 +18,10 @@ const useStyles = makeStyles(({
     }
 }))
 
-function SearchClient({ value, onChange}) {
+function SearchClient({ value, onChange }) {
 
     const classes = useStyles()
+
     const { data, loading, error } = useQuery(GET_CLIENTS)
 
     if(loading) {
@@ -54,14 +37,15 @@ function SearchClient({ value, onChange}) {
     }
 
     const clients = data.getClients
-    //value = clients[0]
+    
+
 
     return (
         <Autocomplete 
+            className={classes.auto}
+            multiple
+            limitTags={2}
             options={clients}
-            value={value}
-            onChange={onChange}
-            autoHighlight
             getOptionLabel={(option) => option.name}
             renderOption={(option) => (
                 <Typography>

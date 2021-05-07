@@ -100,43 +100,28 @@ function PropertyForm () {
 
   const auxImages = ['unaimagen.jpg']
 
-  const [client, setClient] = useState(
-    {
-      id:'',
-      name: '',
-      birthday: '',
-      gender: '',
-      contact: {
-        email: '',
-        phone: '',
-      },
-      location: {
-        state: '',
-        city: '',
-        address: ''
-      }
+  const [client, setClient] = useState([{
+    id: '',
+    name:'',
+    contact: {
+      email:'',
+      phone:'',
     }
-  )
+  }])
 
   const onChangeClient = (_, value) => {
     if(value) {
-      setClient({ 
-        id: value.id,
-        name: value.name, 
-        birthday: value.birthday,
-        gender: value.gender,
-        contact: {
-          email: value.contact.email,
-          phone: value.contact.phone
-        },
-        location: {
-          state: value.location.state,
-          city: value.location.city,
-          address: value.location.address
-        }
-      })
+      setClient((value) => [...client, value])
+      console.log(client)
     } else {
-      setClient({})
+      setClient({
+        id:'',
+        name: '',
+        contact: {
+          email: '',
+          phone: '',
+      },
+      })
     }
   }
 
@@ -173,10 +158,10 @@ function PropertyForm () {
       metaTitle: metaInfo.values.title,
       metaDescription: metaInfo.values.description,
       metaURL: metaInfo.values.URL,
-      id: '60872b9c572f8f19c0020b10',
-      name: client.name,
-      email: client.contact.email,
-      phone: client.contact.phone,
+      //id: client[0].id,
+      //name: client[0].name,
+      //email: client[0].contact.email,
+      //phone: client[0].contact.phone,
     }
   })
 
@@ -434,8 +419,8 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <SearchClient 
-                value={client}
-                onChange={onChangeClient}
+                  value={client}
+                  onChange={onChangeClient}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>

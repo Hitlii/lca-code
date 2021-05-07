@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ShowInformaction = ({ showInformationCheck }) => {
+  
   const classes = useStyles()
 
   return (
@@ -53,7 +54,7 @@ const ShowInformaction = ({ showInformationCheck }) => {
             <Collapse in={showInformationCheck} className={classes.collapseStyle}>
 
                 <Grid container justify="center">
-                  <Link href='/aboutUs'>
+                  <Link href='/nosotros'>
                     <Button
                       className={classes.appButtonStyle}
                       variant="contained"
@@ -62,7 +63,7 @@ const ShowInformaction = ({ showInformationCheck }) => {
                       Nosotros
                     </Button>
                   </Link>
-                  <Link href='/services'>
+                  <Link href='/servicios'>
                     <Button
                       className={classes.appButtonStyle}
                       variant="contained"
