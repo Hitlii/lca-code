@@ -11,7 +11,7 @@ const resolvers = require('./src/graphql/resolvers')
 const typeDefs = require('./src/graphql/typeDefs')
 // const { verifyUser } = require('./src/graphql/helper/context')
 const auth = require('./middleware/auth');
-
+const { v4: uuidv4 } = require('uuid');
 
 const app = express()
 
@@ -22,7 +22,7 @@ const storage = multer.diskStorage(({
     cb(null, 'images')
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
+    cb(null,  uuidv4()+file.originalname)
   }
 }))
 
@@ -38,19 +38,17 @@ const fileFilter = (req, file, cb) => {
 
 
 app.use((req,res,next)=>{
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Methods', 'PUT POST');
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'PUT, POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
   next();
 })
 
-app.use(auth);
+//app.use(auth);
 
 app.use(
   multer({ storage, fileFilter, limits }).array('images', 50)
 )
-
 
 
 app.use('/images', express.static(path.join(__dirname, 'images')))

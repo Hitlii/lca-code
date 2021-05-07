@@ -59,7 +59,7 @@ function PropertyForm () {
   const { description } = useDescription()
   const { location, cities} = useLocation()
   const { URL } = useURL()
-  const { images, updateImages, orderImages, deleteImage } = useImageState([])
+  const { images, updateImages, orderImages, deleteImage,getPathImages,imagesPath} = useImageState([])
 
   const [slateEditor, setSlateEditor] = useState([
     {
@@ -86,6 +86,9 @@ function PropertyForm () {
   }
 
   function addPropertyCallback(){
+    getPathImages(images).then(()=>{
+      console.log(imagesPath.current)
+    })
     generalInfo.handleSubmit()
     priceAndArea.handleSubmit()
     description.handleSubmit()
