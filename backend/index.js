@@ -38,9 +38,9 @@ const fileFilter = (req, file, cb) => {
 
 
 app.use((req,res,next)=>{
-  res.setHeader('Acces-Control-Allow-Origin', '*');
-  res.setHeader('Acces-Control-Methods', 'PUT');
-  res.setHeader('Acces-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Methods', 'PUT POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   next();
 })
