@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 const { v4: uuidv4 } = require("uuid");
 import Axios from "axios";
 
@@ -63,6 +63,11 @@ function useImageState(initialVal) {
   }
 
   async function getPathImages(images) {
+    //Sacamos token de localStorage
+    let token
+    if(typeof window !== 'undefined') {
+      token = localStorage.getItem('token')
+    }
     const formDatas = new FormData();
     images.map((image) => {
       formDatas.append("images", image.imageFile);
@@ -71,13 +76,13 @@ function useImageState(initialVal) {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImxjYWJpZW5lc3JhaWNlc3RrdEBnbWFpbC5jb20iLCJpYXQiOjE2MjA0MjM0MTUsImV4cCI6MTYyMDQzNDIxNSwic3ViIjoiNjA3MTA5Yjk5OWUwNmIzOWM0NDNiN2ViIn0.aQ6ZBohZddfcwUY6HfGXmll-9GzZxQmnHHI5zmNrGD",
+          `Bearer ${token}`,
       },
     })
       .then((res) => {
         console.log(res);
         if (res.data.code === 201) {
-          imagesPath.current = { filesPath: res.data.filesPath };
+          imagesPath.current = Array.from(res.data.filesPath)
         }
       })
       .catch((error) => {
