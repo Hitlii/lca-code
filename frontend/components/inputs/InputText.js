@@ -24,7 +24,7 @@ const useStyles = makeStyles(({
       }
 }))
 
-function InputText({ type, placeholder, value, name, onChange, error }) {
+function InputText({ type, placeholder, multiline,  value, name, onChange, error }) {
 
     const classes = useStyles()
 
@@ -33,6 +33,8 @@ function InputText({ type, placeholder, value, name, onChange, error }) {
             <InputBase 
                 className={classes.root}
                 type={type}
+                multiline={multiline ? true : false}
+                rows='10'
                 placeholder={placeholder}
                 value={value}
                 name={name}

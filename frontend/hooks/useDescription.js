@@ -16,7 +16,7 @@ const useDescription = () => {
       },
       validationSchema: validationSchema,
       onSubmit: (values) => {
-        console.log(v)
+        console.log(values)
       }
     })
 

@@ -33,13 +33,13 @@ const useGeneralInfo = () => {
         }
     })
 
-    const states = ['Venta', 'Renta']
+    const status = ['Venta', 'Renta']
     const zones = ['Campestre', 'Urbana', 'Comercial']
     const types = ['Casa', 'Terreno', 'Rancho']
 
     return { 
         generalInfo,
-        states, 
+        status, 
         zones, 
         types
     }

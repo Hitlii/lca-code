@@ -1,6 +1,6 @@
-import React from 'react'
-import PropertyForm from '../../components/forms/PropertyForm'
+import {Fragment} from 'react'
 
+import PropertyForm from '../../../components/forms/PropertyForm'
 import {
     AppBar,
     IconButton,
@@ -12,7 +12,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
-const useStyles = makeStyles({
+import {gql, useQuery} from '@apollo/client';
+
+  const useStyles = makeStyles({
     appbar: {
         padding: 0,
         marginBottom: 20,
@@ -38,12 +40,29 @@ const useStyles = makeStyles({
     }
 })
 
-function createProperty() {
+export default function PostPropertyPage(props){
 
+    const GET_ALL_CLIENTS = gql`
+    query GetAllClients{
+    getClients{
+        id
+        name
+        contact{
+        phone
+        email
+        }
+    }
+    }
+    `
+    const { loading, error, data } = useQuery(GET_ALL_CLIENTS);
     const classes = useStyles()
+    
+    if(loading) return <h2>Loading...</h2>
+    if(error) return <h2> Some error..</h2>
 
-    return (
-        <div>
+    const autoCompleteClients = data.getClients
+    return(
+        <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton className={classes.iconButton} href='/admin/properties'>
@@ -54,9 +73,12 @@ function createProperty() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <PropertyForm />
-        </div>
+            <PropertyForm 
+                autoCompleteClients={autoCompleteClients} 
+            />
+        </Fragment>
     )
 }
 
-export default createProperty
+
+

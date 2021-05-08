@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import ContainerImageFile from './ShowImageFile'
+import ContainerImageFile from '../ShowImageFile'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
@@ -14,7 +14,7 @@ const { v4: uuidv4 } = require('uuid')
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   button: {
     width: 40,

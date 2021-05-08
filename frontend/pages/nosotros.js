@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   },
 });
 
-function aboutUs() {
+function Nosotros() {
   const classes = useStyles();
 
   return (
@@ -192,4 +192,4 @@ function aboutUs() {
   );
 }
 
-export default aboutUs;
+export default Nosotros;

@@ -8,7 +8,7 @@ import {
   InputBase, 
   Typography,
 } from '@material-ui/core'
-import Checkbox from '../../components/Checkbox'
+import Checkbox from '../../components/inputs/Checkbox'
 import StyledLink from '../../components/StyledLink'
 
 import { useFormik } from 'formik';
@@ -21,6 +21,10 @@ function Login () {
 
   const context = useContext(AuthContext)
   const router = useRouter()
+
+  if(context.user) {
+    router.push('/admin/properties')
+  }
   const classes = loginStyles()
 
   const [errors, setErrors] = useState({})
