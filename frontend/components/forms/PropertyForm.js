@@ -105,6 +105,33 @@ function PropertyForm (props) {
     })
   }
 
+  const auxImages = ['unaimagen.jpg']
+
+  const [client, setClient] = useState([{
+    id: '',
+    name:'',
+    contact: {
+      email:'',
+      phone:'',
+    }
+  }])
+
+  const onChangeClient = (_, value) => {
+    if(value) {
+      setClient((value) => [...client, value])
+      console.log(client)
+    } else {
+      setClient({
+        id:'',
+        name: '',
+        contact: {
+          email: '',
+          phone: '',
+      },
+      })
+    }
+  }
+
   const [createProperty] = useMutation(CREATE_PROPERTY, {
     update (
       _, 
@@ -133,12 +160,15 @@ function PropertyForm (props) {
       address: location.values.address,
       lat: coordinates.lat,
       lng: coordinates.lng,
-      images: imagesPath.current,
+      images: auxImages,
       video: URL.values.URL,
       metaTitle: metaInfo.values.title,
       metaDescription: metaInfo.values.description,
       metaURL: metaInfo.values.URL,
-      clients: vendors
+      //id: client[0].id,
+      //name: client[0].name,
+      //email: client[0].contact.email,
+      //phone: client[0].contact.phone,
     }
   })
 
@@ -152,8 +182,10 @@ function PropertyForm (props) {
     console.log(slateEditor)
     location.handleSubmit()
     console.log(coordinates)
+    console.log(images)
     URL.handleSubmit()
     metaInfo.handleSubmit()
+    console.log(client)
     createProperty()
   }
 
@@ -435,7 +467,10 @@ const CREATE_PROPERTY = gql
     $metaTitle: String!
     $metaDescription: String!
     $metaURL: String
-    $clients: [ClientInput!]!
+    $id: ID!
+    $name: String!
+    $email: String!
+    $phone: String!
   ) {
     createProperty(
       property: {
@@ -471,7 +506,16 @@ const CREATE_PROPERTY = gql
           url: $metaURL
         }
       }
-      clients: $clients
+      clients: [
+        {
+          id: $id
+          name: $name
+          contact: {
+            email: $email
+            phone: $phone
+          }
+        }
+      ]
     ) {
       success
     }

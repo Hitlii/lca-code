@@ -55,15 +55,15 @@ app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.put('/post-images', (req, res, next) => {
 
-  // if (!req.isAuth) {
-  //   return res.status(401).json({
-  //     message: "Acceso Denegado!",
-  //     code: 401,
-  //     solution: "Inicie sesion c:",
-  //     success: false,
-  //   })
+  if (!req.isAuth) {
+    return res.status(401).json({
+      message: "Acceso Denegado!",
+      code: 401,
+      solution: "Inicie sesion c:",
+      success: false,
+    })
    
-  // }
+  }
   
   if (!req.files) {
     return res.status(200).json({ 
