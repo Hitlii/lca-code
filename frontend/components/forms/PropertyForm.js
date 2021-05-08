@@ -74,7 +74,7 @@ function PropertyForm (props) {
   const { URL } = useURL()
 
   const { metaInfo } = useMetaInfo()
-  const { images, updateImages, orderImages, deleteImage,getPathImages,imagesPath} = useImageState([])
+  const { images, updateImages, orderImages, deleteImage, getPathImages, imagesPath } = useImageState([])
 
 
   function handleChangeVendors(updatedVendors){ 
@@ -105,33 +105,6 @@ function PropertyForm (props) {
     })
   }
 
-  const auxImages = ['unaimagen.jpg']
-
-  const [client, setClient] = useState([{
-    id: '',
-    name:'',
-    contact: {
-      email:'',
-      phone:'',
-    }
-  }])
-
-  const onChangeClient = (_, value) => {
-    if(value) {
-      setClient((value) => [...client, value])
-      console.log(client)
-    } else {
-      setClient({
-        id:'',
-        name: '',
-        contact: {
-          email: '',
-          phone: '',
-      },
-      })
-    }
-  }
-
   const [createProperty] = useMutation(CREATE_PROPERTY, {
     update (
       _, 
@@ -160,15 +133,12 @@ function PropertyForm (props) {
       address: location.values.address,
       lat: coordinates.lat,
       lng: coordinates.lng,
-      images: auxImages,
+      images: imagesPath.current,
       video: URL.values.URL,
       metaTitle: metaInfo.values.title,
       metaDescription: metaInfo.values.description,
       metaURL: metaInfo.values.URL,
-      //id: client[0].id,
-      //name: client[0].name,
-      //email: client[0].contact.email,
-      //phone: client[0].contact.phone,
+      clients: vendors
     }
   })
 
@@ -182,10 +152,8 @@ function PropertyForm (props) {
     console.log(slateEditor)
     location.handleSubmit()
     console.log(coordinates)
-    console.log(images)
     URL.handleSubmit()
     metaInfo.handleSubmit()
-    console.log(client)
     createProperty()
   }
 
@@ -467,10 +435,7 @@ const CREATE_PROPERTY = gql
     $metaTitle: String!
     $metaDescription: String!
     $metaURL: String
-    $id: ID!
-    $name: String!
-    $email: String!
-    $phone: String!
+    $clients: [ClientInput!]!
   ) {
     createProperty(
       property: {
@@ -506,16 +471,7 @@ const CREATE_PROPERTY = gql
           url: $metaURL
         }
       }
-      clients: [
-        {
-          id: $id
-          name: $name
-          contact: {
-            email: $email
-            phone: $phone
-          }
-        }
-      ]
+      clients: $clients
     ) {
       success
     }
