@@ -61,11 +61,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function PropertyForm () {
-
+function PropertyForm (props) {
+  const {autoCompleteClients} = props;
   const classes = useStyles()
   const [errors, setErrors] = useState({})
-
+  // Vendors
+  const [vendors, setVendors] = useState([]);
   const { generalInfo, status, zones, types } = useGeneralInfo()
   const { priceAndArea, currencies } = usePriceAndArea()
   const { description } = useDescription()
@@ -74,6 +75,10 @@ function PropertyForm () {
   const { images, updateImages, orderImages, deleteImage } = useImageState([])
   const { metaInfo } = useMetaInfo()
 
+  function handleChangeVendors(updatedVendors){ 
+    setVendors(updatedVendors);
+    console.log(updatedVendors);
+  }
   const [slateEditor, setSlateEditor] = useState([
     {
       type: 'paragraph',
@@ -276,7 +281,7 @@ function PropertyForm () {
             <Grid item xs={12} className={classes.gridItem}>
               <InputText
                 type='number'
-                placeholder='Área(m^2)*'
+                placeholder='Área (m²)*'
                 value={priceAndArea.values.area}
                 name='area'
                 onChange={priceAndArea.handleChange}
@@ -419,8 +424,8 @@ function PropertyForm () {
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>
               <SearchClient 
-                  value={client}
-                  onChange={onChangeClient}
+                  clients = {autoCompleteClients}
+                  handleChangeVendors = {handleChangeVendors}
               />
             </Grid>
             <Grid item xs={12} className={classes.gridItem}>

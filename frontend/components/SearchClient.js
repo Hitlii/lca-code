@@ -4,8 +4,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { gql, useQuery } from '@apollo/client'
-import { GET_CLIENTS } from '../graphql/queries'
+import { GET_ALL_CLIENTS } from '../graphql/queries'
 
 const useStyles = makeStyles(({
     auto: {
@@ -18,28 +17,19 @@ const useStyles = makeStyles(({
     }
 }))
 
-function SearchClient({ value, onChange }) {
+function SearchClient({
+    onChange, 
+    clients, 
+    handleChangeVendors 
+    
+    }) {
 
     const classes = useStyles()
 
-    const { data, loading, error } = useQuery(GET_CLIENTS)
-
-    if(loading) {
-        return (
-            <Typography>
-                Loading...
-            </Typography>
-        )
+    function handleChange(event,value){ 
+        handleChangeVendors(value);
+        console.log(value);
     }
-
-    if(error) {
-        console.log(error)
-    }
-
-    const clients = data.getClients
-    
-
-
     return (
         <Autocomplete 
             className={classes.auto}
@@ -49,14 +39,15 @@ function SearchClient({ value, onChange }) {
             getOptionLabel={(option) => option.name}
             renderOption={(option) => (
                 <Typography>
-                    {option.name} - {option.contact.email}
+                    {option.name} - {option.contact.phone}
                 </Typography>
             )}
+            onChange={handleChange}
             renderInput={(params) => (
                 <TextField 
                     className={classes.textField}
                     {...params} 
-                    label='Elige un cliente'
+                    label='Elija un cliente'
                     variant='outlined'
                 />
             )}
