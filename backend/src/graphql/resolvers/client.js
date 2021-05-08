@@ -47,27 +47,26 @@ module.exports = {
         throw error
       }
     },
-    updateClient: async (_, args) => {
-      // Set fields to update
+    updateClient: async (_, { id, name, gender, birthday, email, phone, city, state, address }) => {
+      // Create object with fields to update
       const tempClient = {
-        name: args.name,
-        gender: args.gender,
-        birthday: args.birthday,
-        contact: {
-          email: args.email,
-          phone: args.phone
-        },
-        location: {
-          city: args.city,
-          state: args.state,
-          address: args.address
-        }
+        name,
+        gender,
+        birthday,
+        'contact.email': email,
+        'contact.phone': phone,
+        'location.city': city,
+        'location.state': state,
+        'location.address': address
       }
+
+      // Clean object to remove null/undefined fields
+      Object.keys(tempClient).forEach((k) => tempClient[k] == null && tempClient[k] == undefined && delete tempClient[k]);
 
       try {
         // Wait for update operation
         const updatedClient = await Client.findByIdAndUpdate(
-          args.id,
+          { _id: id },
           { $set: tempClient },
           { new: true }
         )

@@ -72,8 +72,10 @@ function PropertyForm (props) {
   const { description } = useDescription()
   const { location, cities} = useLocation()
   const { URL } = useURL()
-  const { images, updateImages, orderImages, deleteImage } = useImageState([])
+
   const { metaInfo } = useMetaInfo()
+  const { images, updateImages, orderImages, deleteImage,getPathImages,imagesPath} = useImageState([])
+
 
   function handleChangeVendors(updatedVendors){ 
     setVendors(updatedVendors);
@@ -171,6 +173,9 @@ function PropertyForm (props) {
   })
 
   function addPropertyCallback(){
+    getPathImages(images).then(()=>{
+      console.log(imagesPath.current)
+    })
     generalInfo.handleSubmit()
     priceAndArea.handleSubmit()
     description.handleSubmit()
