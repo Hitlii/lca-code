@@ -10,8 +10,8 @@ const path = require('path')
 const resolvers = require('./src/graphql/resolvers')
 const typeDefs = require('./src/graphql/typeDefs')
 // const { verifyUser } = require('./src/graphql/helper/context')
-const auth = require('./middleware/auth');
-const { v4: uuidv4 } = require('uuid');
+const auth = require('./middleware/auth')
+const { v4: uuidv4 } = require('uuid')
 
 const app = express()
 
@@ -22,7 +22,7 @@ const storage = multer.diskStorage(({
     cb(null, 'images')
   },
   filename: (req, file, cb) => {
-    cb(null,  uuidv4()+file.originalname)
+    cb(null, uuidv4() + file.originalname)
   }
 }))
 
@@ -36,48 +36,45 @@ const fileFilter = (req, file, cb) => {
   (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') ? cb(null, true) : cb(null, false)
 }
 
-
-app.use((req,res,next)=>{
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'PUT, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+  res.setHeader('Access-Control-Allow-Methods', 'PUT, POST')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  next()
 })
 
-//app.use(auth);
+app.use(auth)
 
 app.use(
   multer({ storage, fileFilter, limits }).array('images', 50)
 )
 
-
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.put('/post-images', (req, res, next) => {
-
   if (!req.isAuth) {
     return res.status(401).json({
-      message: "Acceso Denegado!",
+      message: 'Acceso Denegado!',
       code: 401,
-      solution: "Inicie sesion c:",
-      success: false,
+      solution: 'Inicie sesion c:',
+      success: false
     })
-   
   }
-  
+
   if (!req.files) {
-    return res.status(200).json({ 
+    return res.status(200).json({
       message: 'No file provided!',
       code: 200,
-      success: false,
-       })
+      success: false
+    })
   }
   const filesPath = req.files.map(file => file.path)
-  return res.status(201).json({ 
-    message: 'File Stored', 
-    success:true, 
-    code: 201, 
-    filesPath })
+  return res.status(201).json({
+    message: 'File Stored',
+    success: true,
+    code: 201,
+    filesPath
+  })
 })
 
 // Mongoose connection configuration options
@@ -87,8 +84,6 @@ const mongooseOptions = {
   useCreateIndex: true,
   useFindAndModify: false
 }
-
-
 
 app.use(
   expressJwt({

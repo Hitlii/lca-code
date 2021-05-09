@@ -7,7 +7,6 @@ const useDescription = () => {
         .string()
         .required('Título es requerido')
         .max(70, 'Muy largo!'),
-      
     })
 
     const description = useFormik({

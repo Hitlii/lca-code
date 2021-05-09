@@ -1,22 +1,37 @@
 import React, { useState } from 'react'
 import useImageState from '../../hooks/useImageState'
 import useGeneralInfo from '../../hooks/useGeneralInfo'
-import usePriceAndArea from '../../hooks/usePriceAndArea'
+import priceAreaValidation from '../../hooks/priceAreaValidation'
 import useLocation from '../../hooks/useLocation'
 import useDescription from '../../hooks/useDescription'
 import useURL from '../../hooks/useURL'
 import useMetaInfo from '../../hooks/useMetaInfo'
+import { useFormik } from 'formik'
 
 import { gql, useMutation } from '@apollo/client'
 
 import {
   Divider,
   Grid,
-  TextField,
-  Typography,
+  Typography
 } from '@material-ui/core'
 
-import GreenButton from '../buttons/GreenButton'
+// MaterialUI Imports --------------------------------
+import Button from '@material-ui/core/Button'
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import SaveIcon from '@material-ui/icons/Save';
+import Select from '@material-ui/core/Select';
+
+// My Components --------------------------------
+import TextField from '../inputs/TextField'
+import SubmitButton from '../buttons/GreenButton'
 import ImageHandler from '../inputs/ImageHandler'
 import InputSelect from '../inputs/InputSelect'
 import InputText from '../inputs/InputText'
@@ -25,35 +40,39 @@ import MultipleChoice from '../inputs/MultipleChoice'
 import SearchClient from '../SearchClient'
 import TextEditor from '../inputs/TextEditor'
 
+// Validator ----------------------------------------------------------------
+import {propertyValidationSchema} from '../../helper/propertyValidator'
+
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: 10,
-    textAlign: 'center'
+    maxWidth: 600,
+    minWidth: 320,
+    margin: 'auto',
   },
   gridItem: {
     textAlign: 'center'
   },
   map: {
-    marginBottom: 20
+    display: 'float'
   },
   headers: {
     marginLeft: '10%',
     fontSize: '18px',
-    [theme.breakpoints.up('sm')]:{
-      marginLeft:'30%'
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: '30%'
     },
-    [theme.breakpoints.up('md')]:{
-      marginLeft:'40%'
-    },
+    [theme.breakpoints.up('md')]: {
+      marginLeft: '40%'
+    }
   },
   divider: {
     width: 340,
     color: '#f2f2f2',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom: 20,
+    marginBottom: 20
   },
   multiline: {
     width: 320,
@@ -61,26 +80,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function PropertyForm (props) {
-  const {autoCompleteClients} = props;
+function PropertyForm ({ autoCompleteClients }) {
   const classes = useStyles()
   const [errors, setErrors] = useState({})
   // Vendors
-  const [vendors, setVendors] = useState([]);
+  const [vendors, setVendors] = useState([])
   const { generalInfo, status, zones, types } = useGeneralInfo()
-  const { priceAndArea, currencies } = usePriceAndArea()
+  const { priceArea, currencies } = priceAreaValidation()
   const { description } = useDescription()
-  const { location, cities} = useLocation()
+  const { location, cities } = useLocation()
   const { URL } = useURL()
 
   const { metaInfo } = useMetaInfo()
   const { images, updateImages, orderImages, deleteImage, getPathImages, imagesPath } = useImageState([])
-
-
-  function handleChangeVendors(updatedVendors){ 
-    setVendors(updatedVendors);
-    console.log(updatedVendors);
-  }
+  const [coordinates, setCoordinates] = useState({
+    lat: 0,
+    lng: 0
+  })
   const [slateEditor, setSlateEditor] = useState([
     {
       type: 'paragraph',
@@ -89,25 +105,50 @@ function PropertyForm (props) {
       ]
     }
   ])
+  
+  const initialValues ={
+    code:'',
+    status:' ',
+    zone:' ',
+    type:' ',
+    currency:' ',
+    price:'',
+    specialPrice:'',
+    paymentPrice:'',
+    area:'',
+    state:'',
+    city:'',
+    address:'',
+    title: '',
+    description: '',
+
+  }
+    // Formik.
+ const formikInput = useFormik({
+        initialValues: initialValues,
+        validationSchema: propertyValidationSchema,
+        onSubmit: (values) => {
+            console.log(values)
+        }
+    });
+  function handleChangeVendors (updatedVendors) {
+    setVendors(updatedVendors)
+  }
   const onChangeSlateEditor = (newDesc) => {
     setSlateEditor(newDesc)
   }
 
-  const [coordinates, setCoordinates] = useState({
-    lat: 0,
-    lng: 0
-  })
 
   const onChangeCoordinates = (e) => {
     setCoordinates({
-      lat: e.latLng.lat(), 
+      lat: e.latLng.lat(),
       lng: e.latLng.lng()
     })
   }
 
   const [createProperty] = useMutation(CREATE_PROPERTY, {
     update (
-      _, 
+      _,
       { data }
     ) {
       console.log(data)
@@ -117,302 +158,342 @@ function PropertyForm (props) {
       console.log(errors)
     },
     variables: {
-      status: generalInfo.values.status,
-      type: generalInfo.values.type,
-      zone: generalInfo.values.zone,
-      code: generalInfo.values.code,
-      price: priceAndArea.values.price,
-      specialPrice: priceAndArea.values.specialPrice,
-      onPayments: priceAndArea.values.paymentPrice,
-      currency: priceAndArea.values.currency,
-      area: priceAndArea.values.area,
-      title: description.values.title,
+      status: formikInput.values.status,
+      type: formikInput.values.type,
+      zone: formikInput.values.zone,
+      code: formikInput.values.code,
+      price: formikInput.values.price,
+      specialPrice: formikInput.values.specialPrice,
+      onPayments: formikInput.values.paymentPrice,
+      currency: formikInput.values.currency,
+      area: formikInput.values.area,
+      title: formikInput.values.title,
       description: slateEditor.toString(),
-      state: location.values.state,
-      city: location.values.city,
-      address: location.values.address,
+      state: formikInput.values.state,
+      city: formikInput.values.city,
+      address: formikInput.values.address,
       lat: coordinates.lat,
       lng: coordinates.lng,
       images: imagesPath.current,
       video: URL.values.URL,
-      metaTitle: metaInfo.values.title,
-      metaDescription: metaInfo.values.description,
-      metaURL: metaInfo.values.URL,
+      metaTitle: formikInput.values.title,
+      metaDescription: formikInput.values.description,
+      metaURL: formikInput.values.URL,
       clients: vendors
     }
   })
 
-  function addPropertyCallback(){
-    getPathImages(images).then(()=>{
-      console.log(imagesPath.current)
-    })
-    generalInfo.handleSubmit()
-    priceAndArea.handleSubmit()
-    description.handleSubmit()
-    console.log(slateEditor)
-    location.handleSubmit()
-    console.log(coordinates)
-    URL.handleSubmit()
-    metaInfo.handleSubmit()
-    createProperty()
+  async function postProperty (event) {
+    event.preventDefault();
+    formikInput.handleSubmit();
+    if( formikInput.errors)
+    return 
+
+    await getPathImages(images);
+
+    
+    //createProperty()
   }
 
+/**
+  @description Checks errors on Formik #handleSubmit
+  @param {key} String Key of the formik Schema
+  @returns {boolean} True if erros occurred, falsy if not
+ */
+ function isInputError(key){
+   return formikInput.touched[key] && formikInput.errors[key]
+ }
+  
+  const defaultInputProps = {
+    fullWidth: true,
+    size: 'medium',
+    margin: 'dense',
+    variant: 'filled',
+    
+  }
+
+  const defaultTypoProps = {
+    align: 'left',
+    display: 'block',
+    gutterBottom: true,
+    variant: 'h5'
+  }
+
+  const requiredInputs ={
+    required: true,
+    title: 'Por favor, llene este campo.'
+  }
   return (
-        <Grid container>
-            <Grid item xs={12} >
-              <Typography className={classes.headers}>
-                Información General
-              </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Código*'
-                value={generalInfo.values.code}
-                name='code'
-                onChange={generalInfo.handleChange}
-                error={generalInfo.touched.code && generalInfo.errors.code}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <MultipleChoice
-                label='Estado*'
-                object={status}
-                value={generalInfo.values.status}
-                name='status'
-                onChange={generalInfo.handleChange}
-                error={generalInfo.touched.status && generalInfo.errors.status}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <MultipleChoice
-                label='Zona*'
-                object={zones}
-                value={generalInfo.values.zone}
-                name='zone'
-                onChange={generalInfo.handleChange}
-                error={generalInfo.touched.zone && generalInfo.errors.zone}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <MultipleChoice
-                label='Tipo*'
-                object={types}
-                value={generalInfo.values.type}
-                name='type'
-                onChange={generalInfo.handleChange}
-                error={generalInfo.touched.type && generalInfo.errors.type}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.headers}>
-                Precio y Área
-              </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12}>
-              <MultipleChoice
-                label='Divisa*'
-                object={currencies}
-                value={priceAndArea.values.currency}
-                name='currency'
-                onChange={priceAndArea.handleChange}
-                error={priceAndArea.touched.currency && priceAndArea.errors.currency}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='number'
-                placeholder='Precio*'
-                value={priceAndArea.values.price}
-                name='price'
-                onChange={priceAndArea.handleChange}
-                error={priceAndArea.touched.price && priceAndArea.errors.price}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Precio Especial'
-                value={priceAndArea.values.specialPrice}
-                name='specialPrice'
-                onChange={priceAndArea.handleChange}
-                error={priceAndArea.touched.specialPrice && priceAndArea.errors.specialPrice}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Precio en Pagos'
-                value={priceAndArea.values.paymentPrice}
-                name='paymentPrice'
-                onChange={priceAndArea.handleChange}
-                error={priceAndArea.touched.paymentPrice && priceAndArea.errors.paymentPrice}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='number'
-                placeholder='Área (m²)*'
-                value={priceAndArea.values.area}
-                name='area'
-                onChange={priceAndArea.handleChange}
-                error={priceAndArea.touched.area && priceAndArea.errors.area}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.headers}>
-                Descripción
-              </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Título de la propiedad'
-                value={description.values.title}
-                name='title'
-                onChange={description.handleChange}
-                error={description.touched.title && description.errors.title}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <TextEditor
+    <div className={classes.root}>
+
+      <Typography variant='h3' display='block' gutterBottom align='left'> Agregar propiedad </Typography>
+      <Typography {...defaultTypoProps}>Caracteristicas generales</Typography>
+      <Divider/>
+        <form onSubmit={postProperty}>
+            {/* Status */}
+            <FormControl component="fieldset" {...defaultInputProps} {...requiredInputs} error={ isInputError('status')}>
+              <FormLabel component="legend">Estado</FormLabel>
+              <RadioGroup aria-label="quiz" name="status" value={formikInput.values.status} onChange={formikInput.handleChange}>
+                <FormControlLabel value="Venta" control={<Radio />} label="Venta" />
+                <FormControlLabel value="Renta" control={<Radio />} label="Renta" />
+              </RadioGroup>
+              <FormHelperText>Hola</FormHelperText>
+            </FormControl>
+
+            {/* Zone */}
+            <FormControl component="fieldset" {...defaultInputProps}  {...requiredInputs}  error={ isInputError('zone')}>
+            <FormLabel component="legend">Zona</FormLabel>
+            <RadioGroup aria-label="quiz" name="zone" onChange={formikInput.handleChange} value ={formikInput.values.zone}>
+              <FormControlLabel value="Campestre" control={<Radio />} label="Campestre" />
+              <FormControlLabel value="Urbana" control={<Radio />} label="Urbana" />
+              <FormControlLabel value="Comercial" control={<Radio />} label="Comercial" />
+            </RadioGroup>
+            <FormHelperText>Hola</FormHelperText>
+          </FormControl>
+
+           {/* Type */}
+            <FormControl component="fieldset" {...defaultInputProps}  {...requiredInputs}  error={ isInputError('type')}>
+            <FormLabel component="legend">Tipo</FormLabel>
+            <RadioGroup aria-label="quiz" name="type" value={formikInput.values.type} onChange={formikInput.handleChange}>
+              <FormControlLabel value="Casa" control={<Radio />} label="Casa" />
+              <FormControlLabel value="Terreno" control={<Radio />} label="Terreno" />
+              <FormControlLabel value="Rancho" control={<Radio />} label="Rancho" />
+            </RadioGroup>
+             { isInputError('status')&&<FormHelperText>Hola</FormHelperText>}
+          </FormControl>
+
+           {/* Code */}
+            <TextField 
+              {...defaultInputProps}
+              {...requiredInputs}
+              id="code"
+              name="code"
+              label="Codigo"
+              helperText="Máx: 15 caracteres"
+              title = "Por favor, llene este campo"
+              placeholder='0000VT-00'
+              onChange={formikInput.handleChange}
+              value={formikInput.values.code}
+              error={ isInputError('code')}
+             />
+          
+{/* PRICE AREA */}
+          <Typography {...defaultTypoProps}>Precio y Área</Typography>
+          <Divider/>
+
+          {/* Currency */}
+            <FormControl component="fieldset" {...defaultInputProps}  {...requiredInputs} error={ isInputError('currency')}>
+            <FormLabel component="legend">Divisa</FormLabel>
+            <RadioGroup aria-label="quiz" name="currency" value={formikInput.values.currency} onChange={formikInput.handleChange}>
+              <FormControlLabel value="USD" control={<Radio />} label="USD" />
+              <FormControlLabel value="MXN" control={<Radio />} label="MXN" />
+            </RadioGroup>
+            <FormHelperText>Seleccione divisa</FormHelperText>
+          </FormControl>
+
+          {/* Price */}
+           <TextField 
+              {...requiredInputs}
+              {...defaultInputProps}
+              id="price"
+              name="price"
+              label="Precio"
+              type="number"
+              placeholder='$ 0.0'
+               onChange={formikInput.handleChange}
+              value={formikInput.values.price}
+              error={ isInputError('price')}
+             />
+
+            {/* Area */}
+            <TextField 
+              {...requiredInputs}
+              {...defaultInputProps}
+              id="area"
+              name="area"
+              label="Área (m²)"
+              type="number"
+              placeholder='0 m²'
+              onChange={formikInput.handleChange}
+              value={formikInput.values.area}
+              error={ isInputError('area')}
+             />
+
+            {/* Special Price */}
+             <TextField 
+              {...defaultInputProps}
+              id="specialPrice"
+              name="specialPrice"
+              label="Precio especial (como tú)"
+              placeholder='$ 00 USD|MXN/m²'
+              helperText= 'Precio por m², ha. Max: 20'
+              onChange={formikInput.handleChange}
+              value={formikInput.values.specialPrice}
+              error={ isInputError('specialPrice')}
+             />
+
+             {/* Payment Price */}
+              <TextField 
+                {...defaultInputProps}
+                id="paymentPrice"
+                name="paymentPrice"
+                label="Precio en pagos"
+                placeholder='(meses)x $ (mensualidad) 12x $100'
+                helperText= 'Ingrese la los meses y la mensualidad'
+                onChange={formikInput.handleChange}
+                value={formikInput.values.paymentPrice}
+                error={ isInputError('paymentPrice')}
+             />
+
+            
+            
+{/* Description */}
+          <Typography {...defaultTypoProps}>Descripción</Typography>
+          <Divider/>
+          
+          <TextField 
+                {...requiredInputs}
+                {...defaultInputProps}
+                id="title"
+                name="title"
+                label="Título"
+                placeholder='Ingrese un título'
+                helperText= 'Para mejor SEO ingrese un título corto. Máx: 70'
+                onChange={formikInput.handleChange}
+                value={formikInput.values.title}
+                error={ isInputError('title')}
+          />
+
+          <TextEditor
                 value={slateEditor}
                 onChange={onChangeSlateEditor}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.headers}>
-                Ubicación
-              </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Estado'
-                value='Baja California'
-                name='state'
-                onChange={location.handleChange}
-                error={location.touched.state && location.errors.state}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}> 
-              <InputSelect
-                object={cities}  
-                label='Ciudad'
-                placeholder='Ciudad'
-                value={location.values.city}
-                name='city'
-                onChange={location.handleChange}
-                error={location.touched.city && location.errors.city}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Dirección'
-                value={location.values.address}
-                name='address'
-                onChange={location.handleChange}
-                error={location.touched.address && location.errors.address}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.map}>
-              <Map 
+          />
+        
+{/* Location */}
+          <Typography {...defaultTypoProps}>Ubicación</Typography>
+          <Divider/>
+
+          {/* State */}
+          <TextField 
+                {...defaultInputProps}
+                disabled
+                id="state"
+                name="state"
+                label="Estado"
+                value= "B.C"
+
+
+              
+          />
+
+          {/* City */}
+          <FormControl className={classes.formControl} {...defaultInputProps} {...requiredInputs}>
+            <InputLabel id="citySelect">Ciudad</InputLabel>
+            <Select
+              labelId="citySelect"
+              id="city"
+              name="city"
+              value= 'Tecate'
+              error={ isInputError('city')}
+            >
+              <MenuItem value={'Tecate'}>Tecate</MenuItem>
+              <MenuItem value={'Tijuana'}>Tijuana</MenuItem>
+              <MenuItem value={'Mexicali'}>Mexicali</MenuItem>
+              <MenuItem value={'San Quintín'}>San Quintín</MenuItem>
+              <MenuItem value={'Rosarito'}>Rosarito</MenuItem>
+              <MenuItem value={'Ensenada'}>Tecate</MenuItem>
+            </Select>
+          </FormControl>
+
+           {/* Address */}
+          <TextField 
+                {...defaultInputProps}
+                {...requiredInputs}
+                id="address"
+                name="address"
+                label="Dirección"
+                placeholder='Ingrese la dirección de la propiedad'
+                helperText= 'Ingrese una direccion corta. Máx: 20'
+                onChange={formikInput.handleChange}
+                value={formikInput.values.address}
+                error={ isInputError('address')}
+          />
+
+          <Typography {...defaultTypoProps}>Ubicación en el mapa</Typography>
+         {/* Coordinates */}
+               <Map
+                  className={classes.map }
                   marker={coordinates}
                   handleChange={onChangeCoordinates}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.headers}>
-                Media
-              </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='URL'
-                value={URL.values.URL}
-                name='URL'
-                onChange={URL.handleChange}
-                error={URL.touched.URL && URL.errors.URL}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <ImageHandler
+{/* Images */}
+          <Typography {...defaultTypoProps}>Imagenes</Typography>
+          <Divider/>
+
+          {/* Images */}
+          <ImageHandler
                   images={images}
                   updateImages={updateImages}
                   deleteImage={deleteImage}
                   orderImages={orderImages}
-              />
-            </Grid>
-            <Grid item xs={12}>
-                <Typography className={classes.headers}>
-                  Meta
-                </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Meta-Título'
-                value={metaInfo.values.title}
-                name='title'
-                onChange={metaInfo.handleChange}
-                error={metaInfo.touched.title && metaInfo.errors.title}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <TextField
-                className={classes.multiline}
-                type='text'
+          />
+
+{/* Meta */}
+          <Typography {...defaultTypoProps}>Meta</Typography>
+          <Divider/>
+
+          {/* Title */}
+          <TextField 
+                {...defaultInputProps}
+                {...requiredInputs}
+                id="meta.title"
+                name="meta.title"
+                label="Titulo"
+                placeholder='Ingrese el titulo meta de la propiedad'
+                helperText= 'Ingrese un titulo corto. Máx: 55'
+          />
+          {/* Description */}
+             <TextField 
+                {...defaultInputProps}
+                {...requiredInputs}
                 multiline
-                placeholder='Meta-Descripción'
-                value={metaInfo.values.description}
-                name='description'
-                onChange={metaInfo.handleChange}
-                error={metaInfo.touched.description && Boolean(metaInfo.errors.description)}
-                helperText={metaInfo.touched.description && metaInfo.errors.description}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <InputText
-                type='text'
-                placeholder='Meta-URL'
-                value={metaInfo.values.URL}
-                name='URL'
-                onChange={metaInfo.handleChange}
-                error={metaInfo.touched.URL && metaInfo.errors.URL}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.headers}>
-                Cliente
-              </Typography>
-              <Divider className={classes.divider}/>
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <SearchClient 
-                  clients = {autoCompleteClients}
-                  handleChangeVendors = {handleChangeVendors}
-              />
-            </Grid>
-            <Grid item xs={12} className={classes.gridItem}>
-              <GreenButton
-                  onClick={addPropertyCallback}
-                  text='Crear Propiedad'
-              />
-            </Grid>
-        </Grid>
+                rows ={4}
+                id="description"
+                name="description"
+                label="Descripción"
+                placeholder='Ingrese la descripción meta de la propiedad'
+                helperText= 'Ingrese una descripción corto. Máx: 160'
+                onChange={formikInput.handleChange}
+                value={formikInput.values.description}
+                error={ isInputError('description')}
+          />
+
+{/* Meta */}
+          <Typography {...defaultTypoProps}>Dueños</Typography>
+          <Divider/>
+
+          <SearchClient
+            clients = {autoCompleteClients}
+            handleChangeVendors = {handleChangeVendors}
+          />
+
+         
+         
+        <SubmitButton 
+          type="submit" 
+          size="large"
+          fullWidth
+          startIcon ={<SaveIcon/>}  
+        >
+        Crear Propiedad
+        </SubmitButton>
+
+        </form>
+    </div>
   )
 }
 
-const CREATE_PROPERTY = gql 
-`
+const CREATE_PROPERTY = gql`
   mutation createProperty(
     $status: String!
     $type: String!

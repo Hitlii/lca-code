@@ -1,4 +1,4 @@
-import { React, useState, useCallback, useRef } from 'react'
+import { React, useState, useCallback, useRef, useEffect } from 'react'
 import {
   GoogleMap,
   useLoadScript,
@@ -9,8 +9,10 @@ import {
 import mapStyles from './mapStyles'
 // Google Maps Style
 const mapContainerStyle = {
-  width: '100vw',
-  height: '100vh'
+  width: '100%',
+  maxHeight: 600,
+  minHeight: 300,
+  borderRadius: 15
 
 }
 
@@ -26,21 +28,16 @@ const options = {
 }
 
 export default function Map ({ marker, handleChange }) {
-  //const [marker, setMarker] = useState({ lat: '', lng: '' })
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.googleMapsAPIKey
-  })
+  
 
-  /*function handleChange (event) {
-    setMarker({
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng()
+   const { isLoaded, loadError } = useLoadScript({
+      googleMapsApiKey: process.env.googleMapsAPIKey
     })
-  }*/
+
+ 
 
   if (loadError) return 'Error Loading maps'
-
-  if (!isLoaded) return 'Loading...'
+  if(!isLoaded) return 'Loading...'
 
   return <GoogleMap
                 mapContainerStyle={mapContainerStyle}

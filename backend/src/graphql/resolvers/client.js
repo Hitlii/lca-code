@@ -61,7 +61,7 @@ module.exports = {
       }
 
       // Clean object to remove null/undefined fields
-      Object.keys(tempClient).forEach((k) => tempClient[k] == null && tempClient[k] == undefined && delete tempClient[k]);
+      Object.keys(tempClient).forEach((k) => tempClient[k] === null && tempClient[k] === undefined && delete tempClient[k])
 
       try {
         // Wait for update operation

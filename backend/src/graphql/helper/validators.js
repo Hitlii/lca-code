@@ -2,16 +2,24 @@ const ObjectId = require('mongoose').Types.ObjectId
 const Validator = require('validatorjs')
 /**
 @description Validates the client input.
-
+@param {clientInput} object Contains the client input fields.
  */
 function clientInputValidator (clientInput) {
   // Trim client input
   Object.keys(clientInput).forEach(
     key => {
-      if (key === 'location') return Object.keys(clientInput.location).map(key => clientInput.location[key] = trim(clientInput.location[key]))
-      if (key === 'contact') return Object.keys(clientInput.contact).map(key => clientInput.contact[key] = trim(clientInput.contact[key]))
+      if (key === 'location') {
+        Object.keys(clientInput.location).forEach(key => {
+          clientInput.location[key] = trim(clientInput.location[key])
+        })
+      }
+      if (key === 'contact') {
+        Object.keys(clientInput.contact).forEach(key => {
+          clientInput.contact[key] = trim(clientInput.contact[key])
+        })
+      }
       if (key === 'birthday') return
-      return clientInput[key] = trim(clientInput[key])
+      clientInput[key] = trim(clientInput[key])
     }
   )
 
@@ -39,10 +47,10 @@ function clientInputValidator (clientInput) {
 
 function ticketInputValidator (ticket) {
   // Trim client input
-  Object.keys(ticket).map(
+  Object.keys(ticket).forEach(
     key => {
       if (key === 'area' || key === 'price' || key === 'emissionDate' || key === 'promissory') return
-      return ticket[key] = trim(ticket[key])
+      ticket[key] = trim(ticket[key])
     }
   )
 

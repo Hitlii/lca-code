@@ -4,26 +4,24 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    height: 40,
-    width: 340,
-    marginBottom: 10,
+  
     color: 'white',
     backgroundColor: '#4CAF50',
     borderRadius: 15
   }
 }))
 
-function GreenButton ({ type, onClick, text }) {
+function GreenButton (props) {
   const classes = useStyles()
 
   return (
         <Button
-            type={type}
+            type={props.type}
             className={classes.button}
             variant='contained'
-            onClick={onClick}
+            onClick={props.onClick}
         >
-            {text}
+            {props.children}
         </Button>
   )
 }

@@ -1,4 +1,4 @@
-export default function Paga404(){
+export default function Page404(){
 
     return (
         <div>

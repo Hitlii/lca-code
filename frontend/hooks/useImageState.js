@@ -71,22 +71,26 @@ function useImageState(initialVal) {
     images.map((image) => {
       formDatas.append("images", image.imageFile);
     });
-    await Axios.put("http://localhost:8000/post-images", formDatas, {
+
+  try {
+
+    const res = await Axios.put("http://localhost:8000/post-images", formDatas, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization:
           `Bearer ${token}`,
       },
     })
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 201) {
+    if (res.data.code === 201) {
           imagesPath.current = res.data.filesPath;
         }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+
+    
+  } catch (error) {
+      console.log(error)
+  }
+    
   }
 
   // Handler when image is ordered

@@ -63,11 +63,14 @@ const ImageHandler = ({ images, updateImages,deleteImage,orderImages}) => {
   const [initialPositionImage, setInitialPositionImage] = useState(-1)
 
   const handleChangeImages = e => {
+    // Preventing default
+    e.preventDefault()
     updateImages(e)
   }
 
 
   const handleImage = (e) => {
+    e.preventDefault();
     if (deleteMode) {
       deleteImage(e)
     } else if (changeMode) {

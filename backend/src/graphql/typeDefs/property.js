@@ -131,7 +131,7 @@ module.exports = gql`
         "Meta descriptors, such as description, keywords, author, and URL"
         meta: Meta!
         "Property Vendors"
-        vendors: [String!] 
+        vendors: [Client!] 
 
     }
 

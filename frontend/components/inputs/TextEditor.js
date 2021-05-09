@@ -63,7 +63,6 @@ function TextEditor ({ value, onChange }) {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
   return (
-        <Paper elevation={0} variant='outlined' className={classes.root}>
             <Slate
                 editor={editor}
                 value={value}
@@ -85,7 +84,6 @@ function TextEditor ({ value, onChange }) {
                     renderLeaf={renderLeaf}
                 />
             </Slate>
-        </Paper>
   )
 }
 

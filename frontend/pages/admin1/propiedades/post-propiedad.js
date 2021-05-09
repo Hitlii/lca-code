@@ -11,8 +11,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-
-import {gql, useQuery} from '@apollo/client';
+import client from "../../../lib/apollo-client";
+import {gql} from '@apollo/client';
 
   const useStyles = makeStyles({
     appbar: {
@@ -42,25 +42,11 @@ import {gql, useQuery} from '@apollo/client';
 
 export default function PostPropertyPage(props){
 
-    const GET_ALL_CLIENTS = gql`
-    query GetAllClients{
-    getClients{
-        id
-        name
-        contact{
-        phone
-        email
-        }
-    }
-    }
-    `
-    const { loading, error, data } = useQuery(GET_ALL_CLIENTS);
+ 
     const classes = useStyles()
     
-    if(loading) return <h2>Loading...</h2>
-    if(error) return <h2> Some error..</h2>
+    if(props.error) return <h2> Some error occurred..</h2>
 
-    const autoCompleteClients = data.getClients
     return(
         <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
@@ -74,11 +60,37 @@ export default function PostPropertyPage(props){
                 </Toolbar>
             </AppBar>
             <PropertyForm 
-                autoCompleteClients={autoCompleteClients} 
+                autoCompleteClients={props.clients} 
             />
         </Fragment>
     )
 }
 
+export async function getStaticProps(){
+    const GET_ALL_CLIENTS = gql`
+        query GetAllClients{
+            getClients{
+                id
+                name
+                contact{
+                phone
+                email
+                }
+            }
+        }
+    `
+     const { data } = await client.query({query: GET_ALL_CLIENTS})
+    
+    if(!data) return {
+        props: {
+            error: 'Error'
+        }
+    }
+    return{
+        props: {
+            clients: data.getClients
+        }
+    }
+}
 
 

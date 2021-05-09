@@ -1,32 +1,12 @@
 const Property = require('../../models/properties')
-const Client = require('../../models/clients')
 const ObjectId = require('mongoose').Types.ObjectId
 const { isObjectIdValid } = require('../helper/validators')
 module.exports = {
   Mutation: {
 
     createProperty: async (_, { property, clients }) => {
-      const newClients = []
-      const existingClients = []
-      let createdClients = []
-
-      // Seperating existing clients from new clients
-      for (const client of clients) {
-        // A client with an id will be an existing client
-        client.id ? existingClients.push(client) : newClients.push(client)
-      }
-
-      if (newClients.length !== 0) {
-        // Creating the new clients
-        createdClients = await Client.insertMany(newClients)
-      }
-
-      const newProperty = new Property({ ...property, vendors: [...existingClients, ...createdClients] })
-      newProperty.meta.url = process.env.BASE_URL +
-                    process.env.PORT + '/' +
-                    newProperty.title.replace(/\s+/g, '-').toLowerCase() + '-' +
-                    newProperty.code
-
+      const newProperty = new Property({ ...property, vendors: [...clients] })
+      newProperty.meta.url = newProperty.title.replace(/\s+/g, '-').toLowerCase() + '-' + newProperty.code
       await newProperty.save()
 
       return {
