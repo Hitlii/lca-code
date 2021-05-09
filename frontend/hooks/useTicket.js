@@ -19,7 +19,7 @@ const UseTicket = () => {
       .required("Tipo de moneda es requerida"),
     emissionDate: yup
       .date("Ingresa una fecha valida!")
-      .required("La fehca es requerida"),
+      .required("La fecha es requerida"),
     paymentLocation: yup.string("Introduce una localidad"),
     paymentAddress: yup
       .string("Introduce la direccion de la localidad")

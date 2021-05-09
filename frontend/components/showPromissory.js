@@ -53,10 +53,10 @@ const ShowPromissory = ({promissory,deletePromissory}) => {
     <Grid container justify='center'>
       
       <Typography className={classes.typographyStyle}variant="body2" gutterBottom>
-        Meses 
+      {promissory.length ? "Meses":''}
       </Typography>
       <Typography className={classes.typographyStyle}variant="body2" gutterBottom>
-        mensualidad
+      {promissory.length ? "Mensualidad":''}
       </Typography>
       {promissory.length ? promissory.map((promissory, index) => {
         return (
