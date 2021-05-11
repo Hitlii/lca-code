@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import useImageState from '../../hooks/useImageState'
 import useGeneralInfo from '../../hooks/useGeneralInfo'
 import priceAreaValidation from '../../hooks/priceAreaValidation'
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 600,
     minWidth: 320,
     margin: 'auto',
+    padding: 10,
   },
   gridItem: {
     textAlign: 'center'
@@ -82,16 +84,11 @@ const useStyles = makeStyles((theme) => ({
 
 function PropertyForm ({ autoCompleteClients }) {
   const classes = useStyles()
+  const router = useRouter()
   const [errors, setErrors] = useState({})
   // Vendors
   const [vendors, setVendors] = useState([])
-  const { generalInfo, status, zones, types } = useGeneralInfo()
-  const { priceArea, currencies } = priceAreaValidation()
-  const { description } = useDescription()
-  const { location, cities } = useLocation()
   const { URL } = useURL()
-
-  const { metaInfo } = useMetaInfo()
   const { images, updateImages, orderImages, deleteImage, getPathImages, imagesPath } = useImageState([])
   const [coordinates, setCoordinates] = useState({
     lat: 0,
@@ -121,7 +118,6 @@ function PropertyForm ({ autoCompleteClients }) {
     address:'',
     title: '',
     description: '',
-
   }
     // Formik.
  const formikInput = useFormik({
@@ -152,6 +148,7 @@ function PropertyForm ({ autoCompleteClients }) {
       { data }
     ) {
       console.log(data)
+      router.push('/admin1')
     },
     OnError (err) {
       setErrors(err && err.graphQLErrors[0] ? err.graphQLErrors[0].extensions.exception.errors : {})
@@ -186,13 +183,12 @@ function PropertyForm ({ autoCompleteClients }) {
   async function postProperty (event) {
     event.preventDefault();
     formikInput.handleSubmit();
-    if( formikInput.errors)
-    return 
+    if( formikInput.errors){
+      return 
+    }
 
     await getPathImages(images);
-
-    
-    //createProperty()
+    createProperty();
   }
 
 /**
@@ -225,9 +221,7 @@ function PropertyForm ({ autoCompleteClients }) {
   }
   return (
     <div className={classes.root}>
-
-      <Typography variant='h3' display='block' gutterBottom align='left'> Agregar propiedad </Typography>
-      <Typography {...defaultTypoProps}>Caracteristicas generales</Typography>
+      <Typography {...defaultTypoProps}>Características generales</Typography>
       <Divider/>
         <form onSubmit={postProperty}>
             {/* Status */}
@@ -393,7 +387,8 @@ function PropertyForm ({ autoCompleteClients }) {
               labelId="citySelect"
               id="city"
               name="city"
-              value= 'Tecate'
+              value={formikInput.values.city}
+              onChange={formikInput.handleChange}
               error={ isInputError('city')}
             >
               <MenuItem value={'Tecate'}>Tecate</MenuItem>
@@ -426,7 +421,7 @@ function PropertyForm ({ autoCompleteClients }) {
                   marker={coordinates}
                   handleChange={onChangeCoordinates}
               />
-{/* Images */}
+          {/* Images */}
           <Typography {...defaultTypoProps}>Imagenes</Typography>
           <Divider/>
 
@@ -438,7 +433,7 @@ function PropertyForm ({ autoCompleteClients }) {
                   orderImages={orderImages}
           />
 
-{/* Meta */}
+          {/* Meta */}
           <Typography {...defaultTypoProps}>Meta</Typography>
           <Divider/>
 
@@ -468,14 +463,14 @@ function PropertyForm ({ autoCompleteClients }) {
                 error={ isInputError('description')}
           />
 
-{/* Meta */}
-          <Typography {...defaultTypoProps}>Dueños</Typography>
-          <Divider/>
+        {/* Meta */}
+        <Typography {...defaultTypoProps}>Dueños</Typography>
+        <Divider/>
 
-          <SearchClient
+        <SearchClient
             clients = {autoCompleteClients}
             handleChangeVendors = {handleChangeVendors}
-          />
+        />
 
          
          

@@ -37,7 +37,7 @@ function NavBar () {
   const router = useRouter()
 
   const onClickProperties = () => {
-    router.push('/admin/properties')
+    router.push('/admin1')
   }
 
   return (

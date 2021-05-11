@@ -82,6 +82,17 @@ function TextEditor ({ value, onChange }) {
                     placeholder='Ingresa la descripcion aqui...'
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
+                    autoFocus
+                    spellCheck
+                    onKeyDown={(event) => {
+                      for(const hotkey in HOTKEYS) {
+                        if(isHotkey(hotkey, event)) {
+                          event.preventDefault()
+                          const mark = HOTKEYS[hotkey]
+                          toggleMark(editor, mark)
+                        }
+                      }
+                    }}
                 />
             </Slate>
   )

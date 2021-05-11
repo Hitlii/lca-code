@@ -1,11 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300&display=swap');  
 :root {
     --mesenger-blue: #2196F3
 }
 
 body{
     padding:0;
+    padding-bottom: 65px;
     margin:0;
     font-family: Open Sans;    
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300&display=swap');  
