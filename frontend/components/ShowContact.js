@@ -4,6 +4,7 @@ import { FaWhatsapp, FaFacebookMessenger } from 'react-icons/fa'
 import Grid from '@material-ui/core/Grid'
 import Collapse from '@material-ui/core/Collapse'
 import { green, grey6 } from '../public/colors'
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
 
@@ -58,29 +59,31 @@ const ShowContact = ({ showContactCheck }) => {
 
         <Container className={classes.container} >
             <Collapse in={showContactCheck} className={classes.collapseStyle}>
-
                 <Typography variant="h6" className={classes.contactTextStyle}>Contactar por</Typography>
                 <Grid container justify="center">
                       
-                    <a className={classes.link} target='_blank' href='https://api.whatsapp.com/send?phone=+526653922230&text=hola,%20qu%C3%A9%20tal?' rel='noopener noreferrer'>
+                    <Link 
+                      className={classes.link} 
+                      target='_blank' 
+                      href='https://api.whatsapp.com/send?phone=+526653922230&text=hola,%20qu%C3%A9%20tal?' 
+                      rel='noopener noreferrer'>
                         <Button variant="text"
                             className={classes.appButtonStyle}
                             startIcon={<FaWhatsapp className={classes.whatsappIconStyle}/>}
                         > Whatsapp
                         </Button>
-                    </a>
+                    </Link>
 
-                    <a className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
+                    <Link className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
                         <Button
                             variant="text" 
                             className={classes.appButtonStyle}
                             startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
                         > Message
                         </Button>
-                    </a>
+                    </Link>
 
                 </Grid>
-
             </Collapse>
         </Container>
 

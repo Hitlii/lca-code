@@ -1,7 +1,8 @@
 // Todos lo clientes.
-
-import { GET_ALL_CLIENTS } from '../../../graphql/queries'
-import { useQuery } from '@apollo/client';
+import React from 'react'
+import client from "../../../lib/apollo-client";
+import { gql } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 import ClientCard from '../../../components/cards/ClientCard'
 import NavBar from '../../../components/bars/NavBar'
@@ -11,9 +12,10 @@ import {
     InputBase,
     Paper
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
 import SearchIcon from '@material-ui/icons/Search'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
-import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme)=>({
     root: {
@@ -43,7 +45,6 @@ const useStyles = makeStyles((theme)=>({
     clientCard: {
         display: 'flex',
         justifyContent: 'center',
-        
     },
     addButton: {
         position: 'fixed',
@@ -55,25 +56,24 @@ const useStyles = makeStyles((theme)=>({
     addIcon: {
         width: 60,
         height: 60,
-    }
+    },
 }))
 
-export default function AllClientsPage(){
+export default function AllClientsPage(props){
 
     const classes = useStyles()
-    const { data, loading, error } = useQuery(GET_ALL_CLIENTS)
+    const router = useRouter()
 
-    if(loading) {
+    function refreshData() {
+        router.replace(router.asPath)
+    }
+
+    if(props.error) {
+        console.log(props.error)
         return (
-            <h1>Loading...</h1>
+            <h1> Some error occurred...</h1>
         )
     }
-
-    if(error) {
-        console.log(error)
-    }
-
-    const clients = data.getClients
     
     return(
         <div>
@@ -87,22 +87,50 @@ export default function AllClientsPage(){
                     <SearchIcon />
                 </IconButton>
             </Paper>
-                {clients.map((client) => {
-                    return (
-                        <div 
-                            className={classes.clientCard}
-                            key={client.id}
-                        >
-                            <ClientCard 
-                                client={client}
-                            />
-                        </div>
-                    )
-                })}
+            {props.clients.map((client) => {
+                return (
+                    <div 
+                        className={classes.clientCard}
+                        key={client.id}
+                    >
+                        <ClientCard 
+                            client={client}
+                            refreshData={refreshData}
+                        />
+                    </div>
+                )
+            })}
             <IconButton href='/admin1/clientes/post-cliente' className={classes.addButton}>
               <AddCircleIcon className={classes.addIcon} />
             </IconButton>
             <NavBar/>
         </div>
     )
+}
+
+export async function getServerSideProps(){
+    const GET_ALL_CLIENTS = gql`
+        query GetAllClients{
+            getClients{
+                id
+                name
+                contact{
+                phone
+                email
+                }
+            }
+        }
+    `
+    const { data } = await client.query({query: GET_ALL_CLIENTS})
+    
+    if(!data) return {
+        props: {
+            error: 'Error'
+        }
+    }
+    return{
+        props: {
+            clients: data.getClients
+        }
+    }
 }

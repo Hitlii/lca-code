@@ -22,12 +22,10 @@ export const clientValidationSchema = yup.object({
         .required('Número telefónico es requerido'),
     city: yup 
         .string('Ciudad')
-        .matches(/^[A-Za-z ]*$/, 'Este campo solo debe contener letras!')
         .max(40, 'Muy largo!')
         .required('Ciudad es requerida'),
     state: yup 
         .string('Estado')
-        .matches(/^[A-Za-z ]*$/, 'Este campo solo debe contener letras!')
         .max(20, 'Muy largo!')
         .required('Estado es requerido'),        
     address: yup 

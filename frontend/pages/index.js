@@ -116,8 +116,6 @@ import FilterPropertiesForm from "../components/forms/FilterPropertiesForm"
 import { Button, Slide, Collapse, Fade } from '@material-ui/core'
 import OrderFilterButton from "../components/buttons/OrderFilterButton"
 import OrderProperty from '../components/OrderProperty'
-import OptionProperty from '../components/OptionProperty'
-import OptionTicket from '../components/OptionTicket'
 import TicketForm from "../components/forms/TicketForm"
 // Propiedades destacadas
 // La imagen principal 

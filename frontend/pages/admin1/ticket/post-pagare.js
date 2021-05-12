@@ -51,7 +51,7 @@ export default function PostTicket(props){
         <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className={classes.iconButton} href='/admin/properties'>
+                    <IconButton className={classes.iconButton} href='/admin1'>
                         <ChevronLeftIcon className={classes.icon}/>
                     </IconButton>
                     <Typography className={classes.typo}>

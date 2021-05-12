@@ -1,14 +1,18 @@
-
 import { React, useState } from 'react'
-import { CardMedia, Container } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import Link from 'next/link'
+
+import { 
+  CardMedia, 
+  Container,
+  Grid 
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
 import IconButton from '@material-ui/core/IconButton'
 import SearchIcon from '@material-ui/icons/Search'
 import PhoneIcon from '@material-ui/icons/Phone'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Grid from '@material-ui/core/Grid'
+
 import ShowContact from '../ShowContact'
 import ShowInformation from '../ShowInformation'
 
@@ -57,20 +61,10 @@ function MenuBar () {
   const [showContactCheck, setShowContactCheck] = useState(false)
   const [showInformationCheck, setshowInformationCheck] = useState(false)
   const hanleShowContactButton = () => {
-    setshowInformationCheck(false)
-    if (showContactCheck === false) {
-      setShowContactCheck(true)
-    } else {
-      setShowContactCheck(false)
-    }
+    setshowInformationCheck(current => !current)
   }
   const hanleShowInformationButton = () => {
-    setShowContactCheck(false)
-    if (showInformationCheck === false) {
-      setshowInformationCheck(true)
-    } else {
-      setshowInformationCheck(false)
-    }
+    setShowContactCheck(current => !current)
   }
 
   return (

@@ -31,7 +31,7 @@ const useTicket = () => {
     initialValues: {
       name: "",
       idProperty: "",
-      statu: "No pagado",
+      status: "No pagado",
       area: "",
       price: "",
       currency: "USD",
@@ -45,11 +45,7 @@ const useTicket = () => {
       console.log(values);
     },
   });
-
-  const currency = ['USD','MXN']
-  const location = ["Tijuna B.C", "Ensenada B.C", "Rosarito B.C", "Tecate B.C"];
-  const status = ["No pagado", "Pagado"];
-  return { ticket, currency, location, status };
+  return { ticket };
 };
 
 export default useTicket;

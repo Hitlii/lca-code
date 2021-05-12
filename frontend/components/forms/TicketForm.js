@@ -7,24 +7,17 @@ import SearchClient from '../SearchClient'
 import Typography from "@material-ui/core/Typography";
 import SubmitButton from "../buttons/GreenButton";
 import AddPromisorryButton from "../buttons/GreenButton";
-import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormLabel from "@material-ui/core/FormLabel";
 import InputLabel from "@material-ui/core/InputLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import SaveIcon from "@material-ui/icons/Save";
-import Select from "@material-ui/core/Select";
-import Collapse from "@material-ui/core/Collapse";
+import Select from "@material-ui/core/Select"
 import useTicket from "../../hooks/useTicket";
 import TextField from "../inputs/TextField";
-import MenuList from "@material-ui/core/MenuList";
 import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display:'block',
     maxWidth: 600,
     minWidth: 320,
     margin: "auto",
@@ -66,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TicketForm({autoCompleteClients}) {
-    const [clients, setClients] = useState([])
+
+  const [clients, setClients] = useState([])
   const [promissory, setPromissory] = useState({ months: "", payment: "" });
   const [stateAddPromissory, setStateAddPromissory] = useState(false);
   const classes = useStyles();
@@ -127,16 +121,10 @@ function TicketForm({autoCompleteClients}) {
   }
 
   return (
-    <div>
+    <div className={classes.root}>
       <form onSubmit={handleSubmit}>
-        <Typography {...defaultTypoProps}>Informacion del Cliente</Typography>
-        <SearchClient
-          clients={autoCompleteClients}
-          handleChangeVendors={handleChangeClients}
-        />
-
         <Typography {...defaultTypoProps}>
-          Informaciond de la propierdad
+          Informacion de la propiedad
         </Typography>
         <TextField
           {...defaultInputProps}
@@ -151,20 +139,24 @@ function TicketForm({autoCompleteClients}) {
           value={ticket.values.idProperty}
           error={isInputError("idProperty")}
         />
+        <SearchClient
+          clients={autoCompleteClients}
+          handleChangeVendors={handleChangeClients}
+        />
         {/* Statu */}
         <FormControl
           className={classes.formControl}
           {...defaultInputProps}
           {...requiredInputs}
         >
-          <InputLabel id="statuSelect">Estado</InputLabel>
+          <InputLabel id="statusSelect">Estado</InputLabel>
           <Select
-            labelId="statuSelect"
-            id="statu"
-            name="statu"
+            labelId="statusSelect"
+            id="status"
+            name="status"
             onChange={ticket.handleChange}
-            value={ticket.values.statu}
-            error={isInputError("statu")}
+            value={ticket.values.status}
+            error={isInputError("status")}
           >
             <MenuItem value={"No pagado"}>No pagado</MenuItem>
             <MenuItem value={"Pagado"}>Pagado</MenuItem>
@@ -222,7 +214,6 @@ function TicketForm({autoCompleteClients}) {
           {...requiredInputs}
           id="emissionDate"
           name="emissionDate"
-          label="Fecha"
           helperText=""
           type="date"
           title="Por favor, llene este campo"
