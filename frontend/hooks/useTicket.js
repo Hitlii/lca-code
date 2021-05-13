@@ -29,16 +29,15 @@ const useTicket = () => {
 
   const ticket = useFormik({
     initialValues: {
-      name: "",
-      idProperty: "",
-      status: "No pagado",
-      area: "",
-      price: "",
-      currency: "USD",
-      emissionDate: "",
+      propertyId: '',
+      status: 'No pagado',
+      area: '',
+      price: '',
+      currency: 'USD',
+      emissionDate: '',
       promissory: [],
-      paymentLocation: "",
-      paymentAddress: "",
+      paymentLocation: '',
+      paymentAddress: '',
     },
    validationSchema: validationSchema,
     onSubmit: (values) => {

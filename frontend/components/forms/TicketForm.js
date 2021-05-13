@@ -15,6 +15,8 @@ import useTicket from "../../hooks/useTicket";
 import TextField from "../inputs/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 
+
+import { gql, useMutation } from '@apollo/client'
 const useStyles = makeStyles((theme) => ({
   root: {
     display:'block',
@@ -61,9 +63,10 @@ const useStyles = makeStyles((theme) => ({
 function TicketForm({autoCompleteClients}) {
 
   const [clients, setClients] = useState([])
-  const [promissory, setPromissory] = useState({ months: "", payment: "" });
+  const [promissory, setPromissory] = useState({ months:0, payment: 0 });
   const [stateAddPromissory, setStateAddPromissory] = useState(false);
   const classes = useStyles();
+  const [errors, setErrors] = useState({})
   const { ticket, currency, status, location } = useTicket();
   function isInputError(key) {
     return ticket.touched[key] && ticket.errors[key];
@@ -90,24 +93,25 @@ function TicketForm({autoCompleteClients}) {
     title: "Por favor, llene este campo.",
   };
   const onChangeMonths = (event) => {
-    setPromissory({ ...promissory, months: event.target.value });
+    setPromissory({ ...promissory, months: parseFloat(event.target.value) });
     console.log(promissory);
   };
   const onChangePayment = (event) => {
-    setPromissory({ ...promissory, payment: event.target.value });
+    setPromissory({ ...promissory, payment: parseFloat(event.target.value) });
     console.log(promissory);
   };
   const handleNewPromissory = () => {
     console.log(ticket.values.promissory);
-
+    setPromissory({ ...promissory,months:promissory.months});
+    setPromissory({ ...promissory,payment:promissory.payment});
       if (promissory.payment !== "" && promissory.months !== "") {
         ticket.setFieldValue("promissory", [
           ...ticket.values.promissory,
           promissory,
         ]);
-        setPromissory({ months: "", payment: "" });
+        setPromissory({ months: '', payment: '' });
       }
-
+    console.log(promissory)
   };
   const deletePromissory = (index) => {
     console.log(index);
@@ -120,19 +124,59 @@ function TicketForm({autoCompleteClients}) {
     console.log(clients)
   }
 
+  async function postTicket (event) {
+    event.preventDefault();
+    console.log(ticket.values)
+    ticket.handleSubmit();
+    // console.log(ticket.error)
+    // if( ticket.errors){
+    //   return 
+    // }
+    createTicket();
+  }
+
+
+  const [createTicket]= useMutation(CREATE_TICKET,{
+    update(
+      _,
+      {data}
+    ){
+      console.log(data)
+    },
+    OnError(err){
+      setErrors(err && err.graphQLErrors[0] ? err.graphQLErrors[0].extensions.exception.errors : {})
+      console.log(errors)
+    },
+    variables:{
+      propertyId:ticket.values.propertyId,
+      status:ticket.values.status,
+      area:parseFloat(ticket.values.area),
+      price:parseFloat(ticket.values.price),
+      currency:ticket.values.currency,
+      promissory:ticket.values.promissory,
+      emissionDate:ticket.values.emissionDate,
+      paymentLocation:ticket.values.paymentLocation,
+      paymentAddress:ticket.values.paymentAddress,
+      clients:clients
+
+    }
+  })
+
+
+
   return (
     <div className={classes.root}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={postTicket}>
         <Typography {...defaultTypoProps}>
           Informacion de la propiedad
         </Typography>
         <TextField
           {...defaultInputProps}
           {...requiredInputs}
-          id="idProperty"
-          name="idProperty"
+          id="propertyId"
+          name="propertyId"
           label="Id Property"
-          helperText="Máx: 15 caracteres"
+          helperText="Máx: 35 caracteres"
           title="Por favor, llene este campo"
           placeholder="0000VT-00"
           onChange={ticket.handleChange}
@@ -231,6 +275,7 @@ function TicketForm({autoCompleteClients}) {
             label="Meses"
             helperText=""
             type="number"
+            step='0.01'
             placeholder=""
             onChange={onChangeMonths}
             value={promissory.months}
@@ -243,6 +288,7 @@ function TicketForm({autoCompleteClients}) {
             label="Mensualidad"
             helperText=""
             type="number"
+            step='0.01'
             placeholder=""
             onChange={onChangePayment}
             value={promissory.payment}
@@ -311,5 +357,40 @@ function TicketForm({autoCompleteClients}) {
     </div>
   );
 }
+
+const CREATE_TICKET = gql`
+  mutation createTicket(
+    $propertyId:ID!
+    $clients: [ClientInput!]!
+    $status:String!
+    $area:Float!
+    $price:Float!
+    $currency:String!
+    $promissory:[PromissoryInput]
+    $emissionDate:Date!
+    $paymentLocation:String!
+    $paymentAddress:String!
+  ){
+    createTicket(
+      ticket:{
+        propertyId: $propertyId
+        status: $status
+        area: $area
+        price: $price
+        currency: $currency
+        promissory: $promissory
+        emissionDate: $emissionDate
+        paymentLocation: $paymentLocation
+        paymentAddress: $paymentAddress
+      }
+      clients: $clients
+    ){
+      message
+      code
+      success
+      ticket
+    }
+  }
+`
 
 export default TicketForm;
