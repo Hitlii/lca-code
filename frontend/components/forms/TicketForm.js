@@ -388,7 +388,36 @@ const CREATE_TICKET = gql`
       message
       code
       success
-      ticket
+      ticket{
+        id
+        propertyId
+        clients{
+          id
+          name
+          gender
+          birthday
+          contact{
+            email
+            phone
+          }
+          location{
+            city
+            state
+            address
+          }
+        }
+        status
+        area
+        price
+        currency
+        emissionDate
+        promissory{
+          months
+          payment
+        }
+        paymentLocation
+        paymentAddress
+      }
     }
   }
 `
