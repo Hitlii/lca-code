@@ -66,14 +66,14 @@ function useImageState(initialVal) {
     let token
     if(typeof window !== 'undefined') {
       token = localStorage.getItem('token')
+      if(!token) return;
     }
+
     const formDatas = new FormData();
     images.map((image) => {
       formDatas.append("images", image.imageFile);
     });
-
-  try {
-
+   
     const res = await Axios.put("http://localhost:8000/post-images", formDatas, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -82,15 +82,9 @@ function useImageState(initialVal) {
       },
     })
     if (res.data.code === 201) {
-          imagesPath.current = res.data.filesPath;
-        }
-
-
-    
-  } catch (error) {
-      console.log(error)
-  }
-    
+      imagesPath.current = res.data.filesPath;
+    }
+    console.log(res.data);
   }
 
   // Handler when image is ordered
@@ -100,13 +94,10 @@ function useImageState(initialVal) {
     arrayImage.splice(initialPosition, 1, images[finalPosition]);
     arrayImage.splice(finalPosition, 1, initialImage);
     setImages(arrayImage);
-
-    //console.log(event)
   }
 
   // Handler when an image is deleted from the array
   function deleteImage(event) {
-    //console.log(event.target)
     setImages(
       images.filter(
         (image) => image.key !== event.target.getAttribute("data-index")

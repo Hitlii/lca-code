@@ -5,6 +5,7 @@ import {
     Typography,
 } from '@material-ui/core'
 
+import TextField from '@material-ui/core/TextField'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(({
@@ -30,7 +31,7 @@ function InputText({ type, placeholder, multiline,  value, name, onChange, error
 
     return (
         <>
-            <InputBase 
+            <TextField
                 className={classes.root}
                 type={type}
                 multiline={multiline ? true : false}

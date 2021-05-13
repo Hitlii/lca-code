@@ -97,11 +97,11 @@ const PropertiesSchema = mongoose.Schema({
       type: String,
       required: true,
       unique: true
-    },
-    title: {
-      type: String,
-      required: true
     }
+    // title: {
+    //   type: String,
+    //   required: true
+    // }
   },
 
   vendors: [
