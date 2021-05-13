@@ -1,10 +1,12 @@
 const Client = require('../../models/clients')
+const ObjectId = require('mongoose').Types.ObjectId
+const { clientInputValidator, isObjectIdValid } = require('../helper/validators')
 
 module.exports = {
   Query: {
-    getClient: async (_, { name }) => {
+    getClient: async (_, { id }) => {
       try {
-        const client = await Client.findOne({ name })
+        const client = await Client.findById(ObjectID(id))
         return client || null
       } catch (error) {
         console.log(error)
@@ -22,32 +24,40 @@ module.exports = {
     }
   },
   Mutation: {
-    createClient: async (_, { name, gender, birthday, email, phone, city, state, address }) => {
-      const client = new Client({
-        name,
-        gender,
-        birthday,
-        contact: {
-          email,
-          phone
-        },
-        location: {
-          city,
-          state,
-          address
-        }
-      })
-
-      try {
-        // DB Client Creation
-        const newClient = await client.save()
-        return newClient
-      } catch (error) {
-        console.log(error)
+    createClient: async (_, { client }) => {
+      // Input validation
+      //const clientValidationError = new clientInputValidator(client)
+      
+      // Invalid user input
+      /*if (clientValidationError) {
+        let error = new Error('Error validando inputs de cliente')
+        error.code = 400
+        error.data = clientValidationError
+        error.solution = 'Revise los campos enviados'
         throw error
+      }*/
+      
+      const newClient = new Client({ ...client })
+
+      // DB Client Creation
+      await newClient.save()
+
+      return {
+        code: 201,
+        success: true,
+        message: 'Cliente creado existosamente.',
+        client: newClient
       }
     },
     updateClient: async (_, { id, name, gender, birthday, email, phone, city, state, address }) => {
+      let error = null
+      if(!isObjectIdValid(id)) {
+        error = new Error('Este ID no es válido')
+        error.code = 400
+        error.solution = 'Ingrese un ID valido'
+        throw error
+      }
+      
       // Create object with fields to update
       const tempClient = {
         name,
@@ -61,33 +71,51 @@ module.exports = {
       }
 
       // Clean object to remove null/undefined fields
-      Object.keys(tempClient).forEach((k) => tempClient[k] === null && tempClient[k] === undefined && delete tempClient[k])
+      Object.keys(tempClient).forEach((k) => tempClient[k] == null && tempClient[k] == undefined && delete tempClient[k])
 
-      try {
-        // Wait for update operation
-        const updatedClient = await Client.findByIdAndUpdate(
-          { _id: id },
-          { $set: tempClient },
-          { new: true }
-        )
-        // Return updated fields
-        return updatedClient
-      } catch (error) {
-        console.log(error)
-        throw error
+      // Wait for update operation
+      const updatedClient = await Client.findByIdAndUpdate(
+        ObjectId(id),
+        { $set: tempClient },
+        { new: true }
+      )
+      // Return updated fields
+      return {
+        code: 200,
+        success: true,
+        message: 'Datos modificados con exito.',
+        client: updatedClient
       }
+
     },
     deleteClient: async (_, { id }) => {
-      // Find client to delete
-      const client = await Client.findById(id)
-      try {
-        // Wait for delete operation
-        await client.deleteOne()
-        // Indicate correct deletion
-        return true
-      } catch (error) {
-        console.log(error)
+      let error = null
+      // Invalid user input
+      if(!isObjectIdValid(id)) {
+        error = new Error('Este ID no es válido')
+        error.code = 400
+        error.solution = 'Ingrese un ID valido'
         throw error
+      }
+
+      // Find client to delete
+      const client = await Client.findById(ObjectId(id))
+
+      // Client not found
+      if (client == null) {
+        error = new Error('Cliente no encontrado')
+        error.code = 404
+        error.solution = 'Revisa el ID proveido'
+        throw error
+      }
+
+      // Delete operation
+      await client.deleteOne()
+      // Correct deletion
+      return {
+        message: `Cliente [${client.name}] ha sido borrado.`,
+        code: 200,
+        success: true
       }
     }
   }
