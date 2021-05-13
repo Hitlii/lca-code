@@ -144,7 +144,7 @@ function AdminPropertyCard({ property }) {
                 <IconButton className={drawerClasses.drawerButton}>
                     <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
                     <Typography className={drawerClasses.deleteText}>
-                        Eliminar propiedad
+                        Eliminar 
                     </Typography>
                 </IconButton>
             </Drawer>

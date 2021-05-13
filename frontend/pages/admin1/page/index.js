@@ -2,10 +2,11 @@
 // Propiedades destacadas.
 // Imagen principal.
 // Estara el formulario de clientes
+import NavBar from '../../../components/bars/NavBar'
 export default function Page(){
     return(
         <div>
-            <h1>Page</h1>
+            <NavBar/>
         </div>
     )
 }

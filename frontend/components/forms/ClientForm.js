@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { gql, useMutation } from '@apollo/client'
 import { useFormik } from 'formik'
@@ -34,19 +34,35 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-function ClientForm () {
+function ClientForm ({ editClient }) {
     const classes = useStyles()
     const router = useRouter()
+    
+    let initialValues 
 
-    const initialValues = {
-        name: '',
-        gender: '',
-        birthday: '',
-        email: '',
-        phone: '',
-        city: '',
-        state: '',
-        address: ''
+    if(editClient !== null) {
+        initialValues = {
+            id: editClient.id,
+            name: editClient.name,
+            gender: editClient.gender,
+            birthday: editClient.birthday,
+            email: editClient.contact.email,
+            phone: editClient.contact.phone,
+            city: editClient.location.city,
+            state: editClient.location.state,
+            address: editClient.location.address
+        }
+    } else {
+        initialValues = {
+            name: '',
+            gender: '',
+            birthday: '',
+            email: '',
+            phone: '',
+            city: '',
+            state: '',
+            address: ''
+        }
     }
 
     const formikInput = useFormik({
@@ -54,11 +70,34 @@ function ClientForm () {
         validationSchema: clientValidationSchema,
         onSubmit: (values) => {
             console.log(values)
-            createClient()
+            if(editClient!==null) {
+                updateClient()
+            } else { 
+                createClient()
+            }
         }
     })
 
     const [createClient] = useMutation(CREATE_CLIENT, {
+        update (
+        _,
+        { data }
+        ) {
+            console.log(data)
+            router.push('/admin1/clientes')
+        },
+        variables: {
+            name: formikInput.values.name,
+            gender: formikInput.values.gender,
+            birthday: formikInput.values.birthday,
+            email: formikInput.values.email,
+            phone: formikInput.values.phone,
+            city: formikInput.values.city,
+            state: formikInput.values.state,
+            address: formikInput.values.address,
+        }
+    })
+    const [updateClient] = useMutation(UPDATE_CLIENT, {
         update (
         _,
         { data }
@@ -221,7 +260,7 @@ function ClientForm () {
                     type="submit" 
                     startIcon ={<SaveIcon/>}  
                 >
-                    Agregar Cliente
+                    {editClient ? 'Editar Cliente' : 'Agregar Cliente'}
                 </SubmitButton>
             </form>
         </div>
@@ -233,7 +272,7 @@ const CREATE_CLIENT = gql`
     mutation createClient(
         $name: String!
         $gender: String!
-        $birthday: String!
+        $birthday: Date!
         $email: String!
         $phone: String!
         $city: String!
@@ -241,6 +280,41 @@ const CREATE_CLIENT = gql`
         $address: String!
     ) {
         createClient(
+            client: {
+                name: $name
+                gender: $gender
+                birthday: $birthday
+                contact: {
+                    email: $email
+                    phone: $phone
+                }
+                location: {
+                    city: $city
+                    state: $state
+                    address: $address
+                }
+            }
+        ) {
+            code
+            success
+        }
+    }
+`
+
+const UPDATE_CLIENT = gql`
+    mutation updateClient(
+        $id: ID!
+        $name: String!
+        $gender: String!
+        $birthday: String!
+        $email: String!
+        $phone: String!
+        $city: String!
+        $state: String!
+        $address: String!
+    ) {
+        updateClient(
+            id: $id
             name: $name
             gender: $gender
             birthday: $birthday
@@ -250,12 +324,9 @@ const CREATE_CLIENT = gql`
             state: $state
             address: $address
         ) {
-            name
-            gender
-            birthday
+            success
         }
     }
 `
-
 
 export default ClientForm

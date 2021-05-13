@@ -37,7 +37,7 @@ const useStyles = makeStyles(({
     }, 
 }))
 
-function ClientCard({ client, refreshData }) {
+function ClientCard({ client }) {
 
     const classes = useStyles()
     const drawerClasses = drawerStyles()
@@ -49,10 +49,12 @@ function ClientCard({ client, refreshData }) {
         showOptions(current => !current)
     }
 
-    function refreshData() {
-        router.replace(router.asPath)
+    function onEditClick() {
+        router.push({
+            pathname: '/admin1/clientes/edit-cliente',
+            query: { ID: client.id }
+        })
     }
-
 
     const [deleteClient] = useMutation(DELETE_CLIENT, {
         update (
@@ -60,12 +62,17 @@ function ClientCard({ client, refreshData }) {
         { data }
         ) {
             console.log(data)
-            refreshData()
         },
         variables: {
             id: client.id
         }
     })
+
+    function onDeleteClient() {
+        deleteClient()
+        onClick()
+        router.push('/admin1/clientes')
+    }
 
     return (
         <>
@@ -108,20 +115,20 @@ function ClientCard({ client, refreshData }) {
                 open={options}
                 onClose={onClick}
             >
-                <IconButton className={drawerClasses.drawerButton}>
+                <IconButton className={drawerClasses.drawerButton} onClick={onEditClick}>
                     <CreateOutlinedIcon className={drawerClasses.createIcon}/>
                     <Typography className={drawerClasses.createText}>
-                        Editar Cliente
+                        Editar cliente
                     </Typography>
                 </IconButton>
                 <Divider className={drawerClasses.divider}/>
                 <IconButton 
                     className={drawerClasses.drawerButton}
-                    onClick={deleteClient}
+                    onClick={onDeleteClient}
                 >
                     <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
                     <Typography className={drawerClasses.deleteText}>
-                        Eliminar Cliente
+                        Eliminar
                     </Typography>
                 </IconButton>
             </Drawer>

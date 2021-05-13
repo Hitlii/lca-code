@@ -1,12 +1,12 @@
 const Client = require('../../models/clients')
 const ObjectId = require('mongoose').Types.ObjectId
-const { clientInputValidator, isObjectIdValid } = require('../helper/validators')
+const { isObjectIdValid } = require('../helper/validators')
 
 module.exports = {
   Query: {
     getClient: async (_, { id }) => {
       try {
-        const client = await Client.findById(ObjectID(id))
+        const client = await Client.findById(ObjectId(id))
         return client || null
       } catch (error) {
         console.log(error)

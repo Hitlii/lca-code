@@ -81,6 +81,7 @@ function NavBar () {
                 </IconButton>
                 <IconButton 
                   className={classes.button}
+                  href='/admin1/page'
                 >
                     <DescriptionIcon className={classes.icon}/>
                 </IconButton>
@@ -100,7 +101,7 @@ function NavBar () {
         >
           <div className={classes.drawerContainer}>
           <IconButton 
-            href='admin1/clientes'
+            href='/admin1/clientes'
           >
             <div className={classes.drawerButton}>
               <PeopleAltOutlinedIcon/> 
@@ -113,7 +114,7 @@ function NavBar () {
             <IconButton 
               className={classes.logout}
               onClick={logout}
-              href='admin1/login'
+              href='/admin1/login'
             >
               <div className={classes.drawerButton}>
                 <ExitToAppOutlinedIcon/> 

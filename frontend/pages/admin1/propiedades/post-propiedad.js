@@ -14,7 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import client from "../../../lib/apollo-client";
 import {gql} from '@apollo/client';
 
-  const useStyles = makeStyles({
+const useStyles = makeStyles({
     appbar: {
         padding: 0,
         marginBottom: 20,

@@ -1,5 +1,5 @@
 // Todos lo clientes.
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import client from "../../../lib/apollo-client";
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -63,10 +63,17 @@ export default function AllClientsPage(props){
 
     const classes = useStyles()
     const router = useRouter()
+    const [isRefreshing, setIsRefreshing] = useState(false)
 
-    function refreshData() {
-        router.replace(router.asPath)
+    const refreshData = () => {
+        router.replace(router.asPath);
+        setIsRefreshing(true);
     }
+
+    useEffect(() => {
+        refreshData()
+        setIsRefreshing(false);
+    }, [props])
 
     if(props.error) {
         console.log(props.error)
@@ -95,7 +102,6 @@ export default function AllClientsPage(props){
                     >
                         <ClientCard 
                             client={client}
-                            refreshData={refreshData}
                         />
                     </div>
                 )
@@ -128,6 +134,7 @@ export async function getServerSideProps(){
             error: 'Error'
         }
     }
+    
     return{
         props: {
             clients: data.getClients
