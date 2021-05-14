@@ -1,13 +1,21 @@
 const Property = require('../../models/properties')
 const ObjectId = require('mongoose').Types.ObjectId
 const { isObjectIdValid } = require('../helper/validators')
+const { combineResolvers } = require('graphql-resolvers')
+const { isAuthenticated } = require('./middleware')
+
 module.exports = {
   Mutation: {
 
-    createProperty: async (_, { property, clients }) => {
-      const newProperty = new Property({ ...property, vendors: [...clients] })
+    createProperty: combineResolvers(isAuthenticated, async (_, { property, vendors }) => {
+      const newProperty = new Property({ ...property, vendors })
       newProperty.meta.url = newProperty.title.replace(/\s+/g, '-').toLowerCase() + '-' + newProperty.code
-      await newProperty.save()
+      try {
+        await newProperty.save()
+      } catch (error) {
+        error.message = 'Error al crear la propiedad'
+        throw error
+      }
 
       return {
         message: 'Propiedad creada',
@@ -15,7 +23,7 @@ module.exports = {
         success: true,
         url: newProperty.meta.url
       }
-    },
+    }),
 
     deleteProperty: async (_, { id }) => {
       let error = null

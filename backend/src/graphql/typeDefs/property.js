@@ -5,7 +5,7 @@ module.exports = gql`
     
     extend type Mutation {
         "Creates a property, returns the URL generated"
-        createProperty(property: createPropertyInput!, clients: [ClientInput!]!):CreatePropertyMutationResponse!
+        createProperty(property: CreatePropertyInput!, vendors: [ClientInput!]!):CreatePropertyMutationResponse!
         "Deletes a property by ID, returns string with message if deleted, error if not"
         deleteProperty(id: ID!): DeleteMutationResponse!
         
@@ -18,7 +18,7 @@ module.exports = gql`
         url: String
     }
 
-    input createPropertyInput{
+    input CreatePropertyInput{
         "Status of the property, can be Venta, Renta, Vendido, Oculto"
         status: String!
         "Type of property i.e Casa, Terreno, Rancho"
@@ -43,17 +43,17 @@ module.exports = gql`
         "Title of the property"
         title: String!
         
-        description: descriptionInput!
+        description: DescriptionInput!
         "Location of the property, address and coordinates"
-        location: locationInput!
+        location: LocationInput!
         "Media of the property, images and video url"
-        media: mediaInput!
+        media: MediaInput!
         "Meta descriptors, such as description, keywords, author, and URL"
-        meta: metaInput!
+        meta: MetaInput!
 
     }
 
-    input descriptionInput{
+    input DescriptionInput{
         "Slate stringified description"
         text: String!
         isDeeded: Boolean
@@ -62,23 +62,23 @@ module.exports = gql`
 
     
 
-    input mediaInput{
+    input MediaInput{
         "Images of the property in the carrousel/slider"
         images: [String!]
         "Video of the property, should be a youtube URL"
         video: String
     }
-    input metaInput{
+    input MetaInput{
         "Description of the property MAX 160 characters"
         description: String!
         "URL of the page"
         url: String
-        "Title of the page MAX 55 characters"
-        title: String!
+        # "Title of the page MAX 55 characters"
+        # title: String!
     }
 
     "Location of the property"
-    input locationInput {
+    input LocationInput {
         "State of the property, default B.C"
         state: String!
         "City of the property"
@@ -86,11 +86,11 @@ module.exports = gql`
         "Addres of the property"
         address: String!
         "Google Maps API Retrieved coordinates."
-        coordinates: coordinatesInput!
+        coordinates: CoordinatesInput!
     }
     
     "Google Maps Coordinates of the property"
-    input coordinatesInput{
+    input CoordinatesInput{
         lat: Float!
         lng: Float!
     }
@@ -150,7 +150,6 @@ module.exports = gql`
         text: String!
         isDeeded: Boolean
         hasAllServices: Boolean
-
     }
 
     type Meta{
@@ -158,8 +157,8 @@ module.exports = gql`
         description: String!
         "URL of the page"
         url: String!
-        "Title of the page MAX 55 characters"
-        title: String!
+        # "Title of the page MAX 55 characters"
+        # title: String!
     }
 
     type Coordinates{       

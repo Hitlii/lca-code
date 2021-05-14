@@ -121,11 +121,14 @@ import * as yup from 'yup'
             .required('Este campo es requerido')
             .max(15, 'Muy largo!'),
         status: yup
-            .string(),
+            .string()
+            .required(),
         zone: yup
-            .string(),
+            .string()
+            .required(),
         type: yup 
-            .string(),
+            .string()
+            .required(),
 
         // Price Area
         currency: yup
@@ -135,12 +138,12 @@ import * as yup from 'yup'
         specialPrice: yup 
             .string()
             .max(20, 'Muy largo, trate de reducir este campo'),
-        paymentPrice: yup 
+        onPayments: yup 
             .string()
             .max(20, 'Muy largo, trate de reducir este campo'),
         area: yup 
             .number()
-            .required('Área es requerida'),
+            .positive('El area debe de ser positiva'),
 
         // Location  
         city: yup
@@ -150,12 +153,14 @@ import * as yup from 'yup'
             .max(20,'Muy largo:( Trate de reducir este campo'),
               title: yup 
             .string()
-            .required('Este campo es requerido')
             .max(55, 'El titulo es muy largo, trate de hacerlo mas chico'),
         description: yup 
             .string() 
-            .required('Este campo es requerido.')
             .max(160, 'La descripción es muy larga, trate de hacerla mas chica'),
+
+        video: yup
+        .string()
+        .url('En este campo debe de ir un URL')
         
 
     })

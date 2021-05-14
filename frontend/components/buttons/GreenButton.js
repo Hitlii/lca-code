@@ -25,6 +25,9 @@ function GreenButton (props) {
             className={classes.button}
             variant='contained'
             onClick={props.onClick}
+            fullWidth={props.fullWidth}
+            {...props}
+
         >
             {props.children}
         </Button>

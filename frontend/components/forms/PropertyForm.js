@@ -1,34 +1,28 @@
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import useImageState from '../../hooks/useImageState'
-import useGeneralInfo from '../../hooks/useGeneralInfo'
-import priceAreaValidation from '../../hooks/priceAreaValidation'
-import useLocation from '../../hooks/useLocation'
-import useDescription from '../../hooks/useDescription'
-import useURL from '../../hooks/useURL'
-import useMetaInfo from '../../hooks/useMetaInfo'
 import { useFormik } from 'formik'
-
 import { gql, useMutation } from '@apollo/client'
+import Link from 'next/link'
 
-import {
-  Divider,
-  Grid,
-  Typography
-} from '@material-ui/core'
-
-// MaterialUI Imports --------------------------------
+// Material UI Imports --------------------------------
+import Alert from '@material-ui/lab/Alert'
+import AlertTitle from '@material-ui/lab/AlertTitle'
 import Button from '@material-ui/core/Button'
+import Checkbox from '@material-ui/core/Checkbox'
+import Divider from '@material-ui/core/Divider'
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormGroup from '@material-ui/core/FormGroup'
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import SaveIcon from '@material-ui/icons/Save';
 import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography'
 
 // My Components --------------------------------
 import TextField from '../inputs/TextField'
@@ -40,60 +34,61 @@ import Map from '../map'
 import MultipleChoice from '../inputs/MultipleChoice'
 import SearchClient from '../SearchClient'
 import TextEditor from '../inputs/TextEditor'
+import useImageState from '../../hooks/useImageState'
+import useAlert from '../../hooks/useAlert'
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Validator ----------------------------------------------------------------
 import {propertyValidationSchema} from '../../helper/propertyValidator'
-
-import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 600,
     minWidth: 320,
     margin: 'auto',
-    padding: 10,
+  }, 
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
   },
-  gridItem: {
-    textAlign: 'center'
-  },
-  map: {
-    display: 'float'
-  },
-  headers: {
-    marginLeft: '10%',
-    fontSize: '18px',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: '30%'
-    },
-    [theme.breakpoints.up('md')]: {
-      marginLeft: '40%'
-    }
-  },
-  divider: {
-    width: 340,
-    color: '#f2f2f2',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: 20
-  },
-  multiline: {
-    width: 320,
-    marginBottom: 20
+  title:{
+    marginTop: '2em',
+  }, 
+  alert:{
+    marginBottom: '1em'
   }
+
 }))
 
+/**
+  @description Property Form
+  @param {autoCompleteClients} Object All clients for the auto complete.
+ */
 function PropertyForm ({ autoCompleteClients }) {
-  const classes = useStyles()
-  const router = useRouter()
+   const CREATE_PROPERTY = gql`
+    mutation createProperty($property: CreatePropertyInput!, $vendors: [ClientInput!]!) {
+      createProperty( property: $property, vendors: $vendors) 
+        {
+          message
+          code
+          success
+          url
+        }
+    }
+  `
+
+  // State ----------------------------------------------------------------
+  const [isAlertOpen, alert, openAlert, closeAlert, handleAlert] = useAlert();
+  const [backdrop, setBackdrop] = useState(false);
   const [errors, setErrors] = useState({})
-  // Vendors
+  const [isDeeded, setIsDeeded] = useState(false);
+  const [hasAllServices, setHasAllServices] = useState(false)
   const [vendors, setVendors] = useState([])
-  const { URL } = useURL()
   const { images, updateImages, orderImages, deleteImage, getPathImages, imagesPath } = useImageState([])
-  const [coordinates, setCoordinates] = useState({
-    lat: 0,
-    lng: 0
-  })
+  const [createProperty, { loading: mutationLoading, error: mutationError}] = useMutation(CREATE_PROPERTY)  
+  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 })
+  const classes = useStyles()
   const [slateEditor, setSlateEditor] = useState([
     {
       type: 'paragraph',
@@ -102,7 +97,7 @@ function PropertyForm ({ autoCompleteClients }) {
       ]
     }
   ])
-  
+
   const initialValues ={
     code:'',
     status:' ',
@@ -111,84 +106,177 @@ function PropertyForm ({ autoCompleteClients }) {
     currency:' ',
     price:'',
     specialPrice:'',
-    paymentPrice:'',
+    onPayments:'',
     area:'',
-    state:'',
-    city:'',
+    city:'Tecate',
     address:'',
     title: '',
     description: '',
+    video: ''
+
   }
-    // Formik.
- const formikInput = useFormik({
+  // Formik.
+  const formikInput = useFormik({
         initialValues: initialValues,
         validationSchema: propertyValidationSchema,
-        onSubmit: (values) => {
-            console.log(values)
-        }
     });
+    
   function handleChangeVendors (updatedVendors) {
     setVendors(updatedVendors)
   }
-  const onChangeSlateEditor = (newDesc) => {
+  function onChangeSlateEditor(newDesc) {
     setSlateEditor(newDesc)
   }
+   function handleChangeIsDeeded(){
+    setIsDeeded(!isDeeded)
+  }
 
+  function handleChangeHasAllServices(){
+    setHasAllServices(!hasAllServices)
+  }
+  function handleBackdrop(){
+    setBackdrop(!backdrop)
+  }
 
-  const onChangeCoordinates = (e) => {
+  function onChangeCoordinates(e) {
     setCoordinates({
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
     })
   }
 
-  const [createProperty] = useMutation(CREATE_PROPERTY, {
-    update (
-      _,
-      { data }
-    ) {
-      console.log(data)
-      router.push('/admin1')
-    },
-    OnError (err) {
-      setErrors(err && err.graphQLErrors[0] ? err.graphQLErrors[0].extensions.exception.errors : {})
-      console.log(errors)
-    },
-    variables: {
-      status: formikInput.values.status,
-      type: formikInput.values.type,
-      zone: formikInput.values.zone,
-      code: formikInput.values.code,
-      price: formikInput.values.price,
-      specialPrice: formikInput.values.specialPrice,
-      onPayments: formikInput.values.paymentPrice,
-      currency: formikInput.values.currency,
-      area: formikInput.values.area,
-      title: formikInput.values.title,
-      description: slateEditor.toString(),
-      state: formikInput.values.state,
-      city: formikInput.values.city,
-      address: formikInput.values.address,
-      lat: coordinates.lat,
-      lng: coordinates.lng,
-      images: imagesPath.current,
-      video: URL.values.URL,
-      metaTitle: formikInput.values.title,
-      metaDescription: formikInput.values.description,
-      metaURL: formikInput.values.URL,
-      clients: vendors
-    }
-  })
+ 
 
   async function postProperty (event) {
+    setBackdrop(true);
     event.preventDefault();
     formikInput.handleSubmit();
-    if( formikInput.errors){
-      return 
+        
+    let alert;
+    if(coordinates.lat === 0 && coordinates.lng === 0) {
+      
+        setBackdrop(false);
+         alert = {
+          severity: 'error', 
+          title: 'Ingrese las coordenadas',
+          message: 'Las coordenadas son requeridas',
+          success: false
+        }
+        handleAlert(alert);
+    
+    }
+    if(images.length === 0){
+         alert = {
+          severity: 'error', 
+          title: 'Ingrese imagenes de la propiedad',
+          message: 'Las imagenes son requeridas',
+          success: false
+        }
+        setBackdrop(false);
+        handleAlert(alert);
+        return;
+    }
+    if(vendors.length === 0){
+       alert = {
+          severity: 'error', 
+          title: 'Debe de ingresar a los dueños',
+          message: 'Ingrese a los dueños de la propiedad',
+          success: false
+        }
+        setBackdrop(false);
+        handleAlert(alert);
+        return;
+    }
+    const {
+      status,
+      type,
+      zone,
+      code,
+      price,
+      specialPrice,
+      onPayments,
+      currency,
+      area,
+      title,
+      city,
+      address,
+      video,
+      description,
+      } = formikInput.values;
+
+    const {
+      lat, 
+      lng,
+      } = coordinates;
+
+    const variables = {
+      property:{
+        code,
+        status,
+        type,
+        zone,
+
+        area,
+        price,
+        currency,
+        onPayments,
+        specialPrice,
+        
+        title,
+        description:{
+          hasAllServices,
+          isDeeded,
+          text: slateEditor.toString(),
+        }, 
+
+        location: {
+          state: 'B.C',
+          city,
+          address,
+          coordinates:{
+            lat,
+            lng,
+          }
+        }, 
+        media:{
+          images: imagesPath.current,
+          video,
+        }, 
+
+        meta: {
+          description
+        }
+      }, 
+      vendors
+    }  
+    try {
+        await getPathImages(images);
+        const response =  await createProperty({variables});
+        const data = response.data.createProperty;
+        if(response.data){
+          setBackdrop(false);
+          alert = {
+            severity: 'success', 
+            title: data.message,
+            solution: '', 
+            message: data.url,
+            success: data.success
+          }
+          handleAlert(alert);
+        }
+    } catch (error) {
+      setBackdrop(false);
+         alert = {
+          severity: 'error', 
+          title: error.message,
+          message: error.solution,
+          success: false
+        }
+        handleAlert(alert);
     }
 
-    await getPathImages(images);
-    createProperty();
+
+
   }
 
 /**
@@ -197,7 +285,7 @@ function PropertyForm ({ autoCompleteClients }) {
   @returns {boolean} True if erros occurred, falsy if not
  */
  function isInputError(key){
-   return formikInput.touched[key] && formikInput.errors[key]
+   return formikInput.touched[key] && formikInput.errors[key] ? true : false;
  }
   
   const defaultInputProps = {
@@ -212,7 +300,8 @@ function PropertyForm ({ autoCompleteClients }) {
     align: 'left',
     display: 'block',
     gutterBottom: true,
-    variant: 'h5'
+    variant: 'h5',
+    className: classes.title,
   }
 
   const requiredInputs ={
@@ -231,7 +320,6 @@ function PropertyForm ({ autoCompleteClients }) {
                 <FormControlLabel value="Venta" control={<Radio />} label="Venta" />
                 <FormControlLabel value="Renta" control={<Radio />} label="Renta" />
               </RadioGroup>
-              <FormHelperText>Hola</FormHelperText>
             </FormControl>
 
             {/* Zone */}
@@ -242,7 +330,6 @@ function PropertyForm ({ autoCompleteClients }) {
               <FormControlLabel value="Urbana" control={<Radio />} label="Urbana" />
               <FormControlLabel value="Comercial" control={<Radio />} label="Comercial" />
             </RadioGroup>
-            <FormHelperText>Hola</FormHelperText>
           </FormControl>
 
            {/* Type */}
@@ -263,13 +350,22 @@ function PropertyForm ({ autoCompleteClients }) {
               id="code"
               name="code"
               label="Codigo"
-              helperText="Máx: 15 caracteres"
-              title = "Por favor, llene este campo"
-              placeholder='0000VT-00'
+              helperText="0000VT-00 | Máx: 15"
+              placeholder='Codigo de la propiedad'
               onChange={formikInput.handleChange}
               value={formikInput.values.code}
               error={ isInputError('code')}
              />
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={isDeeded} onChange={handleChangeIsDeeded} name="isDeeded" />}
+                label="Escriturado"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={hasAllServices} onChange={handleChangeHasAllServices} name="hasAllServices" />}
+                label="Todos los servicios"
+              />
+            </FormGroup>
           
 {/* PRICE AREA */}
           <Typography {...defaultTypoProps}>Precio y Área</Typography>
@@ -319,8 +415,8 @@ function PropertyForm ({ autoCompleteClients }) {
               id="specialPrice"
               name="specialPrice"
               label="Precio especial (como tú)"
-              placeholder='$ 00 USD|MXN/m²'
-              helperText= 'Precio por m², ha. Max: 20'
+              placeholder='Precio por m², ha.'
+              helperText= '$ 00 USD|MXN/m² | Máx: 20 '
               onChange={formikInput.handleChange}
               value={formikInput.values.specialPrice}
               error={ isInputError('specialPrice')}
@@ -329,14 +425,14 @@ function PropertyForm ({ autoCompleteClients }) {
              {/* Payment Price */}
               <TextField 
                 {...defaultInputProps}
-                id="paymentPrice"
-                name="paymentPrice"
+                id="onPayments"
+                name="onPayments"
                 label="Precio en pagos"
-                placeholder='(meses)x $ (mensualidad) 12x $100'
-                helperText= 'Ingrese la los meses y la mensualidad'
+                placeholder='Ingrese mensualidad'
+                helperText= '(meses)x $ (mensualidad) | Max: 20'
                 onChange={formikInput.handleChange}
-                value={formikInput.values.paymentPrice}
-                error={ isInputError('paymentPrice')}
+                value={formikInput.values.onPayments}
+                error={ isInputError('onPayments')}
              />
 
             
@@ -433,20 +529,25 @@ function PropertyForm ({ autoCompleteClients }) {
                   orderImages={orderImages}
           />
 
-          {/* Meta */}
+           {/* Description */}
+             <TextField 
+                {...defaultInputProps}
+                {...requiredInputs}
+                id="video"
+                name="video"
+                label="Video de Youtube"
+                placeholder='Ingrese URL del video de Youtube'
+                helperText= 'https://youtu.be/dQw4w9WgXcQ'
+                onChange={formikInput.handleChange}
+                value={formikInput.values.video}
+                error={ isInputError('video')}
+          />
+
+{/* Meta */}
           <Typography {...defaultTypoProps}>Meta</Typography>
           <Divider/>
 
-          {/* Title */}
-          <TextField 
-                {...defaultInputProps}
-                {...requiredInputs}
-                id="meta.title"
-                name="meta.title"
-                label="Titulo"
-                placeholder='Ingrese el titulo meta de la propiedad'
-                helperText= 'Ingrese un titulo corto. Máx: 55'
-          />
+
           {/* Description */}
              <TextField 
                 {...defaultInputProps}
@@ -457,7 +558,7 @@ function PropertyForm ({ autoCompleteClients }) {
                 name="description"
                 label="Descripción"
                 placeholder='Ingrese la descripción meta de la propiedad'
-                helperText= 'Ingrese una descripción corto. Máx: 160'
+                helperText= 'Ingrese una descripción corta. Máx: 160'
                 onChange={formikInput.handleChange}
                 value={formikInput.values.description}
                 error={ isInputError('description')}
@@ -482,77 +583,24 @@ function PropertyForm ({ autoCompleteClients }) {
         >
         Crear Propiedad
         </SubmitButton>
-
+        <Backdrop className={classes.backdrop} open={backdrop}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         </form>
+
+
+      {isAlertOpen && 
+      <Alert severity={alert.severity} className={classes.alert }>
+          <AlertTitle>{alert.title}</AlertTitle>
+          
+          {!alert.success && alert.message}
+      </Alert> } 
+
+      {alert.success && <Link href={`/propiedades/${alert.message}`}> <a> Ingrese al siguiente URL </a> </Link> }
+
+     
     </div>
   )
 }
-
-const CREATE_PROPERTY = gql`
-  mutation createProperty(
-    $status: String!
-    $type: String!
-    $zone: String!
-    $code: String!
-    $price: Float!
-    $specialPrice: String
-    $onPayments: String
-    $currency: String!
-    $area: Float!
-    $title: String!
-    $description: String!
-    $state: String!
-    $city: String!
-    $address: String!
-    $lat: Float!
-    $lng: Float!
-    $images: [String!]
-    $video: String
-    $metaTitle: String!
-    $metaDescription: String!
-    $metaURL: String
-    $clients: [ClientInput!]!
-  ) {
-    createProperty(
-      property: {
-        status: $status
-        type: $type
-        zone: $zone  
-        code: $code  
-        price: $price  
-        specialPrice: $specialPrice
-        onPayments: $onPayments
-        currency: $currency 
-        area: $area 
-        title: $title  
-        description: {
-          text: $description
-        }
-        location: {
-          state: $state  
-          city: $city  
-          address: $address
-          coordinates: {
-            lat: $lat  
-            lng: $lng  
-          }
-        }
-        media: {
-          images: $images   
-          video: $video  
-        }
-        meta: {
-          title: $metaTitle
-          description: $metaDescription
-          url: $metaURL
-        }
-      }
-      clients: $clients
-    ) {
-      success
-    }
-  }
-
-`
 
 export default PropertyForm
