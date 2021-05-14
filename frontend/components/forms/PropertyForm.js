@@ -145,7 +145,6 @@ function PropertyForm ({ autoCompleteClients }) {
     })
   }
 
-  // Create property mutation.
  
 
   async function postProperty (event) {
@@ -311,9 +310,7 @@ function PropertyForm ({ autoCompleteClients }) {
   }
   return (
     <div className={classes.root}>
-
-      <Typography variant='h3' display='block' gutterBottom align='left'> Agregar propiedad </Typography>
-      <Typography {...defaultTypoProps}>Caracteristicas generales</Typography>
+      <Typography {...defaultTypoProps}>Características generales</Typography>
       <Divider/>
         <form onSubmit={postProperty}>
             {/* Status */}
@@ -486,8 +483,8 @@ function PropertyForm ({ autoCompleteClients }) {
               labelId="citySelect"
               id="city"
               name="city"
-              onChange={formikInput.handleChange}
               value={formikInput.values.city}
+              onChange={formikInput.handleChange}
               error={ isInputError('city')}
             >
               <MenuItem value={'Tecate'}>Tecate</MenuItem>
@@ -520,7 +517,7 @@ function PropertyForm ({ autoCompleteClients }) {
                   marker={coordinates}
                   handleChange={onChangeCoordinates}
               />
-{/* Images */}
+          {/* Images */}
           <Typography {...defaultTypoProps}>Imagenes</Typography>
           <Divider/>
 
@@ -567,14 +564,14 @@ function PropertyForm ({ autoCompleteClients }) {
                 error={ isInputError('description')}
           />
 
-{/* Meta */}
-          <Typography {...defaultTypoProps}>Dueños</Typography>
-          <Divider/>
+        {/* Meta */}
+        <Typography {...defaultTypoProps}>Dueños</Typography>
+        <Divider/>
 
-          <SearchClient
+        <SearchClient
             clients = {autoCompleteClients}
             handleChangeVendors = {handleChangeVendors}
-          />
+        />
 
          
          

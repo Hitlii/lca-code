@@ -1,6 +1,6 @@
 import {Fragment} from 'react'
 
-import PropertyForm from '../../../components/forms/PropertyForm'
+import TicketForm from '../../../components/forms/TicketForm'
 import {
     AppBar,
     IconButton,
@@ -14,7 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import client from "../../../lib/apollo-client";
 import {gql} from '@apollo/client';
 
-const useStyles = makeStyles({
+  const useStyles = makeStyles({
     appbar: {
         padding: 0,
         marginBottom: 20,
@@ -40,7 +40,7 @@ const useStyles = makeStyles({
     }
 })
 
-export default function PostPropertyPage(props){
+export default function PostTicket(props){
 
  
     const classes = useStyles()
@@ -55,11 +55,11 @@ export default function PostPropertyPage(props){
                         <ChevronLeftIcon className={classes.icon}/>
                     </IconButton>
                     <Typography className={classes.typo}>
-                        Crear Propiedad
+                        Crear Ticket
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <PropertyForm 
+            <TicketForm
                 autoCompleteClients={props.clients} 
             />
         </Fragment>

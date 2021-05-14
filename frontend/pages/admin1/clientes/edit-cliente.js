@@ -41,9 +41,25 @@ const useStyles = makeStyles({
     }
 })
 
-export default function PostClientPage(){
+export default function EditClientPage(){
     
     const classes = useStyles()
+    const router = useRouter()
+    const id = router.query.ID
+
+    console.log(id)
+
+    const { loading, error, data } = useQuery(GET_CLIENT, {
+        variables: {
+            id: id
+        }
+    })
+
+    if(loading) return null
+
+    if(error) return `Error! ${error}`
+
+    const editClient = data.getClient
 
     return(
         <Fragment>
@@ -53,12 +69,12 @@ export default function PostClientPage(){
                         <ChevronLeftIcon className={classes.icon}/>
                     </IconButton>
                     <Typography className={classes.typo}>
-                        Agregar cliente
+                        Editar cliente
                     </Typography>
                 </Toolbar>
             </AppBar>
             <ClientForm 
-                editClient={null}
+                editClient={editClient}
             />
         </Fragment>
     )

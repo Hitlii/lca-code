@@ -23,10 +23,21 @@ query getClients  {
 
 export const GET_CLIENT = gql 
 `
-query getClient($name: String!) {
-    getClient(name: $name) {
+query getClient($id: ID!) {
+    getClient(id: $id) {
         id
         name
+        birthday
+        gender
+        contact {
+            email
+            phone
+        }
+        location {
+            city
+            state
+            address
+        }
     }
 }
 `

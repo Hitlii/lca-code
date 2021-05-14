@@ -4,14 +4,15 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   button: {
+    margin: '0 auto',
+    display: 'block',
+    width: 340,
+    height: 40,
     color: 'white',
     backgroundColor: '#4CAF50',
     borderRadius: 15,
-    marginTop: '1em',
-    marginBottom: '1em',
-    '&:hover': {
-      backgroundColor: "#6ec071",
-    }, 
+    marginTop: 10,
+    marginBottom: 10,
   }
 }))
 

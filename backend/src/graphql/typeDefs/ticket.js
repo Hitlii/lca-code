@@ -29,7 +29,7 @@ module.exports = gql`
         area: Float!
         price: Float!
         currency: String!
-        promissory: PromissoryInput
+        promissory: [PromissoryInput]
         emissionDate: Date!   
         paymentLocation: String!
         paymentAddress: String!
