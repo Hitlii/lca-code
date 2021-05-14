@@ -63,16 +63,13 @@ export default function AllClientsPage(props){
 
     const classes = useStyles()
     const router = useRouter()
-    const [isRefreshing, setIsRefreshing] = useState(false)
 
     const refreshData = () => {
         router.replace(router.asPath);
-        setIsRefreshing(true);
     }
 
     useEffect(() => {
         refreshData()
-        setIsRefreshing(false);
     }, [props])
 
     if(props.error) {

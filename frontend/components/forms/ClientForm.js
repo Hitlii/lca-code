@@ -45,7 +45,7 @@ function ClientForm ({ editClient }) {
             id: editClient.id,
             name: editClient.name,
             gender: editClient.gender,
-            birthday: editClient.birthday,
+            birthday: new Date(new Number(editClient.birthday)).toISOString().slice(0,10),
             email: editClient.contact.email,
             phone: editClient.contact.phone,
             city: editClient.location.city,
