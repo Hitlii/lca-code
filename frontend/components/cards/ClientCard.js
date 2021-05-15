@@ -138,8 +138,12 @@ function ClientCard({ client }) {
 
 const DELETE_CLIENT = gql`
     mutation createClient($id: ID!) {
-        deleteClient( id: $id)
-    }
+        deleteClient( id: $id) {
+            success
+            code
+            message
+        }
+    } 
 `
 
 export default ClientCard

@@ -112,6 +112,7 @@ import MenuBar from '../components/bars/MenuBar'
 //         />
 //     </div>
 // =======
+
 import FilterPropertiesForm from "../components/forms/FilterPropertiesForm"
 import { Button, Slide, Collapse, Fade } from '@material-ui/core'
 import OrderFilterButton from "../components/buttons/OrderFilterButton"
