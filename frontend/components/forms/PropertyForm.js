@@ -119,39 +119,9 @@ function PropertyForm ({ autoCompleteClients }) {
   const formikInput = useFormik({
         initialValues: initialValues,
         validationSchema: propertyValidationSchema,
-    });
-    
-  function handleChangeVendors (updatedVendors) {
-    setVendors(updatedVendors)
-  }
-  function onChangeSlateEditor(newDesc) {
-    setSlateEditor(newDesc)
-  }
-   function handleChangeIsDeeded(){
-    setIsDeeded(!isDeeded)
-  }
-
-  function handleChangeHasAllServices(){
-    setHasAllServices(!hasAllServices)
-  }
-  function handleBackdrop(){
-    setBackdrop(!backdrop)
-  }
-
-  function onChangeCoordinates(e) {
-    setCoordinates({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    })
-  }
-
- 
-
-  async function postProperty (event) {
-    setBackdrop(true);
-    event.preventDefault();
-    formikInput.handleSubmit();
-        
+        onSubmit : async(values)=>{
+          
+    setBackdrop(true)
     let alert;
     if(coordinates.lat === 0 && coordinates.lng === 0) {
       
@@ -202,55 +172,57 @@ function PropertyForm ({ autoCompleteClients }) {
       address,
       video,
       description,
-      } = formikInput.values;
+      } = values;
 
     const {
       lat, 
       lng,
       } = coordinates;
 
-    const variables = {
-      property:{
-        code,
-        status,
-        type,
-        zone,
-
-        area,
-        price,
-        currency,
-        onPayments,
-        specialPrice,
-        
-        title,
-        description:{
-          hasAllServices,
-          isDeeded,
-          text: slateEditor.toString(),
-        }, 
-
-        location: {
-          state: 'B.C',
-          city,
-          address,
-          coordinates:{
-            lat,
-            lng,
-          }
-        }, 
-        media:{
-          images: imagesPath.current,
-          video,
-        }, 
-
-        meta: {
-          description
-        }
-      }, 
-      vendors
-    }  
+    
     try {
         await getPathImages(images);
+        
+        const variables = {
+          property:{
+            code,
+            status,
+            type,
+            zone,
+
+            area,
+            price,
+            currency,
+            onPayments,
+            specialPrice,
+            
+            title,
+            description:{
+              hasAllServices,
+              isDeeded,
+              text: slateEditor.toString(),
+            }, 
+
+            location: {
+              state: 'B.C',
+              city,
+              address,
+              coordinates:{
+                lat,
+                lng,
+              }
+            }, 
+            media:{
+              images: imagesPath.current,
+              video,
+            }, 
+
+            meta: {
+              description
+            }
+          }, 
+          vendors
+        }  
         const response =  await createProperty({variables});
         const data = response.data.createProperty;
         if(response.data){
@@ -275,8 +247,38 @@ function PropertyForm ({ autoCompleteClients }) {
         handleAlert(alert);
     }
 
+        }
+    });
+    
+  function handleChangeVendors (updatedVendors) {
+    setVendors(updatedVendors)
+  }
+  function onChangeSlateEditor(newDesc) {
+    setSlateEditor(newDesc)
+  }
+   function handleChangeIsDeeded(){
+    setIsDeeded(!isDeeded)
+  }
 
+  function handleChangeHasAllServices(){
+    setHasAllServices(!hasAllServices)
+  }
+  function handleBackdrop(){
+    setBackdrop(!backdrop)
+  }
 
+  function onChangeCoordinates(e) {
+    setCoordinates({
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    })
+  }
+
+ 
+
+  async function postProperty (event) {
+    event.preventDefault();
+    formikInput.handleSubmit();
   }
 
 /**
@@ -577,6 +579,7 @@ function PropertyForm ({ autoCompleteClients }) {
          
         <SubmitButton 
           type="submit" 
+          text="Crear Propiedad"
           size="large"
           fullWidth
           startIcon ={<SaveIcon/>}  
@@ -592,11 +595,10 @@ function PropertyForm ({ autoCompleteClients }) {
       {isAlertOpen && 
       <Alert severity={alert.severity} className={classes.alert }>
           <AlertTitle>{alert.title}</AlertTitle>
-          
           {!alert.success && alert.message}
       </Alert> } 
 
-      {alert.success && <Link href={`/propiedades/${alert.message}`}> <a> Ingrese al siguiente URL </a> </Link> }
+      {alert.success && <Link href={`/propiedades/${alert.message}`}><a>Ingrese al siguiente URL</a></Link> }
 
      
     </div>

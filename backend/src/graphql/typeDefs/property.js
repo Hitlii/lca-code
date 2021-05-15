@@ -11,10 +11,46 @@ module.exports = gql`
         
     }
 
+    extend type Query {
+        "Returns a property by url"
+        getProperty(url: String!):Property
+        "Returns properties based on a optional filter"
+        getProperties(filter: PropertyFilterInput): [Property]
+        "Returns admin properties based on a filter"
+        getAdminProperties(filter: PropertyFilterInput):[Property]
+
+
+    }
+
+    "Property filter input."
+    input PropertyFilterInput{
+        zone: String,
+        type: String,
+        status: String
+        city: String,
+        # By now state will not be used because state is always 'B.C'
+        #state: String
+        price: PriceInput
+        area: AreaInput
+        "Search text"
+        search: String 
+    }
+    "Price input for Filter Input"
+    input PriceInput{
+        minPrice: Float,
+        maxPrice: Float
+    }
+    "Area input for AreaInput"
+    input AreaInput{
+        minArea: Float,
+        maxArea: Float
+    }
+
     type CreatePropertyMutationResponse implements MutationResponse{
         message: String!
         code: Float!
         success: Boolean!
+        "The url of the created property"
         url: String
     }
 
@@ -62,12 +98,16 @@ module.exports = gql`
 
     
 
+    "Media input, images and video"
     input MediaInput{
         "Images of the property in the carrousel/slider"
         images: [String!]
         "Video of the property, should be a youtube URL"
         video: String
     }
+
+
+    "Metadescriptor Input"
     input MetaInput{
         "Description of the property MAX 160 characters"
         description: String!
@@ -132,6 +172,7 @@ module.exports = gql`
         meta: Meta!
         "Property Vendors"
         vendors: [Client!] 
+        tickets: [Ticket!]
 
     }
 
@@ -146,12 +187,15 @@ module.exports = gql`
         "Google Maps API Retrieved coordinates."
         coordinates: Coordinates!
     }
+    "Description of the property"
     type PropertyDescription {
+        "Description of the property (Slate)"
         text: String!
         isDeeded: Boolean
         hasAllServices: Boolean
     }
 
+    "Metadescriptors of the property, useful for SEO"
     type Meta{
         "Description of the property MAX 160 characters"
         description: String!
@@ -161,6 +205,7 @@ module.exports = gql`
         # title: String!
     }
 
+    "Coordinates of the property"
     type Coordinates{       
         lat: Float!
         lng: Float!

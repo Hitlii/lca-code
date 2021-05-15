@@ -128,4 +128,6 @@ const PropertiesSchema = mongoose.Schema({
   ]
 })
 
+// Defining indexes
+PropertiesSchema.index({ title: 'text', code: 'text' })
 module.exports = mongoose.model('properties', PropertiesSchema)

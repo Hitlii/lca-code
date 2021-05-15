@@ -11,7 +11,6 @@ const resolvers = require('./src/graphql/resolvers')
 const typeDefs = require('./src/graphql/typeDefs')
 // const { verifyUser } = require('./src/graphql/helper/context')
 const auth = require('./middleware/auth')
-const { v4: uuidv4 } = require('uuid')
 
 const app = express()
 
@@ -22,7 +21,7 @@ const storage = multer.diskStorage(({
     cb(null, 'images')
   },
   filename: (req, file, cb) => {
-    cb(null, uuidv4() + file.originalname)
+    cb(null, file.originalname)
   }
 }))
 
@@ -38,6 +37,7 @@ const fileFilter = (req, file, cb) => {
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+  // res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'PUT, POST')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   next()
@@ -96,6 +96,14 @@ app.use(
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => {
+    const isAuth = req.isAuth
+    const email = req.email
+    return {
+      isAuth,
+      email
+    }
+  },
   formatError: (err) => {
     console.log(err)
     // Returning errors from third party packages

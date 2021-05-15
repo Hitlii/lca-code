@@ -84,7 +84,6 @@ function useImageState(initialVal) {
     if (res.data.code === 201) {
       imagesPath.current = res.data.filesPath;
     }
-    console.log(res.data);
   }
 
   // Handler when image is ordered

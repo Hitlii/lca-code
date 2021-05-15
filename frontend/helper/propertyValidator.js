@@ -151,9 +151,9 @@ import * as yup from 'yup'
         address: yup
             .string()
             .max(20,'Muy largo:( Trate de reducir este campo'),
-              title: yup 
+        title: yup 
             .string()
-            .max(55, 'El titulo es muy largo, trate de hacerlo mas chico'),
+            .max(70, 'El titulo es muy largo, trate de hacerlo mas chico'),
         description: yup 
             .string() 
             .max(160, 'La descripción es muy larga, trate de hacerla mas chica'),
