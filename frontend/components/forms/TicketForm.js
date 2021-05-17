@@ -389,10 +389,10 @@ const CREATE_TICKET = gql`
       code
       success
       ticket{
-        id
+        _id
         propertyId
         clients{
-          id
+          _id
           name
           gender
           birthday

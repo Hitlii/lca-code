@@ -42,7 +42,7 @@ function ClientForm ({ editClient }) {
 
     if(editClient !== null) {
         initialValues = {
-            id: editClient.id,
+            _id: editClient._id,
             name: editClient.name,
             gender: editClient.gender,
             birthday: new Date(new Number(editClient.birthday)).toISOString().slice(0,10),

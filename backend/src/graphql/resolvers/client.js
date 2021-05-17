@@ -4,9 +4,9 @@ const { isObjectIdValid } = require('../helper/validators')
 
 module.exports = {
   Query: {
-    getClient: async (_, { id }) => {
+    getClient: async (_, { _id }) => {
       try {
-        const client = await Client.findById(ObjectId(id))
+        const client = await Client.findById(ObjectId(_id))
         return client || null
       } catch (error) {
         console.log(error)
@@ -26,17 +26,17 @@ module.exports = {
   Mutation: {
     createClient: async (_, { client }) => {
       // Input validation
-      //const clientValidationError = new clientInputValidator(client)
-      
+      // const clientValidationError = new clientInputValidator(client)
+
       // Invalid user input
-      /*if (clientValidationError) {
+      /* if (clientValidationError) {
         let error = new Error('Error validando inputs de cliente')
         error.code = 400
         error.data = clientValidationError
         error.solution = 'Revise los campos enviados'
         throw error
-      }*/
-      
+      } */
+
       const newClient = new Client({ ...client })
 
       // DB Client Creation
@@ -49,15 +49,15 @@ module.exports = {
         client: newClient
       }
     },
-    updateClient: async (_, { id, name, gender, birthday, email, phone, city, state, address }) => {
+    updateClient: async (_, { _id, name, gender, birthday, email, phone, city, state, address }) => {
       let error = null
-      if(!isObjectIdValid(id)) {
+      if (!isObjectIdValid(_id)) {
         error = new Error('Este ID no es válido')
         error.code = 400
         error.solution = 'Ingrese un ID valido'
         throw error
       }
-      
+
       // Create object with fields to update
       const tempClient = {
         name,
@@ -75,7 +75,7 @@ module.exports = {
 
       // Wait for update operation
       const updatedClient = await Client.findByIdAndUpdate(
-        ObjectId(id),
+        ObjectId(_id),
         { $set: tempClient },
         { new: true }
       )
@@ -86,12 +86,11 @@ module.exports = {
         message: 'Datos modificados con exito.',
         client: updatedClient
       }
-
     },
-    deleteClient: async (_, { id }) => {
+    deleteClient: async (_, { _id }) => {
       let error = null
       // Invalid user input
-      if(!isObjectIdValid(id)) {
+      if (!isObjectIdValid(_id)) {
         error = new Error('Este ID no es válido')
         error.code = 400
         error.solution = 'Ingrese un ID valido'
@@ -99,7 +98,7 @@ module.exports = {
       }
 
       // Find client to delete
-      const client = await Client.findById(ObjectId(id))
+      const client = await Client.findById(ObjectId(_id))
 
       // Client not found
       if (client == null) {

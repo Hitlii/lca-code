@@ -24,17 +24,17 @@ module.exports = {
       }
     }),
 
-    deleteProperty: async (_, { id }) => {
+    deleteProperty: async (_, { _id }) => {
       let error = null
       // 400 Invalid user input
-      if (!isObjectIdValid(id)) {
+      if (!isObjectIdValid(_id)) {
         error = new Error('Este ID no es valido')
         error.code = 400
         error.solution = 'Ingrese un ID valido (está mandando un string?)'
         throw error
       }
 
-      const property = await Property.findById(ObjectId(id), 'tickets code').exec()
+      const property = await Property.findById(ObjectId(_id), 'tickets code').exec()
 
       // 404 Property not found
       if (property == null) {
@@ -87,6 +87,7 @@ module.exports = {
             mongoFilter[key] = { $lte: maxPrice, $gte: minPrice }
             return
           }
+          if (key === 'title') mongoFilter[key] = { $nin: ['Vendido', 'Oculto'] }
           if (key === 'area') {
             const { minArea, maxArea } = filter.area
             mongoFilter[key] = { $lte: maxArea, $gte: minArea }
@@ -125,17 +126,46 @@ module.exports = {
       }
     },
     getProperty: async (_, { url }) => {
-      const projection = {
+      // No vendors, no tickets
+      const propertyProjection = {
         vendors: 0,
-        tickets: 0
+        tickets: 0,
+        'media.images': { $slice: [1, 50] }
+      }
+      const relPropertyProjection = {
+        status: 1,
+        zone: 1,
+        type: 1,
+        area: 1,
+        price: 1,
+        specialPrice: 1,
+        onPayments: 1,
+        currency: 1,
+        'location.state': 1,
+        'location.city': 1,
+        'location.address': 1,
+        'description.isDeeded': 1,
+        'description.hasAllServices': 1,
+        'meta.url': 1,
+        'media.images': { $slice: 1 }
       }
 
       try {
-        const property = await Property.findOne({ 'meta.url': url }, projection).exec()
-        return property
+        const property = await Property.findOne({ 'meta.url': url }, propertyProjection).exec()
+
+        const mongooseFilter = {
+          status: property.status,
+          type: property.type,
+          zone: property.zone,
+          'location.city': property.location.city
+        }
+        const relatedProperties = await Property.find({ ...mongooseFilter }, relPropertyProjection).limit(5)
+        return {
+          property,
+          relatedProperties
+        }
       } catch (error) {
         error.message = 'Error al cargar la propiedad'
-        error.solution = 'Es posible que este URL este roto'
         error.code = 404
         throw error
       }
@@ -164,7 +194,28 @@ module.exports = {
         error.code = 418
         throw error
       }
-    }
+    },
+    getAdminProperty: combineResolvers(isAuthenticated, async (_, { url }) => {
+      const projection = {
+        status: 1,
+        title: 1,
+        'location.state': 1,
+        'location.city': 1,
+        'location.address': 1,
+        'meta.url': 1,
+        'media.images': { $slice: [1, 1] },
+        vendors: 1,
+        tickets: 1
+      }
+      try {
+        const property = await Property.findOne({ 'meta.url': url }, projection).exec()
+        return property
+      } catch (error) {
+        error.message = 'Error al cargar la propiedad'
+        error.code = 404
+        throw error
+      }
+    })
 
   }
 }

@@ -6,7 +6,7 @@ module.exports = gql`
         "Creates a ticket, returns created ticket."
         createTicket(ticket: CreateTicketInput!, clients: [ClientInput!]!):CreateEditTicketMutationResponse!
         "Deletes a ticket (id) from a property (propertyID)"
-        deleteTicket(id:ID!, propertyId: ID!): DeleteMutationResponse!
+        deleteTicket(_id:ID!, propertyId: ID!): DeleteMutationResponse!
 
 
     }
@@ -42,7 +42,7 @@ module.exports = gql`
    
     type Ticket{
         "Ticket ID"
-        id: ID!
+        _id: ID!
         "Id of the property"
         propertyId: ID!
         "Arrangement of clients buying or renting a property"

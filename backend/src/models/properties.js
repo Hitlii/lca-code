@@ -123,7 +123,19 @@ const PropertiesSchema = mongoose.Schema({
       _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tickets'
-      }
+      },
+      clients: [{
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'clients'
+        },
+        name: String
+      }],
+      area: Number,
+      price: Number,
+      currency: String,
+      emissionDate: Date
+
     }
   ]
 })

@@ -56,7 +56,7 @@ function ticketInputValidator (ticket) {
 
   // Validator rules
   const rules = {
-    id: 'string',
+    _id: 'string',
     propertyId: 'string',
     status: 'required|string|max:20',
     area: 'numeric',

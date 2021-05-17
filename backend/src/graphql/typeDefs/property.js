@@ -7,19 +7,30 @@ module.exports = gql`
         "Creates a property, returns the URL generated"
         createProperty(property: CreatePropertyInput!, vendors: [ClientInput!]!):CreatePropertyMutationResponse!
         "Deletes a property by ID, returns string with message if deleted, error if not"
-        deleteProperty(id: ID!): DeleteMutationResponse!
+        deleteProperty(_id: ID!): DeleteMutationResponse!
         
     }
 
     extend type Query {
         "Returns a property by url"
-        getProperty(url: String!):Property
+        getProperty(url: String!):PropertyAndRelated
         "Returns properties based on a optional filter"
-        getProperties(filter: PropertyFilterInput): [Property]
+        getProperties(filter: PropertyFilterInput, order: PropertyOrderInput, pagination: PropertyPaginationInput): [Property]
         "Returns admin properties based on a filter"
         getAdminProperties(filter: PropertyFilterInput):[Property]
+        "Returns admin property by url"
+        getAdminProperty(url: String!): Property
 
 
+
+    }
+    
+    type CreatePropertyMutationResponse implements MutationResponse{
+        message: String!
+        code: Float!
+        success: Boolean!
+        "The url of the created property"
+        url: String
     }
 
     "Property filter input."
@@ -35,6 +46,20 @@ module.exports = gql`
         "Search text"
         search: String 
     }
+
+    "Input for ordering properties"
+    input PropertyOrderInput{
+        "1 ascending and -1 descending order"
+        price: Float,
+        area: Float
+    }
+    input PropertyPaginationInput{
+        limit: Float,
+        offset: Float
+    }
+
+
+    
     "Price input for Filter Input"
     input PriceInput{
         minPrice: Float,
@@ -46,13 +71,7 @@ module.exports = gql`
         maxArea: Float
     }
 
-    type CreatePropertyMutationResponse implements MutationResponse{
-        message: String!
-        code: Float!
-        success: Boolean!
-        "The url of the created property"
-        url: String
-    }
+  
 
     input CreatePropertyInput{
         "Status of the property, can be Venta, Renta, Vendido, Oculto"
@@ -138,7 +157,7 @@ module.exports = gql`
     "Represents a Property"
     type Property{
         "ID of the property"
-        id: ID!
+        _id: ID!
         "Status of the property, can be Venta, Renta, Vendido, Oculto"
         status: String!
         "Type of property i.e Casa, Terreno, Rancho"
@@ -165,7 +184,7 @@ module.exports = gql`
         description: PropertyDescription!
 
         "Location of the property, address and coordinates"
-        location: Location!
+        location: PropertyLocation!
         "Media of the property, images and video url"
         media: Media!
         "Meta descriptors, such as description, keywords, author, and URL"
@@ -216,6 +235,12 @@ module.exports = gql`
         images: [String!]
         "Video of the property, should be a youtube URL"
         video: String
+    }
+
+    "Property and related properties when we query getProperty"
+    type PropertyAndRelated {
+        property: Property,
+        relatedProperties: [Property!]
     }
 
 `

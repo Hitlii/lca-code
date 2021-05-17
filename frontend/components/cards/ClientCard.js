@@ -52,7 +52,7 @@ function ClientCard({ client }) {
     function onEditClick() {
         router.push({
             pathname: '/admin1/clientes/edit-cliente',
-            query: { ID: client.id }
+            query: { ID: client._id }
         })
     }
 
@@ -64,7 +64,7 @@ function ClientCard({ client }) {
             console.log(data)
         },
         variables: {
-            id: client.id
+            _id: client._id
         }
     })
 
@@ -138,7 +138,7 @@ function ClientCard({ client }) {
 
 const DELETE_CLIENT = gql`
     mutation createClient($id: ID!) {
-        deleteClient( id: $id) {
+        deleteClient( _id: $id) {
             success
             code
             message
