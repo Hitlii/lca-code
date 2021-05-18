@@ -126,15 +126,6 @@ const Home = () => {
   return (
     <div >
       <MenuBar />
-      {/* <Button onClick={() => { setUse(!use) }}>Hola</Button>
-      <Collapse in={use} >
-        {<FilterPropertiesForm />}
-      </Collapse>
-      <OptionProperty></OptionProperty>
-      {/* <OrderFilterButton/> */}
-      {/* <TicketForm/> */}
-      {/* <OptionTicket stateComponent={true}/> */}
-    <OrderProperty/>
 
     </div>
   )
