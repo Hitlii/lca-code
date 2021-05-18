@@ -2,7 +2,6 @@ const { skip } = require('graphql-resolvers')
 
 // Middleware, checks if user is authenticated
 module.exports.isAuthenticated = (parent, args, context) => {
-  console.log(context)
   if (!context.isAuth) {
     const error = new Error('Acceso denegado!')
     error.code = 401

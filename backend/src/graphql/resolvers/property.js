@@ -4,6 +4,7 @@ const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
 const { isAuthenticated } = require('./middleware')
 
+const PROPERTIES_PER_PAGE = 2
 // Client card property projection
 // Figma component -> https://www.figma.com/file/Zuolu9jlRGMlKDreja7g20/LCA?node-id=180%3A147
 const CLIENT_PROPERTY_CARD = {
@@ -118,6 +119,8 @@ module.exports = {
   },
   Query: {
     getProperties: async (_, { filter, order, pagination }) => {
+      const mongoSkip = pagination.pageNumber > 0 ? (pagination.pageNumber - 1) * PROPERTIES_PER_PAGE : 0
+      const mongoSort = {}
       const mongoFilter = {}
       let search = {}
       if (filter !== {}) {
@@ -150,9 +153,17 @@ module.exports = {
           mongoFilter[key] = filter[key]
         })
       }
+      if (order !== {}) {
+        Object.keys(order).forEach(key => {
+          mongoSort[key] = order[key]
+        })
+      }
 
       try {
-        const properties = await Property.find({ ...mongoFilter, ...search }, CLIENT_PROPERTY_CARD).limit(10)
+        const properties = await Property.find(
+          { ...mongoFilter, ...search },
+          CLIENT_PROPERTY_CARD,
+          { sort: mongoSort }).skip(mongoSkip).limit(PROPERTIES_PER_PAGE)
         return properties
       } catch (error) {
         error.message = 'Error al cargar las propiedades'
@@ -182,12 +193,12 @@ module.exports = {
         throw error
       }
     },
-    getAdminProperties: combineResolvers(isAuthenticated, async (_, { filter }) => {
+    getAdminProperties: combineResolvers(isAuthenticated, async (_, { filter, pagination }) => {
+      const mongoSkip = pagination.pageNumber > 0 ? (pagination.pageNumber - 1) * PROPERTIES_PER_PAGE : 0
       let search = {}
       if (filter.search) { search = { $text: { $search: filter.search } } }
-
       try {
-        const properties = await Property.find({ ...search }, ADMIN_PROPERTY_CARD).limit(10)
+        const properties = await Property.find({ ...search }, ADMIN_PROPERTY_CARD).skip(mongoSkip).limit(PROPERTIES_PER_PAGE)
         return properties
       } catch (error) {
         error.message = 'Error al cargar las propiedades'

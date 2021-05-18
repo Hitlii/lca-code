@@ -13,14 +13,14 @@ module.exports = gql`
         "Returns a property by url"
         getProperty(url: String!):PropertyAndRelated
         "Returns properties based on a optional filter"
-        getProperties(filter: PropertyFilterInput, order: PropertyOrderInput, pagination: PropertyPaginationInput): [Property]
+        getProperties(filter: PropertyFilterInput, order: PropertyOrderInput, pagination: PropertyPaginationInput!): [Property]
         "Returns admin properties based on a filter"
-        getAdminProperties(filter: PropertyFilterInput):[Property]
+        getAdminProperties(filter: PropertyFilterInput, pagination: PropertyPaginationInput!):[Property]
         "Returns admin property by url"
         getAdminProperty(url: String!): Property
         "Returns the featured properties"
         getFeaturedProperties:[Property!]
-        
+
     }
     
     type CreatePropertyMutationResponse implements MutationResponse{
@@ -52,8 +52,7 @@ module.exports = gql`
         area: Float
     }
     input PropertyPaginationInput{
-        limit: Float,
-        offset: Float
+        pageNumber: Float!
     }
 
 
