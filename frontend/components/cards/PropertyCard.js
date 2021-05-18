@@ -11,7 +11,8 @@ import {
 import { HorizontalPropertyCardStyle, VerticalPropertyCardStyle } from '../../styles/PropertyCardStyles'
 
 function PropertyCard({ orientation, property }) {
-    
+    let image="http://localhost:8000/"+property.media.images[0]
+    image=image.replace(/\\/g, '/')
     let classes
     if(orientation === 'horizontal')
         classes = HorizontalPropertyCardStyle()
@@ -22,6 +23,7 @@ function PropertyCard({ orientation, property }) {
 
     function zonePicker(zone){
         if( zone === 'Comercial'){
+            
             return {
                 tagText: 'COMERCIALES',
                 tag: classes.blueTag,
@@ -58,24 +60,24 @@ function PropertyCard({ orientation, property }) {
                 </Paper>
                 <CardMedia
                     className={classes.cover}
-                    image={property.images[0]}
+                    image={image.replace(/\\/g, '/')}
                 />
             </div>
             <div className={classes.details}>
                 <CardContent className={classes.content}>
                     <Paper className={zone.status}>
                         <Typography className={classes.statusText}>
-                            EN {status}
+                            EN {property.status}
                         </Typography>
                     </Paper>
                     <Typography className={classes.area}>
                         {property.area} m²
                     </Typography>
                     <Typography className={classes.address}>
-                        {property.address}
+                        {property.location.address}
                     </Typography>
                     <Typography className={classes.cityState}>
-                        {property.city} {property.state}
+                        {property.location.city} {property.location.state}
                     </Typography>
                     <Typography className={classes.price}>
                         ${property.price} {property.currency}                        

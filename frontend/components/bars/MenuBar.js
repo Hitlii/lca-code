@@ -61,9 +61,11 @@ function MenuBar () {
   const [showContactCheck, setShowContactCheck] = useState(false)
   const [showInformationCheck, setshowInformationCheck] = useState(false)
   const hanleShowContactButton = () => {
+    setShowContactCheck(false)
     setshowInformationCheck(current => !current)
   }
   const hanleShowInformationButton = () => {
+    setshowInformationCheck(false)
     setShowContactCheck(current => !current)
   }
 
@@ -78,9 +80,11 @@ function MenuBar () {
             </Grid>
 
             <Grid >
-                <IconButton className={classes.buttonStyle}>
-                    <SearchIcon/>
+            <Link href='/propiedades'>
+                <IconButton  className={classes.buttonStyle} >
+                    <SearchIcon />
                 </IconButton>
+                </Link>   
             </Grid>
 
             <Grid >

@@ -23,10 +23,12 @@ function FilterButton({ name, text, onChange, index, stateButton }) {
   return (
     <Button
       className={classes.root}
-      style={{ backgroundColor:stateButton?'grey':'#F2F2F2',color:stateButton?'white':null}}
+      style={{
+        backgroundColor: stateButton ? "grey" : "#F2F2F2",
+        color: stateButton ? "white" : null,
+      }}
       onClick={() => {
         onChange(name, index);
-        console.log(index)
       }}
     >
       {text}

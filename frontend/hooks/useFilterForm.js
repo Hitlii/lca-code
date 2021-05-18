@@ -3,24 +3,46 @@ import { useFormik } from "formik";
 const useFilterForm = () => {
   const filterProperty = useFormik({
     initialValues: {
+      search:"",
       zone: "",
       type: "",
-      statu: "",
+      status: "",
       city: "",
-      price: [0,100],
-      area: { min: "", max: "" },
+      price: { minPrice:'', maxPrice: '' },
+      area: { minArea: '', maxArea: '' },
+      orderPrice:'',
+      orderArea:'',
     },
     //validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
     },
+    validate:values=>{
+      let errors ={}
+      if(values.price.minPrice>values.price.maxPrice){
+        errors.minPrice='Error en los precios minimo'
+        errors.maxPrice='Error en los precios maximo'
+      }
+      if(values.area.minArea>values.area.maxArea){
+        errors.minArea='Error en la area minimo'
+        errors.maxArea='Error en la area maximo'
+        
+      }
+      return errors
+    }
   });
-  const zones = ["urbana", "campestre", "comercial"];
-  const types = ["terreno", "casa", "rancho"];
-  const status = ["venta", "renta"];
-  const cities = ["tecate", "ensenada", "rosarito", "tijuana", "mexicali"];
+  function resetFilterPropertyValues(){
+    filterProperty.setFieldValue("city", "");
+    filterProperty.setFieldValue("status", "");
+    filterProperty.setFieldValue("type", "");
+    filterProperty.setFieldValue("zone", "");
+    filterProperty.setFieldValue("price.minPrice", "");
+    filterProperty.setFieldValue("price.maxPrice", "");
+    filterProperty.setFieldValue("price.minPrice", "");
+    filterProperty.setFieldValue("price.maxPrice", "");
+  }
 
-  return { filterProperty, zones, types, status, cities };
+  return {filterProperty,resetFilterPropertyValues};
 };
 
 export default useFilterForm;

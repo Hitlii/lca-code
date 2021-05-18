@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
     left: 0,
     right: 0,
-    bottom: 100,
+    bottom: 61,
     display: "flex",
     textAlign: "space-between",
   },
