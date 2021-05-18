@@ -4,6 +4,59 @@ const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
 const { isAuthenticated } = require('./middleware')
 
+// Client card property projection
+// Figma component -> https://www.figma.com/file/Zuolu9jlRGMlKDreja7g20/LCA?node-id=180%3A147
+const CLIENT_PROPERTY_CARD = {
+  status: 1,
+  zone: 1,
+  type: 1,
+  area: 1,
+  price: 1,
+  specialPrice: 1,
+  onPayments: 1,
+  currency: 1,
+  'location.state': 1,
+  'location.city': 1,
+  'location.address': 1,
+  'description.isDeeded': 1,
+  'description.hasAllServices': 1,
+  'meta.url': 1,
+  'media.images': { $slice: 1 }
+}
+// Admin property card projection
+// Figma component -> https://www.figma.com/file/Zuolu9jlRGMlKDreja7g20/LCA?node-id=1751%3A40
+const ADMIN_PROPERTY_CARD = {
+  code: 1,
+  status: 1,
+  zone: 1,
+  area: 1,
+  'location.state': 1,
+  'location.city': 1,
+  'location.address': 1,
+  'meta.url': 1,
+  'media.images': { $slice: 1 }
+}
+
+// Single property render
+const ADMIN_PROPERTY = {
+  status: 1,
+  title: 1,
+  'location.state': 1,
+  'location.city': 1,
+  'location.address': 1,
+  'meta.url': 1,
+  'media.images': { $slice: [1, 1] },
+  vendors: 1,
+  tickets: 1
+}
+
+// Single client property
+const CLIENT_PROPERTY = {
+  vendors: 0,
+  tickets: 0,
+  'media.images': { $slice: [1, 50] }
+}
+
 module.exports = {
   Mutation: {
     createProperty: combineResolvers(isAuthenticated, async (_, { property, vendors }) => {
@@ -24,7 +77,7 @@ module.exports = {
       }
     }),
 
-    deleteProperty: async (_, { _id }) => {
+    deleteProperty: combineResolvers(isAuthenticated, async (_, { _id }) => {
       let error = null
       // 400 Invalid user input
       if (!isObjectIdValid(_id)) {
@@ -60,11 +113,11 @@ module.exports = {
         code: 200,
         success: true
       }
-    }
+    })
 
   },
   Query: {
-    getProperties: async (_, { filter }) => {
+    getProperties: async (_, { filter, order, pagination }) => {
       const mongoFilter = {}
       let search = {}
       if (filter !== {}) {
@@ -97,26 +150,9 @@ module.exports = {
           mongoFilter[key] = filter[key]
         })
       }
-      const projection = {
-        status: 1,
-        zone: 1,
-        type: 1,
-        area: 1,
-        price: 1,
-        specialPrice: 1,
-        onPayments: 1,
-        currency: 1,
-        'location.state': 1,
-        'location.city': 1,
-        'location.address': 1,
-        'description.isDeeded': 1,
-        'description.hasAllServices': 1,
-        'meta.url': 1,
-        'media.images': { $slice: 1 }
-      }
 
       try {
-        const properties = await Property.find({ ...mongoFilter, ...search }, projection).limit(10)
+        const properties = await Property.find({ ...mongoFilter, ...search }, CLIENT_PROPERTY_CARD).limit(10)
         return properties
       } catch (error) {
         error.message = 'Error al cargar las propiedades'
@@ -126,40 +162,16 @@ module.exports = {
       }
     },
     getProperty: async (_, { url }) => {
-      // No vendors, no tickets
-      const propertyProjection = {
-        vendors: 0,
-        tickets: 0,
-        'media.images': { $slice: [1, 50] }
-      }
-      const relPropertyProjection = {
-        status: 1,
-        zone: 1,
-        type: 1,
-        area: 1,
-        price: 1,
-        specialPrice: 1,
-        onPayments: 1,
-        currency: 1,
-        'location.state': 1,
-        'location.city': 1,
-        'location.address': 1,
-        'description.isDeeded': 1,
-        'description.hasAllServices': 1,
-        'meta.url': 1,
-        'media.images': { $slice: 1 }
-      }
-
       try {
-        const property = await Property.findOne({ 'meta.url': url }, propertyProjection).exec()
-
+        const property = await Property.findOne({ 'meta.url': url }, CLIENT_PROPERTY).exec()
         const mongooseFilter = {
           status: property.status,
           type: property.type,
           zone: property.zone,
-          'location.city': property.location.city
+          'location.city': property.location.city,
+          _id: { $ne: property._id }
         }
-        const relatedProperties = await Property.find({ ...mongooseFilter }, relPropertyProjection).limit(5)
+        const relatedProperties = await Property.find({ ...mongooseFilter }, CLIENT_PROPERTY_CARD).limit(5)
         return {
           property,
           relatedProperties
@@ -170,23 +182,12 @@ module.exports = {
         throw error
       }
     },
-    getAdminProperties: async (_, { filter }) => {
+    getAdminProperties: combineResolvers(isAuthenticated, async (_, { filter }) => {
       let search = {}
       if (filter.search) { search = { $text: { $search: filter.search } } }
-      const projection = {
-        code: 1,
-        status: 1,
-        zone: 1,
-        area: 1,
-        'location.state': 1,
-        'location.city': 1,
-        'location.address': 1,
-        'meta.url': 1,
-        'media.images': { $slice: 1 }
-      }
 
       try {
-        const properties = await Property.find({ ...search }, projection).limit(10)
+        const properties = await Property.find({ ...search }, ADMIN_PROPERTY_CARD).limit(10)
         return properties
       } catch (error) {
         error.message = 'Error al cargar las propiedades'
@@ -194,28 +195,26 @@ module.exports = {
         error.code = 418
         throw error
       }
-    },
+    }),
     getAdminProperty: combineResolvers(isAuthenticated, async (_, { url }) => {
-      const projection = {
-        status: 1,
-        title: 1,
-        'location.state': 1,
-        'location.city': 1,
-        'location.address': 1,
-        'meta.url': 1,
-        'media.images': { $slice: [1, 1] },
-        vendors: 1,
-        tickets: 1
-      }
       try {
-        const property = await Property.findOne({ 'meta.url': url }, projection).exec()
+        const property = await Property.findOne({ 'meta.url': url }, ADMIN_PROPERTY).exec()
         return property
       } catch (error) {
         error.message = 'Error al cargar la propiedad'
         error.code = 404
         throw error
       }
-    })
+    }),
+    getFeaturedProperties: async () => {
+      try {
+        const featuredProperties = await Property.find({ isFeatured: true }, CLIENT_PROPERTY_CARD).exec()
+        return featuredProperties
+      } catch (error) {
+        error.message = 'Error al cargar las propiedades destacadas'
+        error.code = 400
+      }
+    }
 
   }
 }

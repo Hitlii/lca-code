@@ -5,6 +5,8 @@ module.exports = gql`
     extend type Mutation{
         "Creates a ticket, returns created ticket."
         createTicket(ticket: CreateTicketInput!, clients: [ClientInput!]!):CreateEditTicketMutationResponse!
+        "Updates a ticket, returns updated ticket."
+        updateTicket(ticket: UpdateTicketInput!, clients: [ClientInput!]): CreateEditTicketMutationResponse!
         "Deletes a ticket (id) from a property (propertyID)"
         deleteTicket(_id:ID!, propertyId: ID!): DeleteMutationResponse!
 
@@ -33,6 +35,18 @@ module.exports = gql`
         emissionDate: Date!   
         paymentLocation: String!
         paymentAddress: String!
+    }
+    input UpdateTicketInput{
+        _id: ID!
+        propertyId: ID!
+        status: String
+        area: Float
+        price: Float
+        currency: String
+        promissory: [PromissoryInput]
+        emissionDate: Date   
+        paymentLocation: String
+        paymentAddress: String
     }
 
     input PromissoryInput{

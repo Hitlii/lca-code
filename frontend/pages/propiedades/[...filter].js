@@ -4,7 +4,7 @@
 export default function FilteredPropiertiesPage(){
     return(
         <div>
-            <h1>asd</h1>
+            <h1>Buscador de propiedades</h1>
         </div>
     )
 }

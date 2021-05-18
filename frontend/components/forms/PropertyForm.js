@@ -80,6 +80,7 @@ function PropertyForm ({ autoCompleteClients }) {
 
   // State ----------------------------------------------------------------
   const [isAlertOpen, alert, openAlert, closeAlert, handleAlert] = useAlert();
+  const [isFeatured, setFeatured] = useState(false);
   const [backdrop, setBackdrop] = useState(false);
   const [errors, setErrors] = useState({})
   const [isDeeded, setIsDeeded] = useState(false);
@@ -189,7 +190,7 @@ function PropertyForm ({ autoCompleteClients }) {
             status,
             type,
             zone,
-
+            isFeatured,
             area,
             price,
             currency,
@@ -262,6 +263,9 @@ function PropertyForm ({ autoCompleteClients }) {
 
   function handleChangeHasAllServices(){
     setHasAllServices(!hasAllServices)
+  }
+  function handleChangeIsFeatured(){
+    setFeatured(!isFeatured)
   }
   function handleBackdrop(){
     setBackdrop(!backdrop)
@@ -366,6 +370,10 @@ function PropertyForm ({ autoCompleteClients }) {
               <FormControlLabel
                 control={<Checkbox checked={hasAllServices} onChange={handleChangeHasAllServices} name="hasAllServices" />}
                 label="Todos los servicios"
+              />
+               <FormControlLabel
+                control={<Checkbox checked={isFeatured} onChange={handleChangeIsFeatured} name="isFeatured" />}
+                label="Propiedad destacada"
               />
             </FormGroup>
           
@@ -598,7 +606,7 @@ function PropertyForm ({ autoCompleteClients }) {
           {!alert.success && alert.message}
       </Alert> } 
 
-      {alert.success && <Link href={`/propiedades/${alert.message}`}><a>Ingrese al siguiente URL</a></Link> }
+      {alert.success && <Link href={`/propiedad/${alert.message}`}><a>Ingrese al siguiente URL</a></Link> }
 
      
     </div>

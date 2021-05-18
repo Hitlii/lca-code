@@ -3,7 +3,7 @@
 export default function SinglePropertyPage(){
     return(
         <div>
-            <h1>asd</h1>
+            <h1>Vista de una sola propiedad</h1>
         </div>
     )
 }

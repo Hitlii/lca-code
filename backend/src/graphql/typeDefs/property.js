@@ -1,8 +1,6 @@
 const { gql } = require('apollo-server-express')
 
 module.exports = gql`
-   
-    
     extend type Mutation {
         "Creates a property, returns the URL generated"
         createProperty(property: CreatePropertyInput!, vendors: [ClientInput!]!):CreatePropertyMutationResponse!
@@ -20,9 +18,9 @@ module.exports = gql`
         getAdminProperties(filter: PropertyFilterInput):[Property]
         "Returns admin property by url"
         getAdminProperty(url: String!): Property
-
-
-
+        "Returns the featured properties"
+        getFeaturedProperties:[Property!]
+        
     }
     
     type CreatePropertyMutationResponse implements MutationResponse{
@@ -82,6 +80,8 @@ module.exports = gql`
         zone: String!
         "Code of the property"
         code: String!
+        "If a property is a featured property"
+        isFeatured: Boolean
     
         "Special price, used when the property cost more than 150,000 USD (optional) i.e  880 USD / ha"
         specialPrice: String
@@ -115,8 +115,6 @@ module.exports = gql`
         hasAllServices: Boolean
     }
 
-    
-
     "Media input, images and video"
     input MediaInput{
         "Images of the property in the carrousel/slider"
@@ -124,7 +122,6 @@ module.exports = gql`
         "Video of the property, should be a youtube URL"
         video: String
     }
-
 
     "Metadescriptor Input"
     input MetaInput{
@@ -158,6 +155,8 @@ module.exports = gql`
     type Property{
         "ID of the property"
         _id: ID!
+        "Checks if the property is a featured property"
+        isFeatured: Boolean
         "Status of the property, can be Venta, Renta, Vendido, Oculto"
         status: String!
         "Type of property i.e Casa, Terreno, Rancho"

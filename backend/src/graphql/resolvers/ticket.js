@@ -3,6 +3,8 @@ const { isObjectIdValid } = require('../helper/validators')
 // const Client = require('../../models/clients')
 const Property = require('../../models/properties')
 const ObjectId = require('mongoose').Types.ObjectId
+const { combineResolvers } = require('graphql-resolvers')
+const { isAuthenticated } = require('./middleware')
 
 module.exports = {
   Mutation: {
@@ -11,7 +13,7 @@ module.exports = {
       @param {ticket} ticket A new ticket
       @param {clients} clients Array of existing clients and new clients
     */
-    createTicket: async (_, { ticket, clients }) => {
+    createTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }) => {
       let error = null
 
       // Searching property.
@@ -39,13 +41,41 @@ module.exports = {
         success: true,
         ticket: newTicket
       }
-    },
+    }),
+    updateTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }) => {
+      try {
+        let updatedTicket = {
+          ...ticket, clients
+        }
+        updatedTicket = await Ticket.findByIdAndUpdate(
+          ObjectId(ticket._id),
+          { $set: updatedTicket },
+          { new: true }).exec()
+
+        if (updatedTicket === null) {
+          const error = new Error('Ticket no encontrado')
+          error.code = 404
+          throw error
+        }
+        return {
+          message: 'Ticket actualizado',
+          ticket: updatedTicket,
+          success: true,
+          code: 200
+        }
+      } catch (error) {
+        if (error.code && error.code === 404) throw error
+        error.message = 'Error al actualizar el ticket'
+        error.code = 500
+        throw error
+      }
+    }),
     /**
             @description Deletes a ticket
             @param {String} id id of the ticket
-            @returns {MutationResponse} With code and message
+            @returns {MutationResponse} With a code message and success status
          */
-    deleteTicket: async (_, { _id, propertyId }) => {
+    deleteTicket: combineResolvers(isAuthenticated, async (_, { _id, propertyId }) => {
       let error = null
 
       // Invalid ID
@@ -82,10 +112,10 @@ module.exports = {
         success: true,
         code: 200
       }
-    }
+    })
   },
   Query: {
-    getTickets: async (_, { propertyId }) => {
+    getTickets: combineResolvers(isAuthenticated, async (_, { propertyId }) => {
       let error = null
       if (!isObjectIdValid(propertyId)) {
         error = new Error('\'Este ID no es valido\'')
@@ -96,6 +126,6 @@ module.exports = {
       // Need of pagination here?
       const tickets = await Ticket.find({ propertyId }, '-promissory -paymentLocation -paymentAddress')
       return tickets
-    }
+    })
   }
 }

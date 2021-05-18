@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const PropertiesSchema = mongoose.Schema({
+  isFeatured: Boolean,
   code: {
     type: String,
     required: true,
