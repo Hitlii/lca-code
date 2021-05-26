@@ -1,27 +1,18 @@
-import { AuthProvider } from '../context/auth'
 import client from '../lib/apollo-client'
 import { ApolloProvider } from '@apollo/client'
+import { AuthProvider } from '../context/auth'
+import ProtectedRoute from '../components/ProtectedRoute'
 
 import '../styles/globals.css'
 
-export default function App ({ Component, pageProps }) {
-
-  /*
-  React.useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
-  }, []);
-  */
+export default function App ({ Component, pageProps, router }) {
   
   return (
     <ApolloProvider client={client}>
       <AuthProvider>
-        <div>
+        <ProtectedRoute router={router}>
           <Component {...pageProps} />
-        </div>
+        </ProtectedRoute>
       </AuthProvider>
     </ApolloProvider>
   )

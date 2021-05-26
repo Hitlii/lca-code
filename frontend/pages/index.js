@@ -1,132 +1,107 @@
-import { useState } from 'react'
+import React from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_PROPERTIES } from '../graphql/queries'
+
 import MenuBar from '../components/bars/MenuBar'
-// <<<<<<< Updated upstream
-// import { makeStyles } from '@material-ui/core/styles'
 
-// import PropertyCard from '../components/cards/PropertyCard'
-// import ZoneButton from '../components/buttons/ZoneButton'
+import { makeStyles } from '@material-ui/core/styles'
 
-// const useStyles = makeStyles(({
-//   root: {
-//     margin: 0,
-//     padding: 0,
-//   },
-//   img: {
-//     display: 'block',
-//     marginLeft: 'auto',
-//     marginRight: 'auto',
-//     marginBottom: 10,
-//     width: '100%',
-//     maxWidth: 766,
-//     height: 200,
-//     borderRadius: '0px 0px 15px 15px',
-//   },
-//   scrollmenu: {
-//     display: 'flex',
-//     overflowX: 'hidden',
-//     overflowY: 'auto',
-//     whiteSpace: 'nowrap'
-//   }, 
-// }))
+import PropertyCard from '../components/cards/PropertyCard'
+import ZoneButton from '../components/buttons/ZoneButton'
 
+const useStyles = makeStyles(({
+  root: {
+    maxWidth: 600,
+    minWidth: 320,
+    margin: 'auto',
+  },
+  img: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 10,
+    width: '100%',
+    maxWidth: 766,
+    maxHeight: 300,
+    borderRadius: '0px 0px 15px 15px',
+  }, 
+  wrapper: {
+    maxHeight: 400,
+    display: 'flex',
+    overflowX: 'auto',
+    marginLeft: 10,
 
-// // Propiedades destacadas
-// // La imagen principal 
-// function Home(){
+  }, 
+  item: {
+    marginRight: 5,
+  }
+}))
 
-//   const classes = useStyles()
-
-//   const properties = [
-//     {
-//       id: 1,
-//       status: 'Venta',
-//       zone: 'Comercial',
-//       images: ['https://q4g9y5a8.rocketcdn.me/wp-content/uploads/2020/02/home-banner-2020-02-min.jpg'],
-//       area: '4000',
-//       address: 'Loma Tova',
-//       city: 'Tecate',
-//       state: 'B.C',
-//       price: '68,000',
-//       currency:'USD',
-//       specialPrice: '72x $978 USD',
-//     }, 
-//     {
-//       id: 2,
-//       status: 'Renta',
-//       zone: 'Urbana',
-//       images: ['https://q4g9y5a8.rocketcdn.me/wp-content/uploads/2020/02/home-banner-2020-02-min.jpg'],
-//       area: '4000',
-//       address: 'Loma Tova',
-//       city: 'Tecate',
-//       state: 'B.C',
-//       price: '68,000',
-//       currency:'USD',
-//       specialPrice: '72x $978 USD',
-//     }, 
-//     {
-//       id: 3,
-//       status: 'Venta',
-//       zone: 'Campestre',
-//       images: ['https://q4g9y5a8.rocketcdn.me/wp-content/uploads/2020/02/home-banner-2020-02-min.jpg'],
-//       area: '4000',
-//       address: 'Loma Tova',
-//       city: 'Tecate',
-//       state: 'B.C',
-//       price: '68,000',
-//       currency:'USD',
-//       specialPrice: '72x $978 USD',
-//     }, 
-//   ]
-
-//   return (
-//     <div>
-//       <MenuBar/>
-//         <img 
-//           className={classes.img}
-//           src='https://cdn1.matadornetwork.com/blogs/2/2019/05/Tecate1-1200x853.jpg' 
-//           alt='baby yoda'
-//         />
-//         <ZoneButton 
-//           href='#'
-//           text='Zona Comercial'
-//         />
-//         <PropertyCard 
-//           orientation='vertical'
-//           property={properties[0]}
-//         />
-//         <ZoneButton 
-//           href='#'
-//           text='Zona Urbana'
-//         />
-//         <PropertyCard 
-//           orientation='vertical'
-//           property={properties[1]}
-//         />
-//         <ZoneButton 
-//           href='#'
-//           text='Zona Campestre'
-//         />
-//         <PropertyCard 
-//           orientation='vertical'
-//           property={properties[2]}
-//         />
-//     </div>
-// =======
-
-import FilterPropertiesForm from "../components/forms/FilterPropertiesForm"
-import { Button, Slide, Collapse, Fade } from '@material-ui/core'
-import OrderFilterButton from "../components/buttons/OrderFilterButton"
-import OrderProperty from '../components/OrderProperty'
-import TicketForm from "../components/forms/TicketForm"
-// Propiedades destacadas
-// La imagen principal 
 const Home = () => {
-  const [use, setUse] = useState(false)
+  
+  const classes = useStyles()
+  const { data, loading, error } = useQuery(GET_PROPERTIES,
+    {variables: { pageNumber: 1 }})
+  if(loading) return null
+  if(error) return `Error! ${error}`
+
+  const properties = data.getProperties
+  console.log(properties)
 
   return (
-    <div >
+    <div className={classes.root}>
       <MenuBar />
-
+      <img
+        className={classes.img}
+        src='/cover.jpg'
+      />
+      <ZoneButton
+        href='#'
+        text='Zona Urbana'
+      />
+      <div className={classes.wrapper}>
+        {/* <PropertyCard   
+          property={properties[0]}
+        />
+        <PropertyCard   
+          property={properties[0]}
+        />
+        <PropertyCard   
+          property={properties[0]}
+        /> */}
+        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
+        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
+        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
+        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
+      </div>
+      {/* <ZoneButton
+        href='#'
+        text='Zona Campestre'
+      />
+      <div className={classes.wrapper}>
+        {properties.filter(property =>  property.zone === 'Campestre').map((property => {
+          return (
+            <PropertyCard 
+              key={property._id}
+              property={property}
+            />
+          )
+        }))}
+      </div>
+      <ZoneButton
+        href='#'
+        text='Zona Comercial'
+      />
+      <div className={classes.wrapper}>
+        {properties.filter(property =>  property.zone === 'Comercial').map((property => {
+          return (
+            <PropertyCard 
+              key={property._id}
+              property={property}
+            />
+          )
+        }))}
+      </div> */}
     </div>
   )
 }

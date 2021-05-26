@@ -5,5 +5,9 @@ module.exports = {
   assetPrefix: isProd ? 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' : '',
   env: {
     googleMapsAPIKey: 'AIzaSyDVEF5nE9KpC2qQ6mKLly5eYkiXwMnoDqs'
+  },
+  images: {
+    loader: 'imgix',
+    path: 'http://localhost:8000'
   }
 }

@@ -42,7 +42,7 @@ function ClientForm ({ editClient }) {
 
     if(editClient !== null) {
         initialValues = {
-            _id: editClient._id,
+            id: editClient._id,
             name: editClient.name,
             gender: editClient.gender,
             birthday: new Date(new Number(editClient.birthday)).toISOString().slice(0,10),
@@ -97,6 +97,7 @@ function ClientForm ({ editClient }) {
             address: formikInput.values.address,
         }
     })
+
     const [updateClient] = useMutation(UPDATE_CLIENT, {
         update (
         _,
@@ -258,7 +259,7 @@ function ClientForm ({ editClient }) {
                 />
                 <SubmitButton 
                     type="submit" 
-                    startIcon ={<SaveIcon/>}  
+                    
                 >
                     {editClient ? 'Editar Cliente' : 'Agregar Cliente'}
                 </SubmitButton>
@@ -314,7 +315,7 @@ const UPDATE_CLIENT = gql`
         $address: String!
     ) {
         updateClient(
-            id: $id
+            _id: $id
             name: $name
             gender: $gender
             birthday: $birthday

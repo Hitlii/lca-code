@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const GET_ALL_CLIENTS = gql`
   query getClients {
     getClients {
-      id
+      _id
       name
       birthday
       gender
@@ -22,8 +22,8 @@ export const GET_ALL_CLIENTS = gql`
 
 export const GET_CLIENT = gql`
   query getClient($id: ID!) {
-    getClient(id: $id) {
-      id
+    getClient(_id: $id) {
+      _id
       name
       birthday
       gender
@@ -49,10 +49,9 @@ export const GET_PROPERTIES = gql`
     $search: String
     $price: PriceInput
     $area: AreaInput
-    $priceOrder:Float
-    $areaOrder:Float
-    $limit:Float
-    $offset:Float
+    $priceOrder: Float
+    $areaOrder: Float
+    $pageNumber: Float!
   ) {
     getProperties(
       filter:{
@@ -69,8 +68,7 @@ export const GET_PROPERTIES = gql`
         area:$areaOrder
       }
       pagination:{
-        limit:$limit
-        offset:$offset
+        pageNumber: $pageNumber
       }
     ){
     _id
@@ -95,3 +93,99 @@ export const GET_PROPERTIES = gql`
   }
   
 `;
+
+export const GET_ADMIN_PROPERTIES = gql
+`
+  query getAdminProperties(
+    $zone: String
+    $type: String
+    $status: String
+    $city: String
+    $search: String
+    $area: AreaInput
+    $price: PriceInput
+    $pagination: PropertyPaginationInput!
+  ) {
+    getAdminProperties(
+      filter:{
+      zone: $zone
+      type: $type
+      status: $status
+      city: $city
+      search: $search
+      area: $area
+      price: $price
+      }
+      pagination: $pagination
+    ){
+      _id
+      code
+      zone
+      isFeatured
+      area
+      location {
+        state
+        city
+        address
+      }
+      meta{
+        url
+      }
+      media{
+        images
+      }
+    }
+  }
+`
+export const GET_ADMIN_PROPERTY = gql 
+`
+  query getAdminProperty(
+    $url: String!
+  ) {
+    getAdminProperty(url: $url) {
+      _id
+      status
+      media {
+        images
+      }
+      location {
+        address
+        city
+        state
+      }
+      vendors {
+        _id
+        name
+        gender
+        birthday
+        contact {
+          email
+          phone
+        }
+        location {
+          state
+          city
+          address
+        }
+      }
+      tickets {
+        _id
+        clients {
+          _id
+        name
+        gender
+        birthday
+        contact {
+          email
+          phone
+        }
+        location {
+          state
+          city
+          address
+        }
+        }
+      }
+    }
+  }
+`

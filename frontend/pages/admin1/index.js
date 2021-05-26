@@ -1,7 +1,6 @@
-// Todas las propiedades (propertyAdminCards)
-// AllAdminPropertiesPage 
-
-import React from 'react'
+import React, { useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { GET_ADMIN_PROPERTIES } from '../../graphql/queries'
 
 import {
   IconButton,
@@ -61,96 +60,53 @@ const useStyles = makeStyles((theme) => ({
 
 function AllAdminPropertiesPage(){
 
-    const classes = useStyles()
+  const classes = useStyles()
 
-    const properties = [
-      {
-        zone: 'Urbana',
-        code: 'VT001',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://q4g9y5a8.rocketcdn.me/wp-content/uploads/2020/02/home-banner-2020-02-min.jpg']
-      }, 
-      {
-        zone: 'Comercial',
-        code: 'VT002',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://images.adsttc.com/media/images/5ecd/d4ac/b357/65c6/7300/009d/large_jpg/02C.jpg?1590547607']
-      },
-      {
-        zone: 'Campestre',
-        code: 'VT003',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://images.adsttc.com/media/images/5ecd/d4ac/b357/65c6/7300/009d/large_jpg/02C.jpg?1590547607']
-      },
-      {
-        zone: 'Campestre',
-        code: 'VT004',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://images.adsttc.com/media/images/5ecd/d4ac/b357/65c6/7300/009d/large_jpg/02C.jpg?1590547607']
-      },
-      {
-        zone: 'Campestre',
-        code: 'VT005',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://images.adsttc.com/media/images/5ecd/d4ac/b357/65c6/7300/009d/large_jpg/02C.jpg?1590547607']
-      },
-      {
-        zone: 'Campestre',
-        code: 'VT006',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://images.adsttc.com/media/images/5ecd/d4ac/b357/65c6/7300/009d/large_jpg/02C.jpg?1590547607']
-      },
-    ]
+  const { loading, data, error } = useQuery(GET_ADMIN_PROPERTIES, {
+    variables: { pagination:{pageNumber: 1}}
+  })
 
-    return (
-        <div>
-            <Paper className={classes.root} elevation={0}>
-                <InputBase
-                    className={classes.input}
-                    placeholder='Buscar Propiedad'
-                    variant='outlined'
-                />
-                <IconButton type="submit" className={classes.iconButton}>
-                    <SearchIcon />
-                </IconButton>
-            </Paper>
+  if(loading) {
+    return null
+  }
 
-            {properties.map((property) => {
-                return (
-                  <div 
-                    className={classes.propertyCard}
-                    key={property.code}
-                  >
-                    <AdminPropertyCard 
-                      property={property}
-                    />
-                  </div>
-                )
-            })}
+  if(error) {
+    return `Error! ${error}`
+  }
 
-            <IconButton href='/admin1/propiedades/post-propiedad' className={classes.addButton}>
-              <AddCircleIcon className={classes.addIcon} />
-            </IconButton>
-            <NavBar />
-        </div>
+  const properties = data.getAdminProperties
+
+  return (
+      <div>
+        <Paper className={classes.root} elevation={0}>
+          <InputBase
+            className={classes.input}
+            placeholder='Buscar Propiedad'
+            variant='outlined'
+          />
+          <IconButton type="submit" className={classes.iconButton}>
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+
+        {properties.map((property) => {
+          return(
+            <div
+              key={property._id}
+              className={classes.propertyCard}
+            >
+              <AdminPropertyCard 
+                property={property}
+              />
+            </div>
+          )
+        })}
+
+        <IconButton href='/admin1/propiedades/post-propiedad' className={classes.addButton}>
+          <AddCircleIcon className={classes.addIcon} />
+        </IconButton>
+        <NavBar />
+    </div>
   )
 }
 

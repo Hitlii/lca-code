@@ -1,5 +1,11 @@
 import React from 'react'
 
+import Image from 'next/image'
+
+import { useRouter } from 'next/router'
+import { useQuery } from '@apollo/client'
+import { GET_ADMIN_PROPERTY } from '../../../graphql/queries'
+
 import GreenButton from '../../../components/buttons/GreenButton'
 import TicketCard from '../../../components/cards/TicketCard'
 import ClientCard from '../../../components/cards/ClientCard'
@@ -92,57 +98,45 @@ const useStyles = makeStyles(({
 
 export default function AdminSinglePropertyPage(){
     const classes = useStyles()
-    const propiedad = {
-        price: '68,000',
-        zone: 'Urbana',
-        type: 'Renta',
-        code: 'VT001',
-        area: 300,
-        address: 'Loma Tova',
-        city: 'Tijuana',
-        state: 'B.C.',
-        images: ['https://q4g9y5a8.rocketcdn.me/wp-content/uploads/2020/02/home-banner-2020-02-min.jpg'],
-        clients:[{
-            name: 'John Doe',
-            contact: {
-                phone: '(666) 777-8888',
-                email: 'johndoe@uknown.com',
-            }
-        }],
-        ticket: {
-            clients:[
-                {
-                    name: 'John Doe',
-                    contact: {
-                        phone: '(666) 777-8888',
-                        email: 'johndoe@uknown.com',
-                    }
-                },
-            ],
-            area: '4,000',
-            price: '68,000',
-            emissionDate: '3/12/2021'
+    const router = useRouter()
+    const url = router.query.url
+
+    console.log(url)
+
+    const { data, loading, error } = useQuery(GET_ADMIN_PROPERTY, {
+        variables: { 
+            url: url
         }
-    }
+    })
+
+    if (loading) return null
+    if(error) return `Error! ${error}`
+
+    const adminProperty = data.getAdminProperty
+    console.log(adminProperty)
 
     return(
         <div className={classes.root}>
              <IconButton className={classes.backButton} href='/admin1'>
                 <ChevronLeftIcon className={classes.backIcon}/>
             </IconButton>
-            <img 
-                className={classes.img}
-                src={propiedad.images[0]} 
-                alt='propiedad'
-            />
+            <div className={classes.img}>
+                <Image 
+                    className={classes.img}
+                    src={'/'+adminProperty.media.images[0]} 
+                    layout='responsive'
+                    width={700}
+                    height={265}
+                />
+            </div>
             <Typography className={classes.type}>
-                {propiedad.type === 'venta' ? 'Venta' : 'Renta'} de terreno de {propiedad.area} m²
+                {adminProperty.type === 'venta' ? 'Venta' : 'Renta'} de terreno de {adminProperty.area} m²
             </Typography>
             <Typography className={classes.location}>
-                {propiedad.address} {propiedad.city} {propiedad.state}
+                {adminProperty.location.address} {adminProperty.location.city} {adminProperty.location.state}
             </Typography>
             <GreenButton>
-                Vender Propiedad
+                Vender propiedad
             </GreenButton>
             <Grid container>
                 <Grid item xs={4} className={classes.gridItem}>
@@ -184,27 +178,17 @@ export default function AdminSinglePropertyPage(){
             </Typography>
             <Divider className={classes.divider} />
             <div className={classes.clientDiv}>
-                <ClientCard client={propiedad.clients[0]}/>
+                <ClientCard client={adminProperty.vendors[0]}/>
             </div>
             <Divider className={classes.divider} />
             <Typography className={classes.header}>
                 Comprador
             </Typography>
             <div className={classes.clientDiv}>
-                <TicketCard 
-                    ticket={propiedad.ticket}
-                />
+                {adminProperty.tickets.length > 0 && <TicketCard 
+                    ticket={adminProperty.tickets[0]}
+                />}
             </div>
         </div>
     )
 }
-
-/*
-export const getStaticPaths = async () => {
-    
-}
-
-export const getStaticProps = async (context) => {
-    
-}
-*/

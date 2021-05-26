@@ -1,7 +1,10 @@
 import React, { useState} from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import { 
+    Avatar,
     Card,
     CardContent,
     CardMedia,
@@ -45,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
         padding: 0,
         marginBottom: 50
     },
+    iconButton: {
+        padding: 0,
+        margin: 0
+    },
     code: {
         fontSize: 12
     }, 
@@ -72,8 +79,16 @@ function AdminPropertyCard({ property }) {
     const classes = useStyles();
     const drawerClasses = drawerStyles()
     const [options, showOptions] = useState(false)
+    const router = useRouter()
+
     function onClick() {
         showOptions(current => !current)
+    }
+    function onPropertyClick() {
+        router.push({
+            pathname: `/admin1/propiedades/${property.meta.url}`,
+            query: { url: property.meta.url}
+        })
     }
 
     function pickZoneDotColor(zone){
@@ -87,18 +102,25 @@ function AdminPropertyCard({ property }) {
 
     const zoneDot = pickZoneDotColor(property.zone)
 
+    console.log(property.media.images[0])
+
     return (
         <>
             <Card className={classes.root} elevation={0}>
-                <Link
-                    href={'/admin1/propiedades/'+property.code}
+                <IconButton
+                    className={classes.iconButton}
+                    onClick={onPropertyClick}
                 >
-                    <CardMedia 
-                        className={classes.cover}
-                        image={property.images[0]}
-                        title='baby yoda'
-                    />
-                </Link>
+                    <Avatar className={classes.cover}>
+                        <Image
+                            className={classes.cover}
+                            src={'/'+property.media.images[0]}
+                            width={100}
+                            height={100}
+                            alt={`${property.type} en ${property.location.city}`}
+                        />
+                    </Avatar>
+                </IconButton>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
                         <Typography className={classes.code}> 
@@ -108,8 +130,8 @@ function AdminPropertyCard({ property }) {
                             {property.code}
                         </Typography>
                         <Typography>{property.area} m²</Typography>
-                        <Typography className={classes.code}>{property.address}</Typography>
-                        <Typography className={classes.code}>{property.city} {property.state}</Typography>
+                        <Typography className={classes.code}>{property.location.address}</Typography>
+                        <Typography className={classes.code}>{property.location.city} {property.location.state}</Typography>
                     </CardContent>
                 </div>
                 <IconButton onClick={onClick}className={classes.button}>

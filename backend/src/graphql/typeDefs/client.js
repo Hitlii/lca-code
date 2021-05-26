@@ -25,7 +25,7 @@ module.exports = gql`
         "Returns all registered clients"
         getClients: [Client]
         "Returns a client given its name"
-        getClient(id: ID!): Client
+        getClient(_id: ID!): Client
     }
 
      input ClientInput {

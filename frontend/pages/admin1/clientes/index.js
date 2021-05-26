@@ -1,5 +1,5 @@
 // Todos lo clientes.
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import client from "../../../lib/apollo-client";
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
@@ -95,7 +95,7 @@ export default function AllClientsPage(props){
                 return (
                     <div 
                         className={classes.clientCard}
-                        key={client.id}
+                        key={client._id}
                     >
                         <ClientCard 
                             client={client}
@@ -111,11 +111,11 @@ export default function AllClientsPage(props){
     )
 }
 
-export async function getServerSideProps(){
+export async function getStaticProps(){
     const GET_ALL_CLIENTS = gql`
         query GetAllClients{
             getClients{
-                id
+                _id
                 name
                 contact{
                 phone

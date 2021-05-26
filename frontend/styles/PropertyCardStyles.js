@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const HorizontalPropertyCardStyle = makeStyles(({
     root: {
+        position: 'relative',
         display: 'flex',
         flexDirection: 'row',
         width: 347,
@@ -14,6 +15,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         width: 169,
     },
     blueTag:{
+        zIndex: 2,
         position:'absolute',
         width: 141,
         height: 24,
@@ -22,6 +24,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         borderRadius: '15px 15px 0px 15px'
     },
     greenTag:{
+        zIndex: 2,
         position:'absolute',
         width: 140,
         height: 24,
@@ -30,6 +33,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         borderRadius: '15px 15px 0px 15px'
     },
     redTag:{
+        zIndex: 2,
         position:'absolute',
         width: 122,
         height: 24,
@@ -38,6 +42,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         borderRadius: '15px 15px 0px 15px'
     },
     cover: {
+        zIndex: 1,
         height: 169,
         width: 169,
         marginTop: 9,
@@ -100,11 +105,11 @@ export const HorizontalPropertyCardStyle = makeStyles(({
 
 export const VerticalPropertyCardStyle = makeStyles(({
     root: {
+        position: 'relative',
         display: 'flex',
         width: 207,
         height: 368,
         flexDirection: 'column',
-        marginLeft: 10,
         marginBottom: 10,
     },
     coverDiv: {
@@ -113,6 +118,7 @@ export const VerticalPropertyCardStyle = makeStyles(({
         marginBottom: 5,
     },
     blueTag:{
+        zIndex: 2,
         position:'absolute',
         width: 141,
         height: 24,
@@ -120,6 +126,7 @@ export const VerticalPropertyCardStyle = makeStyles(({
         backgroundColor: '#01509D'
     },
     greenTag:{
+        zIndex: 2,
         position:'absolute',
         width: 140,
         height: 24,
@@ -127,6 +134,7 @@ export const VerticalPropertyCardStyle = makeStyles(({
         backgroundColor: '#6DB432'
     },
     redTag:{
+        zIndex: 2,
         position:'absolute',
         width: 122,
         height: 24,
@@ -134,6 +142,7 @@ export const VerticalPropertyCardStyle = makeStyles(({
         backgroundColor: '#E41E2B'
     },
     cover: {
+        zIndex: 1,
         width: 207,
         height: 207,
         borderRadius: 15,

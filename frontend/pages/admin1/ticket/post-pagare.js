@@ -70,7 +70,7 @@ export async function getStaticProps(){
     const GET_ALL_CLIENTS = gql`
         query GetAllClients{
             getClients{
-                id
+                _id
                 name
                 contact{
                 phone

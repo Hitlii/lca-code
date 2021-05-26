@@ -137,8 +137,8 @@ function ClientCard({ client }) {
 }
 
 const DELETE_CLIENT = gql`
-    mutation createClient($id: ID!) {
-        deleteClient( _id: $id) {
+    mutation deleteClient($_id: ID!) {
+        deleteClient( _id: $_id) {
             success
             code
             message

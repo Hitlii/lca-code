@@ -1,5 +1,5 @@
 // Estara el formulario de clientes
-import {Fragment} from 'react'
+import { Fragment } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { GET_CLIENT } from '../../../graphql/queries'
@@ -60,6 +60,7 @@ export default function EditClientPage(){
     if(error) return `Error! ${error}`
 
     const editClient = data.getClient
+    console.log(editClient)
 
     return(
         <Fragment>
