@@ -1,9 +1,14 @@
 
+// Material UI ---------------------------------------------------------
+import Grid from '@material-ui/core/Grid'
 import { Button, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { green, grey6 } from '../public/colors.js'
-import Grid from '@material-ui/core/Grid'
-import Collapse from '@material-ui/core/Collapse'
+
+// My Imports ------------------------------
+import Collapse from './collapse'
+import { green, grey6, white, darkNeutral } from '../public/colors.js'
+
+
 import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
     margin: 5,
     borderRadius: 15,
     backgroundColor: grey6,
-    fontSize: 16
+    fontSize: 16,
+    boxShadow:'none',
   },
   sellButtonStyle: {
     width: 320,
@@ -31,17 +37,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 15,
     backgroundColor: green,
     color: 'white',
-    fontSize: 16
-  },
-  collapseStyle: {
-
-    borderRadius: 15,
-    boxShadow: '0 4px 2px -2px grey'
+    fontSize: 16,
+    boxShadow: 'none',
   },
   container: {
     padding: 0,
     margin: 0
-
   }
 }))
 
@@ -51,7 +52,7 @@ const ShowInformaction = ({ showInformationCheck }) => {
 
   return (
         <Container maxWidth="lg" className={classes.container}>
-            <Collapse in={showInformationCheck} className={classes.collapseStyle}>
+            <Collapse in={showInformationCheck}>
 
                 <Grid container justify="center">
                   <Link href='/nosotros'>
@@ -75,9 +76,12 @@ const ShowInformaction = ({ showInformationCheck }) => {
                 </Grid>
 
                 <Grid container justify="center">
-                    <Button variant="contained" xs={12} text=''
-                            className={classes.sellButtonStyle}
-                            >Vender Propiedad</Button>
+                    <Button 
+                      variant="contained" xs={12} 
+                      className={classes.sellButtonStyle}
+                    >
+                      Vender Propiedad
+                    </Button>
                 </Grid>
 
              </Collapse>

@@ -58,15 +58,16 @@ const useStyles = makeStyles((theme) => ({
 
 function MenuBar () {
   const classes = useStyles()
+  
   const [showContactCheck, setShowContactCheck] = useState(false)
   const [showInformationCheck, setshowInformationCheck] = useState(false)
   const hanleShowContactButton = () => {
-    setShowContactCheck(false)
-    setshowInformationCheck(current => !current)
+    setShowContactCheck(current => !current)
+    setshowInformationCheck(false)
   }
   const hanleShowInformationButton = () => {
-    setshowInformationCheck(false)
-    setShowContactCheck(current => !current)
+    setshowInformationCheck(current => !current)
+    setShowContactCheck(false)
   }
 
   return (

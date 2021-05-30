@@ -1,44 +1,45 @@
-// Todas la propiedades.
 import React, { useState, useRef } from "react";
 
-import {
-  IconButton,
-  InputBase,
-  Paper,
-  Drawer,
-  Typography,
-} from "@material-ui/core";
-import Link from "next/link";
+// Material UI Imports ------------------------------
+import Drawer from '@material-ui/core/Drawer'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import InputBase from '@material-ui/core/InputBase'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from "@material-ui/core/styles";
-import OrderFilterButton from "../../components/buttons/OrderFilterButton";
-
 import SearchIcon from "@material-ui/icons/Search";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import Grid from '@material-ui/core/Grid'
+import TextField from '@material-ui/core/TextField'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import FilledInput from '@material-ui/core/FilledInput'
+import InputAdornment from '@material-ui/core/InputAdornment'
+
+// My Imports ------------------------------
+import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
+import OrderFilterButton from "../../components/buttons/OrderFilterButton";
+import OrderProperty from "../../components/OrderProperty";
+import PropertyCard from "../../components/cards/PropertyCard";
+import client from "../../lib/apollo-client";
+import useFilterForm from "../../hooks/useFilterForm";
 import {
   drawerStyles,
   StyledPaperLarge,
   StyledPaper,
 } from "../../styles/DrawerStyles";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
-import PropertyCard from "../../components/cards/PropertyCard";
-import OrderProperty from "../../components/OrderProperty";
-import useFilterForm from "../../hooks/useFilterForm";
-import client from "../../lib/apollo-client";
+
+// Graph QL Imports ------------------------------
 import { GET_PROPERTIES } from "../../graphql/queries";
 
+import Link from "next/link";
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    margin: 10,
-    marginRight: "auto",
-    marginLeft: "auto",
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 340,
-    height: 40,
-    backgroundColor: "#f2f2f2",
-    borderRadius: 15,
-  },
+ root: {
+   minWidth: 320,
+   maxWidth: 600,
+   margin:"auto"
+ },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
@@ -47,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     padding: 10,
   },
-  resultStyle: {
+  result: {
     margin: 10,
     display: "flex",
     justifyContent: "space-between",
@@ -56,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     textAlign: "center",
   },
+  search: {
+  }
 }));
 
 export default function AllPropertiesPage(props) {
@@ -88,7 +91,7 @@ export default function AllPropertiesPage(props) {
       "orderPrice",
       filterProperty.values.orderPrice === value ? "" : value
     );
-    console.log(filterProperty.values.orderPrice);
+    // console.log(filterProperty.values.orderPrice);
   };
   const updateOrderArea = (value) => {
     filterProperty.setFieldValue(
@@ -96,7 +99,7 @@ export default function AllPropertiesPage(props) {
       filterProperty.values.orderArea === value ? "" : value
     );
     //setOrderArea((current) => (current === value ? 0 : value));
-    console.log(filterProperty.values.orderArea);
+    // console.log(filterProperty.values.orderArea);
   };
   const onChangeZone = (values, index) => {
     let array = [false, false, false];
@@ -168,12 +171,12 @@ export default function AllPropertiesPage(props) {
     console.log(variables);
     const { data } = await client.query({
       query: GET_PROPERTIES,
-      variables: variables,
+      variables,
     });
     setProperties(data.getProperties);
     setShowFilterComponent(false);
-    console.log(data.getProperties);
-    console.log(filterProperty.values);
+    // console.log(data.getProperties);
+    // console.log(filterProperty.values);
   }
   function onCloseFilterComponent() {
     setShowFilterComponent((current) => !current);
@@ -189,34 +192,76 @@ export default function AllPropertiesPage(props) {
     setShowFilterComponent((current) => !current);
   }
   return (
-    <div>
-      <Paper className={classes.root} elevation={0}>
-        <Link href="/">
-          <IconButton className={classes.iconButton}>
-            <KeyboardBackspaceIcon />
-          </IconButton>
-        </Link>
-        <InputBase
-          name="search"
-          id="search"
-          value={filterProperty.values.search}
-          className={classes.input}
-          placeholder="Buscar Propiedad"
-          variant="outlined"
-          onChange={filterProperty.handleChange}
-        />
-        <IconButton className={classes.iconButton} onClick={handleSubmit}>
-          <SearchIcon />
-        </IconButton>
-      </Paper>
-      {/* <button onClick={showProps}>hola</button> */}
-      <Paper className={classes.resultStyle}>
-        <Typography>{properties? properties.length:0} resultdo</Typography>
-        <Typography>{properties? properties.length:0} filtro</Typography>
-      </Paper>
+    <>
+    <Grid className={classes.root} container justify="center">
+      <Grid item>
+        <Grid container>
+          <Grid item xs={3}>
+            <Link href="/">
+              <IconButton className={classes.iconButton}>
+                <KeyboardBackspaceIcon />
+              </IconButton>
+            </Link>
+          </Grid>
 
-      {properties
-        ? properties.map((property) => {
+          <Grid item xs={9}>
+          <FormControl fullWidth variant="filled">
+          <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
+          <FilledInput
+            id="search"
+            name="search"
+            type="text"
+            value={filterProperty.values.search}
+            onChange={filterProperty.handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleSubmit}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                    <SearchIcon />
+                  </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+           {/* <InputBase
+            className={classes.input}
+            id="search"
+            name="search"
+            fullWidth
+            onChange={filterProperty.handleChange}
+            placeholder="Buscar Propiedad"
+            value={filterProperty.values.search}
+            variant="outlined"
+          />
+              <IconButton className={classes.iconButton} onClick={handleSubmit}>
+            <SearchIcon />
+          </IconButton> */}
+
+          </Grid>
+
+        </Grid>
+       
+     
+          
+     
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container justify="space-between">
+        <span> {properties? properties.length:0} filtro(s) </span>
+        <span>{properties? properties.length:0} resultado(s) </span>
+        </Grid> 
+      </Grid>
+      <Divider/>
+
+      
+    </Grid>
+    
+      
+      { properties ? properties.map((property) => {
             return (
               <PropertyCard
                 key={property._id}
@@ -264,7 +309,8 @@ export default function AllPropertiesPage(props) {
       <OrderFilterButton
         onChangeFilter={handleShowFilterComponent}
         onChangeOrder={handleShowOrderComponent}
+
       />
-    </div>
+      </>
   );
 }

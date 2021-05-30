@@ -4,8 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 94,
-    height: 40,
+    minWidth: 93,
+    minHeight: 40,
+    maxHeight: 100,
     borderRadius: 15,
     backgroundColor: "#F2F2F2",
     textAlign: "center",
@@ -23,9 +24,10 @@ function FilterButton({ name, text, onChange, index, stateButton }) {
   return (
     <Button
       className={classes.root}
+      fullWidth
       style={{
         backgroundColor: stateButton ? "grey" : "#F2F2F2",
-        color: stateButton ? "white" : null,
+        color: stateButton ? "white" : "#4A4C4B",
       }}
       onClick={() => {
         onChange(name, index);

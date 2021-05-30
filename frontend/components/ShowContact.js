@@ -1,47 +1,62 @@
+
+// Material UI  ------------------------------
+import Grid from '@material-ui/core/Grid'
 import { Typography, Button, Container } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { FaWhatsapp, FaFacebookMessenger } from 'react-icons/fa'
-import Grid from '@material-ui/core/Grid'
-import Collapse from '@material-ui/core/Collapse'
-import { green, grey6 } from '../public/colors'
+
+// My Imports --------------------------------
+import { 
+  green, 
+  grey6, 
+  lightGrey,
+  white,
+  darkNeutral,
+  whatsappColor, 
+  messengerColor 
+} from '../public/colors'
+
+import Collapse from './collapse'
+
+// Icons --------------------------------
+import {RiWhatsappFill} from 'react-icons/ri'
+import { FaFacebookMessenger } from 'react-icons/fa'
+
+
 import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
 
   contactTextStyle: {
     fontSize: 18,
-    margin: 20,
-    marginBottom: 0,
+    margin: 'auto',
     [theme.breakpoints.only('xs')]: {
       fontSize: 18
     }
   },
-  appButtonStyle: {
+  button: {
     width: 150,
     height: 40,
     marginLeft: 15,
     marginBottom: 30,
     marginRight: 15,
     borderRadius: 15,
-    backgroundColor: '#F2F2F2'
+    backgroundColor: lightGrey,
+  
   },
 
   collapseStyle: {
-
     borderRadius: 15,
-    boxShadow: '0 4px 2px -2px grey'
+    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.22);'
   },
   whatsappIconStyle: {
-    width: 24,
-    height: 24,
-    backgroundColor: green,
-    color: 'white'
+    width: 30,
+    height: 30, 
+    color: whatsappColor
   },
   messengerIconStyle: {
     width: 24,
     height: 24,
-    backgroundColor: 'white',
-    color: '#2196F3'
+    color: messengerColor
   },
   container: {
     padding: 0,
@@ -65,11 +80,11 @@ const ShowContact = ({ showContactCheck }) => {
                     <Link 
                       className={classes.link} 
                       target='_blank' 
-                      href='https://api.whatsapp.com/send?phone=+526653922230&text=hola,%20qu%C3%A9%20tal?' 
+                      href='https://api.whatsapp.com/send?phone=+526653922230' 
                       rel='noopener noreferrer'>
                         <Button variant="text"
-                            className={classes.appButtonStyle}
-                            startIcon={<FaWhatsapp className={classes.whatsappIconStyle}/>}
+                            className={classes.button}
+                            startIcon={<RiWhatsappFill className={classes.whatsappIconStyle}/>}
                         > Whatsapp
                         </Button>
                     </Link>
@@ -77,9 +92,9 @@ const ShowContact = ({ showContactCheck }) => {
                     <Link className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
                         <Button
                             variant="text" 
-                            className={classes.appButtonStyle}
+                            className={classes.button}
                             startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
-                        > Message
+                        > Messenger
                         </Button>
                     </Link>
 

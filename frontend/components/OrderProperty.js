@@ -1,24 +1,23 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, Button, Typography, Collapse } from "@material-ui/core";
+import Grid from '@material-ui/core/Grid'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { BiSortDown, BiSortUp } from "react-icons/bi";
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: 195,
+    padding:20
+  },
+  buttonGroup: {
+    backgroundColor: "#F2F2F2",
     borderRadius: 15,
-    bottom: 0,
-    backgroundColor: "white",
-    boxShadow: "0 0 10px",
-    padding: 0,
+    minHeight:40
   },
   buttonsContainer: {
     display: "flex",
     textAlign: "space-between",
   },
   subtitle: {
-    width: 150,
-    height: 30,
-    marginLeft: "auto",
     color: "#828282",
   },
   textMargin: {
@@ -34,39 +33,49 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "space-between",
   },
   greenButton: {
-    width: 320,
+   
     height: 40,
     borderRadius: 15,
     color: "white",
-    margin: "auto",
     marginTop: 20,
+    marginBottom:0,
     backgroundColor: "#4CAF50",
     display: "flex",
-    textAlign: "center",
     "&:hover": {
-      backgroundColor: "#4CAF50",
-    },
+      backgroundColor: "#439A46",
+    }
+    
   },
 }));
 function OrderProperty(props) {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root}>
-      <Typography variant="h5" className={classes.textMargin}>
-        Ordenar por
-      </Typography>
-      <Container className={classes.buttonsContainer}>
-        <Typography variant="subtitle1" className={classes.subtitle}>
-          Precio
+    <Grid container spacing={2} className={classes.root}>
+      <Grid item xs={12}>
+        <Typography display="block" variant="h5" gutterBottom>
+          <strong>Ordenar por </strong>
         </Typography>
-        <Typography variant="subtitle1" className={classes.subtitle}>
-          Area
+      </Grid>
+
+      {/* PRICE */}
+      <Grid item xs={6}>
+         <Typography variant="subtitle1" className={classes.subtitle}>
+            Precio
         </Typography>
-      </Container>
-      <Container className={classes.buttonsContainer}>
-        <Container className={classes.buttonContainer}>
-          <Button
+      </Grid>
+
+      {/* AREA */}
+      <Grid item xs={6}>
+         <Typography variant="subtitle1" className={classes.subtitle}>
+            Área
+        </Typography>
+      </Grid>
+
+      {/* PRICE ORDER */}
+      <Grid item xs={6}>
+        <ButtonGroup variant="text" fullWidth className={classes.buttonGroup}>
+           <Button
             startIcon={<BiSortUp />}
             style={{ backgroundColor: props.orderPrice === 1 ? "grey" : null }}
             onClick={() => props.updateOrderPrice(1)}
@@ -76,22 +85,27 @@ function OrderProperty(props) {
             style={{ backgroundColor: props.orderPrice === -1 ? "grey" : null }}
             onClick={() => props.updateOrderPrice(-1)}
           />
-        </Container>
-        <Container className={classes.buttonContainer}>
+        </ButtonGroup>
+      </Grid>
+      <Grid item xs={6}>
+        <ButtonGroup variant="text" fullWidth className={classes.buttonGroup} >
           <Button
-            startIcon={<BiSortUp />}
-            style={{ backgroundColor: props.orderArea === 1 ? "grey" : null }}
+           startIcon={<BiSortUp />}
+           style={{ backgroundColor: props.orderArea === 1 ? "grey" : null }}
             onClick={() => props.updateOrderArea(1)}
           />
-          <Button
-            startIcon={<BiSortDown />}
-            style={{ backgroundColor: props.orderArea=== -1 ? "grey" : null }}
-            onClick={() => props.updateOrderArea(-1)}
+         <Button
+          startIcon={<BiSortDown />}
+          style={{ backgroundColor: props.orderArea=== -1 ? "grey" : null }}
+          onClick={() => props.updateOrderArea(-1)}
           />
-        </Container>
-      </Container>
-      <Button className={classes.greenButton} onClick={props.handleSubmit}>Ordenar</Button>
-    </Container>
+        </ButtonGroup>
+      </Grid>
+
+
+       
+      <Button fullWidth className={classes.greenButton} onClick={props.handleSubmit}>Ordenar</Button>
+    </Grid>
   );
 }
 
