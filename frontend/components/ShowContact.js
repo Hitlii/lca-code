@@ -12,7 +12,8 @@ import {
   white,
   darkNeutral,
   whatsappColor, 
-  messengerColor 
+  messengerColor,
+  lightNeutral
 } from '../public/colors'
 
 import Collapse from './collapse'
@@ -33,14 +34,17 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 18
     }
   },
+  contact:{
+    maxWidth:280,
+    margin: 'auto',
+  },
   button: {
-    width: 150,
+    marginBottom:30,
     height: 40,
-    marginLeft: 15,
-    marginBottom: 30,
-    marginRight: 15,
     borderRadius: 15,
     backgroundColor: lightGrey,
+    textTransform:'capitalize',
+    color: lightNeutral
   
   },
 
@@ -60,7 +64,9 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     padding: 0,
-    margin: 0
+    margin: 'auto',
+    maxWidth: 600,
+    
   },
   link: {
     textDecoration: 'none'
@@ -74,29 +80,38 @@ const ShowContact = ({ showContactCheck }) => {
 
         <Container className={classes.container} >
             <Collapse in={showContactCheck} className={classes.collapseStyle}>
-                <Typography variant="h6" className={classes.contactTextStyle}>Contactar por</Typography>
-                <Grid container justify="center">
-                      
-                    <Link 
-                      className={classes.link} 
-                      target='_blank' 
-                      href='https://api.whatsapp.com/send?phone=+526653922230' 
-                      rel='noopener noreferrer'>
-                        <Button variant="text"
-                            className={classes.button}
-                            startIcon={<RiWhatsappFill className={classes.whatsappIconStyle}/>}
-                        > Whatsapp
-                        </Button>
-                    </Link>
+                <Grid container spacing={1}  className={classes.contact} justify='center' >
+                  <Grid item xs={12}>
+                    <Typography variant="h6" display="block" align="left" className={classes.contactTextStyle}>Contactar por</Typography>
+                  </Grid>
 
-                    <Link className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
-                        <Button
-                            variant="text" 
-                            className={classes.button}
-                            startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
-                        > Messenger
-                        </Button>
-                    </Link>
+                <Grid item xs={6}>
+                  <Link 
+                    className={classes.link} 
+                    target='_blank' 
+                    href='https://api.whatsapp.com/send?phone=+526653922230' 
+                    rel='noopener noreferrer'>
+                      <Button variant="text"
+                          fullWidth
+                          className={classes.button}
+                          startIcon={<RiWhatsappFill className={classes.whatsappIconStyle}/>}
+                      > Whatsapp
+                      </Button>
+                  </Link>
+                </Grid>     
+                <Grid item xs={6}>
+                  <Link className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
+                      <Button
+                          variant="text" 
+
+                          fullWidth
+                          className={classes.button}
+                          startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
+                      > Messenger
+                      </Button>
+                  </Link>
+                </Grid>
+
 
                 </Grid>
             </Collapse>

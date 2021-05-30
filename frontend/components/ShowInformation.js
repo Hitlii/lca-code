@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 // My Imports ------------------------------
 import Collapse from './collapse'
-import { green, grey6, white, darkNeutral } from '../public/colors.js'
+import { green, grey6, white, darkNeutral, lightNeutral } from '../public/colors.js'
 
 
 import Link from 'next/link'
@@ -22,27 +22,33 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   appButtonStyle: {
-    width: 150,
     height: 40,
-    margin: 5,
     borderRadius: 15,
     backgroundColor: grey6,
     fontSize: 16,
     boxShadow:'none',
+    textTransform:'capitalize'
   },
   sellButtonStyle: {
-    width: 320,
     height: 40,
-    margin: 20,
     borderRadius: 15,
     backgroundColor: green,
     color: 'white',
     fontSize: 16,
     boxShadow: 'none',
+    textTransform:'capitalize'
   },
   container: {
     padding: 0,
-    margin: 0
+    margin: 'auto',
+    maxWidth: 600,
+    color: lightNeutral
+   
+  }, 
+  main: {
+    maxWidth:280,
+    margin: 'auto',
+    marginBottom:30,
   }
 }))
 
@@ -54,35 +60,45 @@ const ShowInformaction = ({ showInformationCheck }) => {
         <Container maxWidth="lg" className={classes.container}>
             <Collapse in={showInformationCheck}>
 
-                <Grid container justify="center">
-                  <Link href='/nosotros'>
-                    <Button
-                      className={classes.appButtonStyle}
-                      variant="contained"
-                      xs={6}
-                    >   
-                      Nosotros
-                    </Button>
-                  </Link>
-                  <Link href='/servicios'>
-                    <Button
-                      className={classes.appButtonStyle}
-                      variant="contained"
-                      xs={6}  
-                    >   
-                      Servicios
-                    </Button>
-                  </Link>
-                </Grid>
+                <Grid container spacing={1} className={classes.main}>
+                  <Grid item xs={6}>
+                    <Link href='/nosotros'>
+                      <Button
+                        fullWidth
+                        className={classes.appButtonStyle}
+                        variant="contained"
+                        xs={6}
+                      >   
+                        Nosotros
+                      </Button>
+                    </Link>
 
-                <Grid container justify="center">
-                    <Button 
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Link href='/servicios'>
+                      <Button
+                        fullWidth
+                        className={classes.appButtonStyle}
+                        variant="contained"
+                        xs={6}  
+                      >   
+                        Servicios
+                      </Button>
+                    </Link>
+
+                  </Grid>
+                  <Grid item xs={12}>
+                     <Button 
+                      fullWidth
                       variant="contained" xs={12} 
                       className={classes.sellButtonStyle}
                     >
                       Vender Propiedad
                     </Button>
+                  </Grid>
                 </Grid>
+
+             
 
              </Collapse>
         </Container>

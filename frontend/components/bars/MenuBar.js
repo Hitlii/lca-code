@@ -18,41 +18,28 @@ import ShowInformation from '../ShowInformation'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-
+    maxWidth: 600,
+    minWidth: 320,
+    padding:10,
+    margin:'auto'
+  
   },
   buttonStyle: {
-
-    margin: 10,
-    width: 40,
-    height: 40,
+    marginRight:10,
     backgroundColor: '#F2F2F2',
-    marginRight: 'auto',
     borderRadius: '50%',
     '&:hover': {
-      backgroundColor: 'grey'
+      backgroundColor: 'grey',
+      color:'white'
     },
-    ['@media (max-width:320px)']: { // eslint-disable-line no-useless-computed-key
-      margin: 5,
-      marginTop: 10
-    }
+   
   },
   logoStyle: {
-    width: 87,
-    height: 40,
-    margin: 10
-
+    width:87,
+    height:40
   },
-  container: {
+  
 
-    [theme.breakpoints.only('xs')]: {
-      padding: 0,
-      margin: 0
-    }
-
-  },
-  image: {
-    cursor: 'pointer'
-  }
 
 }))
 
@@ -71,41 +58,35 @@ function MenuBar () {
   }
 
   return (
-        <Container maxWidth="lg" className={classes.container} >
-        <Grid container justify="center" direction='row'>
-
-            <Grid item xs={6}>
-                <Link href='/' className={classes.image}>
+     <>
+        <Grid container justify="space-between"  className={classes.root}>
+            <Grid item xs={4} >
+                <Link href='/'>
                     <CardMedia className={classes.logoStyle} image='/LogoOriginalSF.png'/>
                 </Link>
             </Grid>
-
-            <Grid >
-            <Link href='/propiedades'>
-                <IconButton  className={classes.buttonStyle} >
-                    <SearchIcon />
-                </IconButton>
-                </Link>   
-            </Grid>
-
-            <Grid >
-                <IconButton className={classes.buttonStyle} onClick={hanleShowContactButton}>
-                    <PhoneIcon/>
-                </IconButton>
-            </Grid>
-
-            <Grid >
-                <IconButton className={classes.buttonStyle} onClick={hanleShowInformationButton}>
-                    <ExpandMoreIcon/>
-                </IconButton>
-
+              
+            <Grid item container justify="flex-end"  xs={8}>
+                  <Link href='/propiedades'>
+                    <IconButton  className={classes.buttonStyle} >
+                     <SearchIcon />
+                    </IconButton>
+                  </Link>
+              
+                  <IconButton className={classes.buttonStyle} onClick={hanleShowContactButton}>
+                      <PhoneIcon/>
+                  </IconButton>
+              
+                  <IconButton className={classes.buttonStyle} onClick={hanleShowInformationButton}>
+                      <ExpandMoreIcon/>
+                  </IconButton>
+              
             </Grid>
         </Grid>
 
         <ShowContact showContactCheck={showContactCheck}/>
         <ShowInformation showInformationCheck={showInformationCheck}/>
-
-        </Container>
+      </>
   )
 }
 
