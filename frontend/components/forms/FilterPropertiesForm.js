@@ -272,7 +272,7 @@ function FilterPropertiesForm(props) {
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
-                  helperText={props.filterProperty.errors.maxArea? "Introduce el área maxima":"null"}
+                  helperText={props.filterProperty.errors.maxArea? "Introduce el área maxima":null }
                   onChange={props.filterProperty.handleChange}
                   value={props.filterProperty.values.area.maxArea}
                   error={props.filterProperty.errors.maxArea? true:false}
