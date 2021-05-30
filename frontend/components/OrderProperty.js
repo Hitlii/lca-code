@@ -76,11 +76,13 @@ function OrderProperty(props) {
       <Grid item xs={6}>
         <ButtonGroup variant="text" fullWidth className={classes.buttonGroup}>
            <Button
+           title=" De mayor a menor"
             startIcon={<BiSortUp />}
             style={{ backgroundColor: props.orderPrice === 1 ? "grey" : null }}
             onClick={() => props.updateOrderPrice(1)}
           />
           <Button
+            title="De menor a mayor"
             startIcon={<BiSortDown />}
             style={{ backgroundColor: props.orderPrice === -1 ? "grey" : null }}
             onClick={() => props.updateOrderPrice(-1)}
@@ -90,11 +92,13 @@ function OrderProperty(props) {
       <Grid item xs={6}>
         <ButtonGroup variant="text" fullWidth className={classes.buttonGroup} >
           <Button
+          title=" De mayor a menor"
            startIcon={<BiSortUp />}
            style={{ backgroundColor: props.orderArea === 1 ? "grey" : null }}
             onClick={() => props.updateOrderArea(1)}
           />
          <Button
+         title="De menor a mayor"
           startIcon={<BiSortDown />}
           style={{ backgroundColor: props.orderArea=== -1 ? "grey" : null }}
           onClick={() => props.updateOrderArea(-1)}

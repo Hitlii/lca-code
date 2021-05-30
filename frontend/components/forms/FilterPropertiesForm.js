@@ -225,7 +225,7 @@ function FilterPropertiesForm(props) {
                   inputProps={{step:"0.01"}}
                   onChange={props.filterProperty.handleChange}
                   value={props.filterProperty.values.price.minPrice}
-                  helperText={props.filterProperty.errors.minArea?"Introduce el precio mínimo":null}
+                  helperText={props.filterProperty.errors.minArea? "Introduce el precio mínimo":null}
                   label="Min"
                   error={props.filterProperty.errors.minPrice? true:false}
                 />
@@ -237,7 +237,7 @@ function FilterPropertiesForm(props) {
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
-                  helperText={props.filterProperty.errors.minArea?"Introduce el precio máximo":null}
+                  helperText={props.filterProperty.errors.minArea? "Introduce el precio máximo":null}
                   onChange={props.filterProperty.handleChange}
                   value={props.filterProperty.values.price.maxPrice}
                   error={props.filterProperty.errors.maxPrice? true:false}
@@ -257,7 +257,7 @@ function FilterPropertiesForm(props) {
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
-                  helperText={props.filterProperty.errors.minArea?"Introduce el área minima":null}
+                  helperText={props.filterProperty.errors.minArea? "Introduce el área minima":null}
                   onChange={props.filterProperty.handleChange}
                   value={props.filterProperty.values.area.minArea}
                   error={props.filterProperty.errors.minArea? true:false}
@@ -272,7 +272,7 @@ function FilterPropertiesForm(props) {
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
-                  helperText={props.filterProperty.errors.maxArea?"Introduce el área maxima":null}
+                  helperText={props.filterProperty.errors.maxArea? "Introduce el área maxima":"null"}
                   onChange={props.filterProperty.handleChange}
                   value={props.filterProperty.values.area.maxArea}
                   error={props.filterProperty.errors.maxArea? true:false}

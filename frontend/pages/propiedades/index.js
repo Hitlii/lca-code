@@ -28,6 +28,10 @@ import {
   StyledPaperLarge,
   StyledPaper,
 } from "../../styles/DrawerStyles";
+import {
+  lightNeutral,
+  darkneutral,
+} from '../../public/colors'
 
 // Graph QL Imports ------------------------------
 import { GET_PROPERTIES } from "../../graphql/queries";
@@ -40,13 +44,14 @@ const useStyles = makeStyles((theme) => ({
    maxWidth: 600,
    margin:"auto"
  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-    color: "black",
-  },
+ search:{
+   borderRadius: 15,
+   backgroundColor: "#f2f2f2"
+ },
+
   iconButton: {
-    padding: 10,
+    padding: 15,
+    backgroundColor: "#f2f2f2",
   },
   result: {
     margin: 10,
@@ -58,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   search: {
+    border:'none',
+    backgroundColor:"#f2f2f2",
+    borderRadius: 30,
   }
 }));
 
@@ -193,10 +201,10 @@ export default function AllPropertiesPage(props) {
   }
   return (
     <>
-    <Grid className={classes.root} container justify="center">
-      <Grid item>
-        <Grid container>
-          <Grid item xs={3}>
+    <Grid className={classes.root} spacing={3} container justify="center">
+      <Grid item xs={12}>
+        <Grid container spacing={3}>
+          <Grid item xs={2}>
             <Link href="/">
               <IconButton className={classes.iconButton}>
                 <KeyboardBackspaceIcon />
@@ -204,59 +212,40 @@ export default function AllPropertiesPage(props) {
             </Link>
           </Grid>
 
-          <Grid item xs={9}>
-          <FormControl fullWidth variant="filled">
-          <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
-          <FilledInput
-            id="search"
-            name="search"
-            type="text"
-            value={filterProperty.values.search}
-            onChange={filterProperty.handleChange}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleSubmit}
-                  // onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                    <SearchIcon />
+          <Grid item xs={10}>
+            <FormControl fullWidth variant="filled">
+            <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
+            <FilledInput
+              id="search"
+              name="search"
+              type="text"
+              value={filterProperty.values.search}
+              onChange={filterProperty.handleChange}
+              autofocus
+              fullWidth
+              className={classes.search}
+              disableUnderline
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="search button"
+                    onClick={handleSubmit}
+                    edge="end"
+                  >
+                      <SearchIcon />
                   </IconButton>
-              </InputAdornment>
-            }
-          />
-        </FormControl>
-           {/* <InputBase
-            className={classes.input}
-            id="search"
-            name="search"
-            fullWidth
-            onChange={filterProperty.handleChange}
-            placeholder="Buscar Propiedad"
-            value={filterProperty.values.search}
-            variant="outlined"
-          />
-              <IconButton className={classes.iconButton} onClick={handleSubmit}>
-            <SearchIcon />
-          </IconButton> */}
-
+                </InputAdornment>
+              }
+            />
+          </FormControl>
           </Grid>
-
         </Grid>
-       
-     
-          
-     
       </Grid>
       <Grid item xs={12}>
-        <Grid container justify="space-between">
-        <span> {properties? properties.length:0} filtro(s) </span>
         <span>{properties? properties.length:0} resultado(s) </span>
-        </Grid> 
+        <Divider/>
       </Grid>
-      <Divider/>
-
+      
       
     </Grid>
     
