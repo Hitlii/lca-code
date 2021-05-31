@@ -86,7 +86,7 @@ const ShowContact = ({ showContactCheck }) => {
                   </Grid>
 
                 <Grid item xs={6}>
-                  <Link 
+                  <a 
                     className={classes.link} 
                     target='_blank' 
                     href='https://api.whatsapp.com/send?phone=+526653922230' 
@@ -97,10 +97,10 @@ const ShowContact = ({ showContactCheck }) => {
                           startIcon={<RiWhatsappFill className={classes.whatsappIconStyle}/>}
                       > Whatsapp
                       </Button>
-                  </Link>
+                  </a>
                 </Grid>     
                 <Grid item xs={6}>
-                  <Link className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
+                  <a className={classes.link} target='_blank' href='https://www.facebook.com/lcabienesraices' rel='noopener noreferrer'>
                       <Button
                           variant="text" 
 
@@ -109,7 +109,7 @@ const ShowContact = ({ showContactCheck }) => {
                           startIcon={<FaFacebookMessenger className={classes.messengerIconStyle}/>}
                       > Messenger
                       </Button>
-                  </Link>
+                  </a>
                 </Grid>
 
 
