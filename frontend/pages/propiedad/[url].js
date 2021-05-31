@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { GET_PROPERTY } from '../../graphql/queries'
 
 import Image from 'next/image'
+import Link from 'next/link' 
 
 import GreenButton from '../../components/buttons/GreenButton'
 import Map from '../../components/map'
 import PropertyCard from '../../components/cards/PropertyCard'
 import ZoneButton from '../../components/buttons/ZoneButton'
+
+import Carousel from 'react-material-ui-carousel'
 
 import {
     CircularProgress,
@@ -28,8 +31,6 @@ import YouTubeIcon from '@material-ui/icons/YouTube'
 
 import { IoLogoGoogleplus } from 'react-icons/io'
 import { IoLogoTiktok } from 'react-icons/io5'
-
-
 
 import { green, lightNeutral } from '../../public/colors'
 
@@ -137,16 +138,17 @@ const useStyles = makeStyles(({
     map: {
         marginTop: 20,
         marginBottom:  20
+    },
+    description: {
+        margin: 10
     }
 }))
 
 export default function SinglePropertyPage(){
     const classes = useStyles()
-    const router = useRouter()
     const [map, setMap] = useState(false)
+    const router = useRouter()
     const url = router.query.url
-
-    console.log(url)
     
     const { data, loading, error } = useQuery(GET_PROPERTY, { 
         variables: { url: url }
@@ -157,10 +159,8 @@ export default function SinglePropertyPage(){
 
     const property = data.getProperty.property
     const relatedProperties = data.getProperty.relatedProperties
+    const slateText = JSON.parse(property.description.text)
 
-    function goBack() {
-        router.back()
-    }
     function onClickMap() { 
         setMap(current => !current)
     }
@@ -168,19 +168,34 @@ export default function SinglePropertyPage(){
     return(
         <div className={classes.root}>
             {/* Back Button */}
-            <IconButton className={classes.backButton} onClick={goBack}>
-                <ChevronLeftIcon className={classes.backIcon}/>
-            </IconButton>
-            {/* Property Thumbnail */}
-            <div className={classes.img}>
-                <Image 
-                    className={classes.img}
-                    src={'/'+property.media.images[0]} 
-                    layout='responsive'
-                    width={360}
-                    height={265}
-                />
-            </div>
+            <Link href='/propiedades'>
+                <IconButton className={classes.backButton}>
+                    <ChevronLeftIcon className={classes.backIcon}/>
+                </IconButton>
+            </Link>
+            {/* Property Images */}
+            <Carousel
+                autoplay={true}
+                animation='fade'
+                indicators={true}
+                timeout={500}
+                navButtonsAlwaysVisible={true}
+                navButtonsAlwaysInvisible={false}
+            >
+                {property.media.images.map((image,i)=>{
+                    return(
+                        <div key={i} className={classes.img}>
+                            <Image 
+                                className={classes.img}
+                                src={'/'+image} 
+                                layout='responsive'
+                                width={360}
+                                height={265}
+                            />
+                        </div>
+                    )
+                })}       
+            </Carousel>
             {/* Type of property */}
             <Typography className={classes.type}>
                 {property.type === 'venta' ? 'Venta' : 'Renta'} de terreno de {property.area} m²
@@ -194,6 +209,65 @@ export default function SinglePropertyPage(){
                 <DescriptionIcon className={classes.icon}/>
                 <Typography className={classes.iconText}>Descripción</Typography>
             </div>
+            <div className={classes.description}>
+                {slateText.map((n, i) => {
+                    switch(n.type){
+                        case 'bulleted-list': return(
+                            <ul key={i}>
+                                {n.children.map((children, i) => {
+                                    if(children.bold) return <li key={i}><Typography gutterBottom><strong>{children.text}</strong></Typography></li>
+                                    if(children.italic) return <li key={i}><Typography gutterBottom><em>{children.text}</em></Typography></li>
+                                    if(children.underline) return <li key={i}><Typography gutterBottom><u>{children.text}</u></Typography></li>
+                                    return <li key={i}><Typography gutterBottom>{children.text}</Typography></li>
+                                })}  
+                            </ul>           
+                        ) 
+                        case 'heading-one': return(
+                            <Typography variant='h4' gutterBottom key={i}>
+                                {n.children.map((children, i) => {
+                                    if(children.bold) return <strong key={i}>{children.text}</strong>
+                                    if(children.italic) return <em key={i}>{children.text}</em>
+                                    if(children.underline) return <u key={i}>{children.text}</u>
+                                    return <Fragment key={i}>{children.text}</Fragment>
+                                })}  
+                            </Typography>           
+                        )
+                        case 'heading-two': return(
+                            <Typography variant='h6' gutterBottom key={i}>
+                                {n.children.map((children,i) => {
+                                    if(children.bold) return <strong key={i}>{children.text}</strong>
+                                    if(children.italic) return <em key={i}>{children.text}</em>
+                                    if(children.underline) return <u key={i}>{children.text}</u>
+                                    return <Fragment key={i}>{children.text}</Fragment>
+                                })}  
+                            </Typography>           
+                        )
+                        case 'numbered-list': return(
+                            <ol key={i}>
+                                {n.children.map((children, i) => {
+                                    if(children.bold) return <li key={i}><Typography gutterBottom><strong>{children.text}</strong></Typography></li>
+                                    if(children.italic) return <li key={i}><Typography gutterBottom><em>{children.text}</em></Typography></li>
+                                    if(children.underline) return <li key={i}><Typography gutterBottom><u>{children.text}</u></Typography></li>
+                                    return <li key={i}><Typography gutterBottom>{children.text}</Typography></li>
+                                })}  
+                            </ol>           
+                        )
+                        default: {
+                            return (
+                                <Typography gutterBottom key={i}>
+                                    {n.children.map((children, i) => {
+                                        if(children.bold) return <strong key={i}>{children.text}</strong>
+                                        if(children.italic) return <em key={i}>{children.text}</em>
+                                        if(children.underline) return <u key={i}>{children.text}</u>
+                                        return <Fragment key={i}>{children.text}</Fragment>
+                                    })}
+                                </Typography>             
+                            )
+                        }
+                    }
+                })}
+            </div>
+
             {/* Video */}
             <div className={classes.iconDiv}>
                 <PlayArrowIcon className={classes.icon}/>
@@ -249,29 +323,29 @@ export default function SinglePropertyPage(){
                     </Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.socialMediaGridItem}>
-                    <IconButton className={classes.socialMediaButton}>
+                    <a target="_blank" href='https://www.facebook.com/lcabienesraices'>
                         <FacebookIcon className={classes.socialMediaIcon} />
-                    </IconButton>
+                    </a>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <IconButton className={classes.socialMediaButton}>
+                    <a target="_blank" href='https://www.tiktok.com/@lcabienesraices?_d=secCgYIASAHKAESMgowYT1TrB3ng6pzY72Dpd5OkxEysU%2BHzTSImHyPRc6vk9fandDCg5slJJ2OCL4rxcSTGgA%3D&_r=1&checksum=2f1cbed0b1a1be3ba092cf36c081a5f3ac54b254ab2aa90055a0be7bede6a117&language=es&sec_uid=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&sec_user_id=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&share_app_id=1233&share_author_id=6915514760588149766&share_link_id=202F5DC7-9C7C-45E2-8ADD-CABE60553F51&source=h5_m&tt_from=copy&u_code=dgd0bm0e8e085e&user_id=6915514760588149766&utm_campaign=client_share&utm_medium=ios&utm_source=copy'>
                         <IoLogoTiktok className={classes.socialMediaIcon} />
-                    </IconButton>
+                    </a>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <IconButton className={classes.socialMediaButton}>
+                    <a target="_blank" href='https://www.youtube.com/channel/UCej0jSusZmWgqmUDey8UeJQ'>
                         <YouTubeIcon className={classes.socialMediaIcon}/>
-                    </IconButton>
+                    </a>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <IconButton className={classes.socialMediaButton}>
+                    <a target="_blank" href='https://www.google.com/maps/place/LCA+Bienes+Raices/@32.5661397,-116.590919,17z/data=!3m1!4b1!4m5!3m4!1s0x80d90d6db4b0bd7d:0xcc6fe9ea04043c0e!8m2!3d32.5661397!4d-116.5887303'>
                         <IoLogoGoogleplus className={classes.socialMediaIcon} />
-                    </IconButton>
+                    </a>
                 </Grid>
                 <Grid item xs={3} className={classes.socialMediaGridItem}>
-                    <IconButton className={classes.socialMediaButton}>
+                    <a target="_blank" href='https://www.instagram.com/lca_bienesraices/'>
                         <InstagramIcon className={classes.socialMediaIcon}/>
-                    </IconButton>
+                    </a>
                 </Grid>
             </Grid>
             {/* Related Properties */}
