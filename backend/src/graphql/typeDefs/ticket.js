@@ -16,6 +16,8 @@ module.exports = gql`
     extend type Query {
         "Gets tickets by propertyId"
         getTickets(propertyId:ID): [Ticket]
+        "Gets a ticket by id"
+        getTicket(_id:ID): Ticket
     }
 
     type CreateEditTicketMutationResponse implements MutationResponse{

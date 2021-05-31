@@ -126,6 +126,18 @@ module.exports = {
       // Need of pagination here?
       const tickets = await Ticket.find({ propertyId }, '-promissory -paymentLocation -paymentAddress')
       return tickets
+    }),
+    getTicket: combineResolvers(isAuthenticated, async (_, { _id }) => {
+      let error = null
+      if (!isObjectIdValid(_id)) {
+        error = new Error('\'Este ID no es valido\'')
+        error.code = 400
+        error.solution = 'Ingrese un ID valido (está mandando un string?)'
+        throw error
+      }
+
+      const ticket = await Ticket.findOne({ _id }).exec()
+      return ticket
     })
   }
 }

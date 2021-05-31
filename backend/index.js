@@ -21,7 +21,8 @@ const storage = multer.diskStorage(({
     cb(null, 'images')
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
+    // Triming and replacing spaces with dashes.
+    cb(null, file.originalname.trim().replace(/\s+/g, '-'))
   }
 }))
 
