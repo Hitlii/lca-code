@@ -99,13 +99,10 @@ const useStyles = makeStyles(({
 export default function AdminSinglePropertyPage(){
     const classes = useStyles()
     const router = useRouter()
-    const url = router.query.url
-
-    console.log(url)
 
     const { data, loading, error } = useQuery(GET_ADMIN_PROPERTY, {
         variables: { 
-            url: url
+            url: router.query.url
         }
     })
 
@@ -113,7 +110,7 @@ export default function AdminSinglePropertyPage(){
     if(error) return `Error! ${error}`
 
     const adminProperty = data.getAdminProperty
-    console.log(adminProperty)
+    
 
     return(
         <div className={classes.root}>

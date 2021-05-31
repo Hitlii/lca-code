@@ -84,12 +84,6 @@ function AdminPropertyCard({ property }) {
     function onClick() {
         showOptions(current => !current)
     }
-    function onPropertyClick() {
-        router.push({
-            pathname: `/admin1/propiedades/${property.meta.url}`,
-            query: { url: property.meta.url}
-        })
-    }
 
     function pickZoneDotColor(zone){
         if(zone === 'Comercial')
@@ -107,10 +101,7 @@ function AdminPropertyCard({ property }) {
     return (
         <>
             <Card className={classes.root} elevation={0}>
-                <IconButton
-                    className={classes.iconButton}
-                    onClick={onPropertyClick}
-                >
+                <Link href={`/admin1/propiedades/${property.meta.url}`}>
                     <Avatar className={classes.cover}>
                         <Image
                             className={classes.cover}
@@ -120,7 +111,7 @@ function AdminPropertyCard({ property }) {
                             alt={`${property.type} en ${property.location.city}`}
                         />
                     </Avatar>
-                </IconButton>
+                </Link>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
                         <Typography className={classes.code}> 

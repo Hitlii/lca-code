@@ -60,31 +60,30 @@ const Home = () => {
         text='Zona Urbana'
       />
       <div className={classes.wrapper}>
-        {/* <PropertyCard   
-          property={properties[0]}
-        />
-        <PropertyCard   
-          property={properties[0]}
-        />
-        <PropertyCard   
-          property={properties[0]}
-        /> */}
-        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
-        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
-        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
-        <div className={classes.item}><PropertyCard property={properties[0]}/></div>
+        {properties.filter(property =>  property.zone === 'Urbana').map((property => {
+          return (
+            <div key={property._id} className={classes.item}>
+              <PropertyCard 
+                key={property._id}
+                property={property}
+              />
+            </div>
+          )
+        }))}
       </div>
-      {/* <ZoneButton
+      <ZoneButton
         href='#'
         text='Zona Campestre'
       />
       <div className={classes.wrapper}>
         {properties.filter(property =>  property.zone === 'Campestre').map((property => {
           return (
-            <PropertyCard 
-              key={property._id}
-              property={property}
-            />
+            <div key={property._id} className={classes.item}>
+              <PropertyCard 
+                key={property._id}
+                property={property}
+              />
+            </div>
           )
         }))}
       </div>
@@ -95,13 +94,17 @@ const Home = () => {
       <div className={classes.wrapper}>
         {properties.filter(property =>  property.zone === 'Comercial').map((property => {
           return (
-            <PropertyCard 
-              key={property._id}
-              property={property}
-            />
+            <div 
+              key={property._id} 
+              className={classes.item}
+            >
+              <PropertyCard 
+                property={property}
+              />
+            </div>
           )
         }))}
-      </div> */}
+      </div>
     </div>
   )
 }

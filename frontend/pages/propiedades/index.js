@@ -221,7 +221,7 @@ export default function AllPropertiesPage(props) {
               type="text"
               value={filterProperty.values.search}
               onChange={filterProperty.handleChange}
-              autofocus
+              autoFocus
               fullWidth
               className={classes.search}
               disableUnderline

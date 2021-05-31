@@ -1,11 +1,12 @@
 import React from 'react'
+
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { 
     Avatar,
     Card,
     CardContent,
-    CardMedia,
     Paper,
     Typography,
 } from '@material-ui/core'
@@ -64,15 +65,17 @@ function PropertyCard({ orientation, property }) {
                         TERRENOS {zone.tagText}
                     </Typography>
                 </Paper>
-                <Avatar className={classes.cover}>
-                    <Image
-                        className={classes.cover}
-                        src={`/${property.media.images[0].replace(/\\/g,'/')}`}
-                        width={width}
-                        height={height}
-                        alt={`${property.type} en ${property.location.city}`}
-                    />
-                </Avatar>
+                <Link href={`/propiedad/${property.meta.url}`}>
+                    <Avatar className={classes.cover}>
+                        <Image
+                            className={classes.cover}
+                            src={`/${property.media.images[0].replace(/\\/g,'/')}`}
+                            width={width}
+                            height={height}
+                            alt={`${property.type} en ${property.location.city}`}
+                        />
+                    </Avatar>
+                </Link>
             </div>
             <div className={classes.details}>
                 <CardContent className={classes.content}>

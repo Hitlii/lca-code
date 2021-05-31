@@ -88,14 +88,15 @@ export const GET_PROPERTIES = gql`
     media {
       images
     }
-
+    meta {
+      url
+    }
   }
-  }
+}
   
 `;
 
-export const GET_ADMIN_PROPERTIES = gql
-`
+export const GET_ADMIN_PROPERTIES = gql`
   query getAdminProperties(
     $zone: String
     $type: String
@@ -137,8 +138,7 @@ export const GET_ADMIN_PROPERTIES = gql
     }
   }
 `
-export const GET_ADMIN_PROPERTY = gql 
-`
+export const GET_ADMIN_PROPERTY = gql `
   query getAdminProperty(
     $url: String!
   ) {
@@ -184,6 +184,78 @@ export const GET_ADMIN_PROPERTY = gql
           city
           address
         }
+        }
+      }
+    }
+  }
+`
+
+export const GET_PROPERTY = gql`
+  query getProperty($url: String!) {
+    getProperty(url: $url){
+      property{
+        _id
+        area
+        price
+        specialPrice
+        type
+        description {
+          text
+        }
+        location {
+          city
+          state
+          address
+          coordinates{
+            lat
+            lng
+          }
+        }
+        code
+        media {
+          video
+          images
+        }
+        vendors {
+          gender
+          birthday
+          name
+          contact {
+            email
+            phone
+          }
+          location {
+            state
+            city
+            address
+          }
+        }
+        meta {
+          url
+          description
+        }
+        isFeatured
+      }
+      relatedProperties {
+        _id
+        status
+        type
+        zone
+        specialPrice
+        onPayments
+        price
+        currency
+        area
+        location {
+          city 
+          state 
+          address
+        }
+        media {
+          images
+        }
+        meta {
+          url
         }
       }
     }

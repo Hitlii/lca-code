@@ -27,7 +27,7 @@ const options = {
   styles: mapStyles
 }
 
-export default function Map ({ marker, handleChange }) {
+export default function Map ({ marker, zoom, forClients, handleChange }) {
   
 
    const { isLoaded, loadError } = useLoadScript({
@@ -35,14 +35,14 @@ export default function Map ({ marker, handleChange }) {
     })
 
  
-
+  
   if (loadError) return 'Error Loading maps'
   if(!isLoaded) return 'Loading...'
 
   return <GoogleMap
                 mapContainerStyle={mapContainerStyle}
-                zoom={8}
-                center={center}
+                zoom={zoom ? zoom : 8}
+                center={forClients ? marker : center}
                 options={options}
                 onClick ={handleChange}
             >
