@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import { gql, useMutation } from '@apollo/client'
 import Link from 'next/link'
+import {Node} from 'slate'
 
 // Material UI Imports --------------------------------
 import Alert from '@material-ui/lab/Alert'
@@ -116,6 +117,10 @@ function PropertyForm ({ autoCompleteClients }) {
     video: ''
 
   }
+
+  const serialize = nodes => {
+    return  nodes.map(n => Node.string(n)).join('\n');
+  }
   // Formik.
   const formikInput = useFormik({
         initialValues: initialValues,
@@ -201,7 +206,7 @@ function PropertyForm ({ autoCompleteClients }) {
             description:{
               hasAllServices,
               isDeeded,
-              text: slateEditor.toString(),
+              text: JSON.stringify(slateEditor),
             }, 
 
             location: {

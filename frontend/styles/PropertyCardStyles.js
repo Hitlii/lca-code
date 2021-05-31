@@ -16,6 +16,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
     },
     blueTag:{
         zIndex: 2,
+        padding:0,
         position:'absolute',
         width: 141,
         height: 24,
@@ -25,6 +26,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
     },
     greenTag:{
         zIndex: 2,
+        padding:0,
         position:'absolute',
         width: 140,
         height: 24,
@@ -34,6 +36,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
     },
     redTag:{
         zIndex: 2,
+        padding:0,
         position:'absolute',
         width: 122,
         height: 24,
@@ -79,6 +82,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         color: 'white',
         padding: '5px 10px',
         fontSize: 10,
+        fontFamily: 'Bebas Neue'
     },
     area: {
         color: '#4A4C4B',
@@ -108,9 +112,9 @@ export const VerticalPropertyCardStyle = makeStyles(({
         position: 'relative',
         display: 'flex',
         width: 207,
-        height: 368,
+        height: 380,
         flexDirection: 'column',
-        marginBottom: 10,
+        marginRight: 20
     },
     coverDiv: {
         height: 219,
@@ -160,29 +164,42 @@ export const VerticalPropertyCardStyle = makeStyles(({
         height: 25,
         width: 70,
         backgroundColor: '#01509D',
+        marginTop:5,
+        marginBottom: 10,
+        marginleft:0,
+        
         borderRadius: 15,
     },
     statusGreenBackground: {
         height: 25,
         width: 70,
         backgroundColor: '#6DB432',
+        marginTop:5,
+        marginBottom: 5,
+        marginleft:0,
+    
         borderRadius: 15,
     },
     statusRedBackground: {
         height: 25,
         width: 70,
         backgroundColor: '#E41E2B',
+        marginTop:5,
+        marginBottom: 10,
+        marginleft:0,
+        
         borderRadius: 15,
     },
     statusText: {
         color: 'white',
-        padding: '5px 10px',
-        fontSize: 10,
+        padding: '2px 10px',
+        fontSize: 16,
+        fontFamily: 'Bebas Neue'
     },
     area: {
         color: '#4A4C4B',
         fontSize: 16,
-        fontWeight: 700
+        fontWeight: 700,
     }, 
     address: {
         color: '#BDBDBD',

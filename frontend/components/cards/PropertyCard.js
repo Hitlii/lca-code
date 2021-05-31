@@ -2,7 +2,7 @@ import React from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
-
+import {numberWithCommas} from '../../helper/format'
 import { 
     Avatar,
     Card,
@@ -60,9 +60,9 @@ function PropertyCard({ orientation, property }) {
     return (
         <Card className={classes.root} elevation={0}>
             <div className={classes.coverDiv}>
-                <Paper className={zone.tag}>
+                <Paper className={zone.tag} elevation={0}>
                     <Typography className={classes.statusText}>
-                        TERRENOS {zone.tagText}
+                        {`${property.type} ${(property.type.charAt(property.type.length-1)==='o')&& property.zone==="Urbana"? "Urbano": property.zone}`}
                     </Typography>
                 </Paper>
                 <Link href={`/propiedad/${property.meta.url}`}>
@@ -79,13 +79,13 @@ function PropertyCard({ orientation, property }) {
             </div>
             <div className={classes.details}>
                 <CardContent className={classes.content}>
-                    <Paper className={zone.status}>
+                    <Paper className={zone.status} elevation={0}>
                         <Typography className={classes.statusText}>
                             EN {status}
                         </Typography>
                     </Paper>
                     <Typography className={classes.area}>
-                        {property.area} m²
+                        {numberWithCommas(property.area)} m²
                     </Typography>
                     <Typography className={classes.address}>
                         {property.location.address}
@@ -94,7 +94,7 @@ function PropertyCard({ orientation, property }) {
                         {property.location.city} {property.location.state}
                     </Typography>
                     <Typography className={classes.price}>
-                        ${property.price} {property.currency}                        
+                        ${numberWithCommas(property.price)} {property.currency}                        
                     </Typography>
                     {property.specialPrice !== '' ?
                     <Typography className={classes.specialPrice}>

@@ -40,6 +40,33 @@ export const GET_CLIENT = gql`
   }
 `;
 
+export const GET_FEATURED_PROPERTIES = gql` 
+ query getFeaturedProperties{
+  getFeaturedProperties{
+     status
+    type
+    zone
+    area
+    location {
+      state
+      city
+      address
+    }
+    price
+    currency
+    specialPrice
+    onPayments
+    media {
+      images
+    }
+    meta{
+      url
+    }
+    
+  }
+}
+`
+
 export const GET_PROPERTIES = gql`
   query getProperties(
     $zone: String
@@ -95,6 +122,8 @@ export const GET_PROPERTIES = gql`
 }
   
 `;
+
+
 
 export const GET_ADMIN_PROPERTIES = gql`
   query getAdminProperties(

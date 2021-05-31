@@ -63,6 +63,8 @@ module.exports = {
     createProperty: combineResolvers(isAuthenticated, async (_, { property, vendors }) => {
       const newProperty = new Property({ ...property, vendors })
       newProperty.meta.url = newProperty.title.replace(/\s+/g, '-').toLowerCase() + '-' + newProperty.code
+      const videoID = newProperty.media.video.split('/')
+      newProperty.media.video = videoID[videoID - 1]
       try {
         await newProperty.save()
       } catch (error) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import { GET_PROPERTIES } from '../graphql/queries'
+import { GET_FEATURED_PROPERTIES } from '../graphql/queries'
 
 import MenuBar from '../components/bars/MenuBar'
 
@@ -40,13 +40,22 @@ const useStyles = makeStyles(({
 const Home = () => {
   
   const classes = useStyles()
-  const { data, loading, error } = useQuery(GET_PROPERTIES,
-    {variables: { pageNumber: 1 }})
+  const { data, loading, error } = useQuery(GET_FEATURED_PROPERTIES)
   if(loading) return null
   if(error) return `Error! ${error}`
 
-  const properties = data.getProperties
+  const properties = data.getFeaturedProperties
   console.log(properties)
+
+  let country = []
+  let residential=[]
+  let comercial =[]
+
+  properties.forEach( p => {
+    if(p.zone === "Campestre") country.push(p)
+    if(p.zone === "Urbana") residential.push(p)
+    if(p.zone === "Comercial") comercial.push(p)
+  })
 
   return (
     <div className={classes.root}>
@@ -60,7 +69,7 @@ const Home = () => {
         text='Zona Urbana'
       />
       <div className={classes.wrapper}>
-        {properties.filter(property =>  property.zone === 'Urbana').map((property => {
+        {residential.map((property => {
           return (
             <div key={property._id} className={classes.item}>
               <PropertyCard 
@@ -76,7 +85,7 @@ const Home = () => {
         text='Zona Campestre'
       />
       <div className={classes.wrapper}>
-        {properties.filter(property =>  property.zone === 'Campestre').map((property => {
+        {country.map((property => {
           return (
             <div key={property._id} className={classes.item}>
               <PropertyCard 
@@ -92,7 +101,7 @@ const Home = () => {
         text='Zona Comercial'
       />
       <div className={classes.wrapper}>
-        {properties.filter(property =>  property.zone === 'Comercial').map((property => {
+        {comercial.map((property => {
           return (
             <div 
               key={property._id} 
