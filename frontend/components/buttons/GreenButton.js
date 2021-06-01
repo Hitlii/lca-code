@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: '0 auto',
     display: 'block',
-    width: 340,
     height: 40,
     color: 'white',
     backgroundColor: '#4CAF50',
@@ -25,7 +24,7 @@ function GreenButton (props) {
             className={classes.button}
             variant='contained'
             onClick={props.onClick}
-            fullWidth={props.fullWidth}
+            fullWidth
             {...props}
 
         >

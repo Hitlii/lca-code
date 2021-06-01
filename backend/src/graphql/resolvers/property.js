@@ -64,8 +64,10 @@ module.exports = {
       const newProperty = new Property({ ...property, vendors })
       newProperty.meta.url = newProperty.title.replace(/\s+/g, '-').toLowerCase() + '-' + newProperty.code
       // Saving only youtube ID
+      console.log(newProperty)
       const videoID = newProperty.media.video.split('/')
-      newProperty.media.video = videoID[videoID - 1]
+      newProperty.media.video = videoID[videoID.length - 1]
+      console.log(newProperty.media.video)
       try {
         await newProperty.save()
       } catch (error) {

@@ -90,7 +90,7 @@ const useStyles = makeStyles(({
         fontSize: 25,
         backgroundColor: lightNeutral,
         color: 'white',
-        borderRadius: 15,
+        borderRadius: '50%',
         padding: 5
     },
     iconText: {
@@ -120,7 +120,7 @@ const useStyles = makeStyles(({
         color: lightNeutral
     },
     wrapper: {
-        maxHeight: 400,
+        maxHeight: 360,
         display: 'flex',
         overflowX: 'auto',
         marginLeft: 10,
@@ -129,11 +129,21 @@ const useStyles = makeStyles(({
     wrapperItem: {
         marginRight: 5
     }, 
+    iframeContainer: {
+        position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        paddingTop: "56.25%"
+    },
     video: {
-        display: 'flex',
-        justifyContent: 'center',
-        borderRadius: 15,
-        marginTop: 10
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius:15,
     }, 
     map: {
         marginTop: 20,
@@ -160,7 +170,7 @@ export default function SinglePropertyPage(){
     const property = data.getProperty.property
     const relatedProperties = data.getProperty.relatedProperties
     const slateText = JSON.parse(property.description.text)
-
+    console.log(property)
     function onClickMap() { 
         setMap(current => !current)
     }
@@ -173,6 +183,7 @@ export default function SinglePropertyPage(){
                     <ChevronLeftIcon className={classes.backIcon}/>
                 </IconButton>
             </Link>
+
             {/* Property Images */}
             <Carousel
                 autoplay={true}
@@ -189,19 +200,21 @@ export default function SinglePropertyPage(){
                                 className={classes.img}
                                 src={'/'+image} 
                                 layout='responsive'
-                                width={360}
-                                height={265}
+                                width={600}
+                                height={337}
                             />
                         </div>
                     )
                 })}       
             </Carousel>
+
             {/* Type of property */}
-            <Typography className={classes.type}>
-                {property.type === 'venta' ? 'Venta' : 'Renta'} de terreno de {property.area} m²
+            <Typography  variant="h5" gutterBottom>
+                {property.title}
             </Typography>
+
             {/* Location */}
-            <Typography className={classes.location}>
+            <Typography variant="body2" className={classes.location} gutterBottom>
                 {property.location.address} {property.location.city} {property.location.state}
             </Typography>
             {/* Description */}
@@ -211,6 +224,7 @@ export default function SinglePropertyPage(){
             </div>
             <div className={classes.description}>
                 {slateText.map((n, i) => {
+                    console.log(n.type)
                     switch(n.type){
                         case 'bulleted-list': return(
                             <ul key={i}>
@@ -223,7 +237,7 @@ export default function SinglePropertyPage(){
                             </ul>           
                         ) 
                         case 'heading-one': return(
-                            <Typography variant='h4' gutterBottom key={i}>
+                            <Typography variant='h5' gutterBottom key={i}>
                                 {n.children.map((children, i) => {
                                     if(children.bold) return <strong key={i}>{children.text}</strong>
                                     if(children.italic) return <em key={i}>{children.text}</em>
@@ -256,6 +270,7 @@ export default function SinglePropertyPage(){
                             return (
                                 <Typography gutterBottom key={i}>
                                     {n.children.map((children, i) => {
+                                        if(children.text === '') return <br/>
                                         if(children.bold) return <strong key={i}>{children.text}</strong>
                                         if(children.italic) return <em key={i}>{children.text}</em>
                                         if(children.underline) return <u key={i}>{children.text}</u>
@@ -271,14 +286,12 @@ export default function SinglePropertyPage(){
             {/* Video */}
             <div className={classes.iconDiv}>
                 <PlayArrowIcon className={classes.icon}/>
-                <Typography className={classes.iconText}>Video</Typography>
+                <Typography gutterBottom className={classes.iconText}>Video</Typography>
             </div>
-            <div className={classes.video}>
+            <div className={classes.iframeContainer}>
                 <iframe 
-                    style={{borderRadius: 15}} 
-                    width='360' 
-                    height='202' 
-                    src={`https://youtube.com/embed/${property.media.video}`}
+                    className={classes.video} 
+                    src={`https://youtube.com/embed/${property.media.video}?showinfo=0`}
                     frameBorder='0'
                     allowFullScreen
                 />
@@ -305,8 +318,7 @@ export default function SinglePropertyPage(){
                         onClick={onClickMap}
                     >
                         <img
-                            width={360}
-                            height={300}
+                            width="100%"
                             src='/dontChargeMeGoogleMaps.png'
                         />
                     </IconButton>

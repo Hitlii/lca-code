@@ -221,72 +221,50 @@ export const GET_ADMIN_PROPERTY = gql `
 
 export const GET_PROPERTY = gql`
   query getProperty($url: String!) {
-    getProperty(url: $url){
-      property{
-        _id
-        area
-        price
-        specialPrice
-        type
-        description {
-          text
-        }
-        location {
-          city
-          state
-          address
-          coordinates{
-            lat
-            lng
-          }
-        }
-        code
-        media {
-          video
-          images
-        }
-        vendors {
-          gender
-          birthday
-          name
-          contact {
-            email
-            phone
-          }
-          location {
-            state
-            city
-            address
-          }
-        }
-        meta {
-          url
-          description
-        }
-        isFeatured
+    getProperty(url: $url) {
+    property {
+      media {
+
+        images
+        video
       }
-      relatedProperties {
-        _id
-        status
-        type
-        zone
-        specialPrice
-        onPayments
-        price
-        currency
-        area
-        location {
-          city 
-          state 
-          address
+      title
+      location {
+        state
+        city
+        address
+        coordinates {
+          lat
+          lng
         }
-        media {
-          images
-        }
-        meta {
-          url
-        }
+      }
+      description {
+        text
+        isDeeded
+        hasAllServices
       }
     }
+    relatedProperties {
+      status
+      type
+      zone
+      area
+      location {
+        state
+        city
+        address
+      }
+      price
+      currency
+      specialPrice
+      onPayments
+      media {
+        images
+      }
+      meta {
+        url
+      }
+    }
+  }
   }
 `
