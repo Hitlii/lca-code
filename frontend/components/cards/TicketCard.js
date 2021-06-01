@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 import {
     Divider,
@@ -8,7 +10,9 @@ import {
     Typography,
 } from '@material-ui/core'
 
-import { drawerStyles, StyledPaper } from '../../styles/DrawerStyles'
+import DeleteButton from '../buttons/DeleteButton'
+
+import { drawerStyles, StyledPaper, DeletePaper } from '../../styles/DrawerStyles'
 
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined';
@@ -39,12 +43,55 @@ const useStyles = makeStyles(({
     }
 }))
 
-function TicketCard({ ticket }) {
+function TicketCard({ ticket, propertyId }) {
     const classes = useStyles()
     const drawerClasses = drawerStyles()
+    const router = useRouter()
     const [options, showOptions] = useState(false)
+    const [deleteDrawer, setDeleteDrawer] = useState(false)
+
+    const [deleteTicket] = useMutation(DELETE_TICKET, {
+        update (
+        _,
+        { data }
+        ) {
+            console.log(data)
+            document.location.reload()
+        },
+        variables: {
+            _id: ticket._id,
+            propertyId: propertyId
+        }
+    })
+
+    function onEditTicket() {
+        router.push({
+            pathname: '/admin1/ticket/edit-pagare',
+            query: { ID: ticket._id }
+        })
+    }
+
     function onClick() {
         showOptions(current => !current)
+    }
+
+    function onClickDelete() {
+        onClick()
+        setDeleteDrawer(current => !current)
+    }
+
+    function onDeleteProperty() {
+        deleteTicket()
+        onClickDelete()
+        onClick()
+    }
+
+    function daysAgo(emissionDate) {
+        const oneDay = 1000*60*60*24
+        const today = new Date()
+        const ticketDate = new Date(emissionDate)
+        const days = today.getTime() - ticketDate.getTime()
+        return Math.round(days/oneDay)
     }
 
     return (
@@ -71,14 +118,14 @@ function TicketCard({ ticket }) {
                     <Typography
                         className={classes.body}
                     >
-                        {ticket.area}m² - {ticket.price}
+                        {ticket.area}m² - ${ticket.price}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography
                         className={classes.body}
                     >
-                        {ticket.emissionDate}
+                        Hace {daysAgo(ticket.emissionDate)} día(s)
                     </Typography>
                 </Grid>
             </Grid>
@@ -95,7 +142,7 @@ function TicketCard({ ticket }) {
                     </Typography>
                 </IconButton>
                 <Divider className={drawerClasses.divider}/>
-                <IconButton className={drawerClasses.drawerButton}>
+                <IconButton className={drawerClasses.drawerButton} onClick={onEditTicket}>
                     <CreateOutlinedIcon className={drawerClasses.createIcon}/>
                     <Typography className={drawerClasses.createText}>
                         Editar ticket
@@ -104,6 +151,7 @@ function TicketCard({ ticket }) {
                 <Divider className={drawerClasses.divider}/>
                 <IconButton 
                     className={drawerClasses.drawerButton}
+                    onClick={onClickDelete}
                 >
                     <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
                     <Typography className={drawerClasses.deleteText}>
@@ -111,8 +159,35 @@ function TicketCard({ ticket }) {
                     </Typography>
                 </IconButton>
             </Drawer>
+            <Drawer
+                PaperProps={{ component: DeletePaper }}
+                anchor='bottom'
+                open={deleteDrawer}
+                onClose={onClickDelete}
+            >
+                <Typography className={drawerClasses.confirmText}>
+                    ¿Estás seguro?
+                </Typography>
+                <DeleteButton onClick={onDeleteProperty}/>
+            </Drawer>
         </>
     )
 }
+
+const DELETE_TICKET = gql`
+    mutation deleteTicket(
+        $_id: ID! 
+        $propertyId: ID!
+    ) {
+        deleteTicket(
+            _id: $_id 
+            propertyId: $propertyId
+        ) {
+            success
+            code
+            message
+        }
+    }
+`
 
 export default TicketCard

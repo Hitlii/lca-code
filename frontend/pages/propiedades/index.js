@@ -1,14 +1,28 @@
 import React, { useState, useRef } from "react";
 
 // Material UI Imports ------------------------------
-import Drawer from '@material-ui/core/Drawer'
+
 import Divider from '@material-ui/core/Divider'
-import IconButton from '@material-ui/core/IconButton'
-import InputBase from '@material-ui/core/InputBase'
-import Typography from '@material-ui/core/Typography'
+
+
+import {
+  IconButton,
+  InputBase,
+  Paper,
+  Drawer,
+  Typography,
+} from "@material-ui/core";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
+import OrderFilterButton from "../../components/buttons/OrderFilterButton";
+import NoFoundComponent from "../../components/NoFoundComponent";
+//ICONS
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+
 import SearchIcon from "@material-ui/icons/Search";
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+//import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import FormControl from '@material-ui/core/FormControl'
@@ -16,11 +30,6 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FilledInput from '@material-ui/core/FilledInput'
 import InputAdornment from '@material-ui/core/InputAdornment'
 
-// My Imports ------------------------------
-import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
-import OrderFilterButton from "../../components/buttons/OrderFilterButton";
-import OrderProperty from "../../components/OrderProperty";
-import PropertyCard from "../../components/cards/PropertyCard";
 import client from "../../lib/apollo-client";
 import useFilterForm from "../../hooks/useFilterForm";
 import {
@@ -28,15 +37,22 @@ import {
   StyledPaperLarge,
   StyledPaper,
 } from "../../styles/DrawerStyles";
+
 import {
   lightNeutral,
   darkneutral,
 } from '../../public/colors'
 
 // Graph QL Imports ------------------------------
+
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
+import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
+import PropertyCard from "../../components/cards/PropertyCard";
+import OrderProperty from "../../components/OrderProperty";
+
 import { GET_PROPERTIES } from "../../graphql/queries";
 
-import Link from "next/link";
 
 const useStyles = makeStyles((theme) => ({
  root: {
@@ -44,10 +60,7 @@ const useStyles = makeStyles((theme) => ({
    maxWidth: 600,
    margin:"auto"
  },
- search:{
-   borderRadius: 15,
-   backgroundColor: "#f2f2f2"
- },
+
 
   iconButton: {
     padding: 15,
@@ -62,17 +75,44 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     textAlign: "center",
   },
+
   search: {
     border:'none',
     backgroundColor:"#f2f2f2",
     borderRadius: 30,
-  }
+  },
+
+  icons: {
+    backgroundColor: "#f2f2f2",
+    margin: "auto",
+    "&:hover": {
+      backgroundColor: "#f2f2f2",
+    },
+  },
+  containerIcons: {
+    marginTop:20,
+    display: "flex",
+    justifyContent: "center",
+  },
+  sadIcon: {
+    height: 200,
+  },
+  errorMessage: {
+    display: "flex",
+    color: "red",
+    justifyContent: "center",
+  },
+
 }));
 
 export default function AllPropertiesPage(props) {
   const classes = useStyles();
-
-  const [properties, setProperties] = useState();
+  const router = useRouter();
+  const [errors, setErrors] = useState();
+  const pageNumber = useRef(1);
+  const [properties, setProperties] = useState(props.properties);
+  const [statePageNumber, setStatePageNumber] = useState(1);
+  const [stateNoFound, setStateNoFound] = useState(false);
   const { filterProperty, resetFilterPropertyValues } = useFilterForm();
   const [showOrderComponent, setShowOrderComponent] = useState(false);
   const [showFilterComponent, setShowFilterComponent] = useState(false);
@@ -94,20 +134,61 @@ export default function AllPropertiesPage(props) {
     false,
     false,
   ]);
+  function resetPageNumber() {
+    pageNumber.current = 1;
+    setStatePageNumber(1);
+  }
+
+  function updatePageNumber(value) {
+    let variables = getParamsFilterQuery();
+
+    if (pageNumber.current + value !== 0) {
+       if (properties.length) {
+      pageNumber.current += value;
+      setStatePageNumber(pageNumber.current);
+      variables.pageNumber = pageNumber.current;
+      console.log(variables);
+      updatePage(variables);
+       }
+      else if (properties.length === 0 && value === -1) {
+        pageNumber.current += value;
+        setStatePageNumber(pageNumber.current);
+        variables.pageNumber = pageNumber.current;
+        updatePage(variables);
+      }
+    }
+  }
+
+  async function updatePage(variables) {
+    const { data } = await client.query({
+      query: GET_PROPERTIES,
+      variables: variables,
+    });
+    if (data.getProperties.length) {
+      setProperties(data.getProperties);
+      setErrors();
+    } else {
+      pageNumber.current -= 1;
+      setStatePageNumber(pageNumber.current);
+      setErrors({ properties: "Ya es la ultima pagina" });
+    }
+  }
+
   const updateOrderPrice = (value) => {
     filterProperty.setFieldValue(
-      "orderPrice",
+      "priceOrder",
       filterProperty.values.orderPrice === value ? "" : value
     );
-    // console.log(filterProperty.values.orderPrice);
+    filterProperty.setFieldValue("areaOrder", "");
+    console.log(filterProperty.values)
   };
   const updateOrderArea = (value) => {
     filterProperty.setFieldValue(
-      "orderArea",
+      "areaOrder",
       filterProperty.values.orderArea === value ? "" : value
     );
-    //setOrderArea((current) => (current === value ? 0 : value));
-    // console.log(filterProperty.values.orderArea);
+    filterProperty.setFieldValue("priceOrder", "");
+    console.log(filterProperty.values)
   };
   const onChangeZone = (values, index) => {
     let array = [false, false, false];
@@ -115,6 +196,7 @@ export default function AllPropertiesPage(props) {
     setStateZonesButton(array);
     filterProperty.setFieldValue("zone", values);
   };
+
   const onChangeType = (values, index) => {
     let array = [false, false, false];
     array.splice(index, 1, true);
@@ -141,54 +223,70 @@ export default function AllPropertiesPage(props) {
     resetFilterPropertyValues();
   };
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  function getParamsFilterQuery() {
     let variables = {};
-    // validate param to query
-    let keys = Object.keys(filterProperty.values);
-    console.log(keys);
+    const keys = Object.keys(filterProperty.values);
     keys.forEach((key) => {
       if (
         filterProperty.values[key] !== "" &&
-        key !== "area" &&
-        key !== "price"
+        key !== "minArea" &&
+        key !== "maxArea" &&
+        key !== "minPrice" &&
+        key !== "maxPrice"
       ) {
-        variables[key] = filterProperty.values[key];
+        if (key === "priceOrder" || key === "areaOrder") {
+          variables[key] = parseInt(filterProperty.values[key]);
+        } else {
+          variables[key] = filterProperty.values[key];
+        }
       }
     });
-
     if (
-      filterProperty.values.price.minPrice !== "" &&
-      filterProperty.values.price.maxPrice !== ""
-    ) {
-      variables.price = {
-        minPrice: filterProperty.values.price.minPrice,
-        maxPrice: filterProperty.values.price.maxPrice,
-      };
-    }
-    if (
-      filterProperty.values.area.minArea !== "" &&
-      filterProperty.values.area.maxArea !== ""
+      filterProperty.values.minArea !== "" &&
+      filterProperty.values.maxArea !== ""
     ) {
       variables.area = {
-        minArea: filterProperty.values.area.minArea,
-        maxArea: filterProperty.values.area.maxArea,
+        minArea: filterProperty.values.minArea,
+        maxArea: filterProperty.values.maxArea,
       };
     }
+    if (
+      filterProperty.values.minPrice !== "" &&
+      filterProperty.values.maxPrice !== ""
+    ) {
+      variables.price = {
+        minPrice: filterProperty.values.minPrice,
+        maxPrice: filterProperty.values.maxPrice,
+      };
+    }
+    return variables;
+  }
 
-    console.log(variables);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let variables = getParamsFilterQuery();
+    variables.pageNumber = 1;
+    updatePage(variables);
     const { data } = await client.query({
       query: GET_PROPERTIES,
       variables,
     });
-    setProperties(data.getProperties);
-    setShowFilterComponent(false);
-    // console.log(data.getProperties);
-    // console.log(filterProperty.values);
+    pageNumber.current = 1;
+    if (data.getProperties.length) {
+      setProperties(data.getProperties);
+      setStateNoFound(false);
+    } else {
+      setStateNoFound(true);
+      resetPageNumber();
+
+    }
+    
+    
+
   }
+
   function onCloseFilterComponent() {
     setShowFilterComponent((current) => !current);
-    // resetFilterPropertyValues();
   }
   function onCloseOrderComponent() {
     setShowOrderComponent((current) => !current);
@@ -199,23 +297,23 @@ export default function AllPropertiesPage(props) {
   function handleShowFilterComponent() {
     setShowFilterComponent((current) => !current);
   }
-  return (
-    <>
-    <Grid className={classes.root} spacing={3} container justify="center">
-      <Grid item xs={12}>
-        <Grid container spacing={3}>
+   return (
+    <div>
+      <Grid className={classes.root} spacing={3} container justify="center">
+       <Grid item xs={12}>
+         <Grid container spacing={3}>
           <Grid item xs={2}>
             <Link href="/">
-              <IconButton className={classes.iconButton}>
-                <KeyboardBackspaceIcon />
-              </IconButton>
-            </Link>
-          </Grid>
+               <IconButton className={classes.iconButton}>
+                 <KeyboardBackspaceIcon />
+               </IconButton>
+             </Link>
+           </Grid>
 
           <Grid item xs={10}>
             <FormControl fullWidth variant="filled">
-            <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
-            <FilledInput
+             <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
+             <FilledInput
               id="search"
               name="search"
               type="text"
@@ -242,64 +340,121 @@ export default function AllPropertiesPage(props) {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <span>{properties? properties.length:0} resultado(s) </span>
+        <span>{stateNoFound? 0: properties?properties.length:0} resultado(s) </span>
         <Divider/>
       </Grid>
       
-      
+
     </Grid>
-    
       
-      { properties ? properties.map((property) => {
-            return (
-              <PropertyCard
-                key={property._id}
-                orientation="horizontal"
-                property={property}
-              />
-            );
-          })
-        : null}
 
-      <Drawer
-        PaperProps={{ component: StyledPaperLarge }}
-        anchor="bottom"
-        open={showFilterComponent}
-        onClose={onCloseFilterComponent}
-      >
-        <FilterPropertiesForm
-          stateZonesButton={stateZonesButton}
-          stateStatusButton={stateStatusButton}
-          stateCitiesButton={stateCitiesButton}
-          stateTypesButton={stateTypesButton}
-          onChangeZone={onChangeZone}
-          onChangeCities={onChangeCities}
-          onChangeType={onChangeType}
-          onChangeStatus={onChangeStatus}
-          filterProperty={filterProperty}
-          handleSubmit={handleSubmit}
-          reset={reset}
+      <Grid container justify="center">
+      {stateNoFound ? (
+        <NoFoundComponent search={filterProperty.values.search} />
+      ) : (
+        properties.map((property) => {
+          return (
+            <PropertyCard
+              key={property._id}
+              orientation="horizontal"
+              property={property}
+            />
+          );
+        })
+      )}
+      </Grid>
+      {!stateNoFound ? (
+        <div className={classes.containerIcons}>
+          <IconButton
+            className={classes.icons}
+            onClick={() => {
+              updatePageNumber(-1);
+            }}
+          >
+            {<ArrowBackIcon />}
+          </IconButton>
+          <Typography style={{ marginTop: 10 }}>
+            Pagina {statePageNumber}
+          </Typography>
+          <IconButton
+            className={classes.icons}
+            onClick={() => {
+              updatePageNumber(1);
+            }}
+          >
+            {<ArrowForwardIcon />}
+          </IconButton>
+        </div>
+      ) : null}
+      {!stateNoFound ? (
+        <Typography className={classes.errorMessage}>
+          {errors ? errors.properties : ""}
+        </Typography>
+      ) : null}
+      {!stateNoFound ? (
+        <Drawer
+          PaperProps={{ component: StyledPaperLarge }}
+          anchor="bottom"
+          open={showFilterComponent}
+          onClose={onCloseFilterComponent}
+        >
+          <FilterPropertiesForm
+            stateZonesButton={stateZonesButton}
+            stateStatusButton={stateStatusButton}
+            stateCitiesButton={stateCitiesButton}
+            stateTypesButton={stateTypesButton}
+            onChangeZone={onChangeZone}
+            onChangeCities={onChangeCities}
+            onChangeType={onChangeType}
+            onChangeStatus={onChangeStatus}
+            filterProperty={filterProperty}
+            handleSubmit={handleSubmit}
+            reset={reset}
+          />
+        </Drawer>
+      ) : null}
+      {!stateNoFound ? (
+        <Drawer
+          PaperProps={{ component: StyledPaper }}
+          anchor="bottom"
+          open={showOrderComponent}
+          onClose={onCloseOrderComponent}
+        >
+          <OrderProperty
+            orderPrice={filterProperty.values.priceOrder}
+            orderArea={filterProperty.values.areaOrder}
+            updateOrderPrice={updateOrderPrice}
+            updateOrderArea={updateOrderArea}
+            handleSubmit={handleSubmit}
+          />
+        </Drawer>
+      ) : null}
+      {!stateNoFound ? (
+        <OrderFilterButton
+          onChangeFilter={handleShowFilterComponent}
+          onChangeOrder={handleShowOrderComponent}
         />
-      </Drawer>
-      <Drawer
-        PaperProps={{ component: StyledPaper }}
-        anchor="bottom"
-        open={showOrderComponent}
-        onClose={onCloseOrderComponent}
-      >
-        <OrderProperty
-          orderPrice={filterProperty.values.orderPrice}
-          orderArea={filterProperty.values.orderArea}
-          updateOrderPrice={updateOrderPrice}
-          updateOrderArea={updateOrderArea}
-          handleSubmit={handleSubmit}
-        />
-      </Drawer>
-      <OrderFilterButton
-        onChangeFilter={handleShowFilterComponent}
-        onChangeOrder={handleShowOrderComponent}
+      ) : null}
+    </div>
 
-      />
-      </>
   );
+}
+
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: GET_PROPERTIES,
+    variables: { pageNumber: 1 },
+  });
+
+  if (!data)
+    return {
+      props: {
+        error: "Error",
+      },
+    };   
+  return {
+    props: {
+      properties: data.getProperties,
+    },
+  };
 }

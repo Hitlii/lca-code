@@ -111,7 +111,7 @@ function Login () {
                 </Button>
             </form>
             <StyledLink 
-              href='/admin/recoverPassword'
+              href='/admin1/recoverPassword'
               text='Recuperar Contraseña'
             />
         </div>

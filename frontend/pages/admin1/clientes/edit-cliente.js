@@ -4,6 +4,11 @@ import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { GET_CLIENT } from '../../../graphql/queries'
 import ClientForm from '../../../components/forms/ClientForm'
+
+import Link from 'next/link'
+
+import LoadingCircle from '../../../components/LoadingCircle'
+
 import {
     AppBar,
     IconButton,
@@ -13,7 +18,6 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-
 
 const useStyles = makeStyles({
     appbar: {
@@ -38,7 +42,7 @@ const useStyles = makeStyles({
     },
     typo: {
         color: 'black'
-    }
+    },
 })
 
 export default function EditClientPage(){
@@ -55,7 +59,7 @@ export default function EditClientPage(){
         }
     })
 
-    if(loading) return null
+    if(loading) return <LoadingCircle />
 
     if(error) return `Error! ${error}`
 
@@ -66,9 +70,11 @@ export default function EditClientPage(){
         <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className={classes.iconButton} href='/admin1/clientes'>
-                        <ChevronLeftIcon className={classes.icon}/>
-                    </IconButton>
+                    <Link href='/admin1/clientes'>
+                        <IconButton className={classes.iconButton} href='/admin1/clientes'>
+                            <ChevronLeftIcon className={classes.icon}/>
+                        </IconButton>
+                    </Link>
                     <Typography className={classes.typo}>
                         Editar cliente
                     </Typography>

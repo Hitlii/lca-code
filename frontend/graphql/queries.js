@@ -199,20 +199,30 @@ export const GET_ADMIN_PROPERTY = gql `
       }
       tickets {
         _id
+        area
+        price
+        currency
+        emissionDate
+        promissory {
+          months
+          payment
+        }
+        paymentLocation
+        paymentAddress
         clients {
           _id
-        name
-        gender
-        birthday
-        contact {
-          email
-          phone
-        }
-        location {
-          state
-          city
-          address
-        }
+          name
+          gender
+          birthday
+          contact {
+            email
+            phone
+          }
+          location {
+           state
+            city
+            address
+          }
         }
       }
     }
@@ -221,12 +231,49 @@ export const GET_ADMIN_PROPERTY = gql `
 
 export const GET_PROPERTY = gql`
   query getProperty($url: String!) {
-    getProperty(url: $url) {
-    property {
-      media {
+    getProperty(url: $url){
+      property{
+        _id
+        area
+        price
+        specialPrice
+        type
+        description {
+          text
+        }
+        location {
+          city
+          state
+          address
+          coordinates{
+            lat
+            lng
+          }
+        }
+        code
+        media {
+          video
+          images
+        }
+        vendors {
+          gender
+          birthday
+          name
+          contact {
+            email
+            phone
+          }
+          location {
+            state
+            city
+            address
+          }
+        }
+        meta {
 
-        images
-        video
+          description
+        }
+        isFeatured
       }
       title
       location {
@@ -266,5 +313,29 @@ export const GET_PROPERTY = gql`
       }
     }
   }
+  }
+`
+
+export const GET_TICKET = gql`
+  query getTicket($_id: ID!) {
+    getTicket(_id: $_id) {
+      _id 
+  propertyId
+  status
+  area
+    price
+    currency
+  	emissionDate
+    promissory{
+      months
+      payment
+    }
+    paymentLocation
+    paymentAddress
+    clients{
+      _id
+      name
+    }
+    }
   }
 `

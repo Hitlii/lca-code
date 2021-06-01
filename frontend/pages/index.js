@@ -1,4 +1,5 @@
 import React from 'react'
+import client from '../lib/apollo-client'
 import { useQuery } from '@apollo/client'
 import { GET_FEATURED_PROPERTIES } from '../graphql/queries'
 
@@ -6,8 +7,10 @@ import MenuBar from '../components/bars/MenuBar'
 
 import { makeStyles } from '@material-ui/core/styles'
 
+import LoadingCircle from '../components/LoadingCircle'
 import PropertyCard from '../components/cards/PropertyCard'
 import ZoneButton from '../components/buttons/ZoneButton'
+
 
 const useStyles = makeStyles(({
   root: {
@@ -34,18 +37,16 @@ const useStyles = makeStyles(({
   }, 
   item: {
     marginRight: 5,
-  }
+  },
 }))
 
-const Home = () => {
+const Home = ({ properties }) => {
   
   const classes = useStyles()
-  const { data, loading, error } = useQuery(GET_FEATURED_PROPERTIES)
-  if(loading) return null
-  if(error) return `Error! ${error}`
 
-  const properties = data.getFeaturedProperties
-  console.log(properties)
+  // const { data, loading, error } = useQuery(GET_FEATURED_PROPERTIES)
+  // if(loading) return <LoadingCircle />
+  // if(error) return `Error! ${error}`
 
   let country = []
   let residential=[]
@@ -66,14 +67,13 @@ const Home = () => {
       />
       <ZoneButton
         href='#'
-        text='Zona Urbana'
+        text='Zona Comercial'
       />
       <div className={classes.wrapper}>
-        {residential.map((property => {
+        {comercial.map((property => {
           return (
-            <div key={property._id} className={classes.item}>
+            <div key={property.meta.url} className={classes.item}>
               <PropertyCard 
-                key={property._id}
                 property={property}
               />
             </div>
@@ -87,9 +87,8 @@ const Home = () => {
       <div className={classes.wrapper}>
         {country.map((property => {
           return (
-            <div key={property._id} className={classes.item}>
+            <div key={property.meta.url} className={classes.item}>
               <PropertyCard 
-                key={property._id}
                 property={property}
               />
             </div>
@@ -98,15 +97,12 @@ const Home = () => {
       </div>
       <ZoneButton
         href='#'
-        text='Zona Comercial'
+        text='Zona Urbana'
       />
       <div className={classes.wrapper}>
-        {comercial.map((property => {
+        {residential.map((property => {
           return (
-            <div 
-              key={property._id} 
-              className={classes.item}
-            >
+            <div key={property.meta.url} className={classes.item}>
               <PropertyCard 
                 property={property}
               />
@@ -116,6 +112,16 @@ const Home = () => {
       </div>
     </div>
   )
+}
+
+export async function getStaticProps() {
+  const { data } = await client.query({ query: GET_FEATURED_PROPERTIES });
+
+  return {
+    props: {
+      properties: data.getFeaturedProperties
+    },
+ };
 }
 
 export default Home

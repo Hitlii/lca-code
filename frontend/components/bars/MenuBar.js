@@ -69,7 +69,7 @@ function MenuBar () {
             <Grid item container justify="flex-end"  xs={8}>
                   <Link href='/propiedades'>
                     <IconButton  className={classes.buttonStyle} >
-                     <SearchIcon />
+                      <SearchIcon />
                     </IconButton>
                   </Link>
               

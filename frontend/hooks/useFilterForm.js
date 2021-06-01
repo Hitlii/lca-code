@@ -1,48 +1,54 @@
-import React from "react";
+
 import { useFormik } from "formik";
-const useFilterForm = () => {
+const useFilterForm = (initialValues) => {
+  const dataDefault = {
+    search: "",
+    zone: "",
+    type: "",
+    status: "",
+    city: "",
+    minPrice: "",
+    maxPrice: "",
+    minArea: "",
+    maxArea: "",
+    priceOrder: "",
+    areaOrder: "",
+
+  };
   const filterProperty = useFormik({
-    initialValues: {
-      search:"",
-      zone: "",
-      type: "",
-      status: "",
-      city: "",
-      price: { minPrice:'', maxPrice: '' },
-      area: { minArea: '', maxArea: '' },
-      orderPrice:'',
-      orderArea:'',
-    },
+    initialValues: initialValues ? initialValues : dataDefault,
     //validationSchema: validationSchema,
+    enableReinitialize: true,
     onSubmit: (values) => {
       console.log(values);
     },
-    validate:values=>{
-      let errors ={}
-      if(values.price.minPrice>values.price.maxPrice){
-        errors.minPrice='Error en los precios minimo'
-        errors.maxPrice='Error en los precios maximo'
+    validate: (values) => {
+      let errors = {};
+      if (values.minPrice > values.maxPrice) {
+        errors.minPrice = "Error en los precios minimo";
+        errors.maxPrice = "Error en los precios maximo";
       }
-      if(values.area.minArea>values.area.maxArea){
-        errors.minArea='Error en la area minimo'
-        errors.maxArea='Error en la area maximo'
-        
+      if (values.minArea > values.maxArea) {
+        errors.minArea = "Error en la area minimo";
+        errors.maxArea = "Error en la area maximo";
       }
-      return errors
-    }
+      return errors;
+    },
   });
-  function resetFilterPropertyValues(){
+  function resetFilterPropertyValues() {
     filterProperty.setFieldValue("city", "");
     filterProperty.setFieldValue("status", "");
     filterProperty.setFieldValue("type", "");
     filterProperty.setFieldValue("zone", "");
-    filterProperty.setFieldValue("price.minPrice", "");
-    filterProperty.setFieldValue("price.maxPrice", "");
-    filterProperty.setFieldValue("price.minPrice", "");
-    filterProperty.setFieldValue("price.maxPrice", "");
+    filterProperty.setFieldValue("minPrice", "");
+    filterProperty.setFieldValue("maxPrice", "");
+    filterProperty.setFieldValue("minPrice", "");
+    filterProperty.setFieldValue("maxPrice", "");
+    filterProperty.setFieldValue("priceOrder", "");
+    filterProperty.setFieldValue("areaOrder", "");
   }
 
-  return {filterProperty,resetFilterPropertyValues};
+  return { filterProperty, resetFilterPropertyValues };
 };
 
 export default useFilterForm;

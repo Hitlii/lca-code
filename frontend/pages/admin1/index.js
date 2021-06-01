@@ -8,6 +8,7 @@ import {
   Paper,
 } from '@material-ui/core'
 
+import LoadingCircle from '../../components/LoadingCircle'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AdminPropertyCard from '../../components/cards/AdminPropertyCard'
@@ -66,9 +67,7 @@ function AllAdminPropertiesPage(){
     variables: { pagination:{pageNumber: 1}}
   })
 
-  if(loading) {
-    return null
-  }
+  if(loading) return <LoadingCircle />
 
   if(error) {
     return `Error! ${error}`

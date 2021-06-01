@@ -7,6 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link' 
 
 import GreenButton from '../../components/buttons/GreenButton'
+import LoadingCircle from '../../components/LoadingCircle'
 import Map from '../../components/map'
 import PropertyCard from '../../components/cards/PropertyCard'
 import ZoneButton from '../../components/buttons/ZoneButton'
@@ -14,10 +15,8 @@ import ZoneButton from '../../components/buttons/ZoneButton'
 import Carousel from 'react-material-ui-carousel'
 
 import {
-    CircularProgress,
     Grid,
     IconButton,
-    Paper,
     Typography
 } from '@material-ui/core'
 
@@ -74,12 +73,6 @@ const useStyles = makeStyles(({
         fontSize: 16,
         fontWeight: 600,
         color: '#4A4C4B'
-    },
-    progress: {
-        display: "block",
-        margin: "auto",
-        marginTop: 200,
-        color: green,
     },
     iconDiv: {
         display: 'flex',
@@ -164,7 +157,7 @@ export default function SinglePropertyPage(){
         variables: { url: url }
     })
 
-    if(loading) return(<CircularProgress className={classes.progress} size={60} />)
+    if(loading) return (<LoadingCircle />)
     if(error) return `Error! ${error.message}`
 
     const property = data.getProperty.property

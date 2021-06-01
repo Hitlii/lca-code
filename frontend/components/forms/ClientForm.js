@@ -15,7 +15,6 @@ import {
     Typography,
 } from '@material-ui/core'
 import SubmitButton from '../buttons/GreenButton'
-import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({

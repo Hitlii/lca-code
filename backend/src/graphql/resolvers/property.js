@@ -4,7 +4,7 @@ const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
 const { isAuthenticated } = require('./middleware')
 
-const PROPERTIES_PER_PAGE = 2
+const PROPERTIES_PER_PAGE = 12
 // Client card property projection
 // Figma component -> https://www.figma.com/file/Zuolu9jlRGMlKDreja7g20/LCA?node-id=180%3A147
 const CLIENT_PROPERTY_CARD = {
@@ -104,7 +104,7 @@ module.exports = {
       }
 
       // 409 Cannot delete property
-      if (typeof property.tickets !== 'undefined') {
+      if (property.tickets.length > 0) {
         error = new Error('No puedes eliminar una propiedad que ya tiene tickets.')
         error.solution = 'Si desea eliminar esta propiedad, primero deberá de eliminar los tickets'
         error.code = 409
