@@ -90,7 +90,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   containerIcons: {
-    marginTop:20,
     display: "flex",
     justifyContent: "center",
   },
@@ -147,11 +146,10 @@ export default function AllPropertiesPage(props) {
 
     if (pageNumber.current + value !== 0) {
        if (properties.length) {
-      pageNumber.current += value;
-      setStatePageNumber(pageNumber.current);
-      variables.pageNumber = pageNumber.current;
-      console.log(variables);
-      updatePage(variables);
+        pageNumber.current += value;
+        setStatePageNumber(pageNumber.current);
+        variables.pageNumber = pageNumber.current;
+        updatePage(variables);
        }
       else if (properties.length === 0 && value === -1) {
         pageNumber.current += value;
@@ -269,7 +267,6 @@ export default function AllPropertiesPage(props) {
     e.preventDefault();
     let variables = getParamsFilterQuery();
     variables.pageNumber = 1;
-    updatePage(variables);
     const { data } = await client.query({
       query: GET_PROPERTIES,
       variables,
@@ -280,12 +277,12 @@ export default function AllPropertiesPage(props) {
       setStateNoFound(false);
     } else {
       setStateNoFound(true);
+      reset()
       resetPageNumber();
 
     }
     setShowOrderComponent(false)
     setShowFilterComponent(false)
-    
 
   }
 
