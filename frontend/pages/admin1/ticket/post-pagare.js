@@ -60,6 +60,7 @@ export default function PostTicket(props){
                 </Toolbar>
             </AppBar>
             <TicketForm
+                editTicket={null}
                 autoCompleteClients={props.clients} 
             />
         </Fragment>

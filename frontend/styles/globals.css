@@ -5,13 +5,14 @@
 
 body{
     padding:0;
-    padding-bottom: 65px;
+    padding-bottom: 120px;
     margin:0;
     font-family: Open Sans;    
 }
 
 a:hover {
     cursor: pointer;
+    text-decoration: none;
 }
 ::-webkit-scrollbar {
     width: 20px;

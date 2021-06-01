@@ -76,7 +76,7 @@ export default function EditTicket(props){
                         <ChevronLeftIcon className={classes.icon}/>
                     </IconButton>
                     <Typography className={classes.typo}>
-                        Crear Ticket
+                        Editar Ticket
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -86,7 +86,9 @@ export default function EditTicket(props){
             />
         </Fragment>
     )
+    
 }
+
 
 export async function getStaticProps(){
     const GET_ALL_CLIENTS = gql`

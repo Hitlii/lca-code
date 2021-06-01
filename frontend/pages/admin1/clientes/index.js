@@ -74,6 +74,8 @@ export default function AllClientsPage(props){
         refreshData()
     }, [props])
 
+
+    
     if(props.error) {
         console.log(props.error)
         return (

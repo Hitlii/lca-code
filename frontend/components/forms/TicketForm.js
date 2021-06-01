@@ -74,6 +74,8 @@ function TicketForm({ autoCompleteClients, editTicket }) {
 
   if(editTicket !== null) {
     initialValues = {
+      _id: editTicket._id,
+      propertyId: editTicket.propertyId,
       status: editTicket.status,
       area: editTicket.area,
       price: editTicket.price,
@@ -167,8 +169,8 @@ function TicketForm({ autoCompleteClients, editTicket }) {
       console.log(errors)
     },
     variables:{
-      _id: editTicket._id,
-      propertyId: editTicket.propertyId,
+      _id: ticket.values._id,
+      propertyId: ticket.values.propertyId,
       status: ticket.values.status,
       area: ticket.values.area,
       price: ticket.values.price,

@@ -1,16 +1,13 @@
 import React from 'react'
 import client from '../lib/apollo-client'
-import { useQuery } from '@apollo/client'
 import { GET_FEATURED_PROPERTIES } from '../graphql/queries'
 
 import MenuBar from '../components/bars/MenuBar'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import LoadingCircle from '../components/LoadingCircle'
 import PropertyCard from '../components/cards/PropertyCard'
 import ZoneButton from '../components/buttons/ZoneButton'
-
 
 const useStyles = makeStyles(({
   root: {

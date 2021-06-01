@@ -584,12 +584,11 @@ function PropertyForm ({ autoCompleteClients }) {
         <Divider/>
 
         <SearchClient
+            selectedClients={null}
             clients = {autoCompleteClients}
             handleChangeVendors = {handleChangeVendors}
         />
-
-         
-         
+        
         <SubmitButton 
           type="submit" 
           text="Crear Propiedad"

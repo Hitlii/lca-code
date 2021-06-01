@@ -231,80 +231,61 @@ export const GET_ADMIN_PROPERTY = gql `
 
 export const GET_PROPERTY = gql`
   query getProperty($url: String!) {
-    getProperty(url: $url){
-      property{
-        _id
-        area
-        price
-        specialPrice
-        type
-        description {
-          text
-        }
-        location {
-          city
-          state
-          address
-          coordinates{
-            lat
-            lng
-          }
-        }
-        code
-        media {
-          video
-          images
-        }
-        vendors {
-          gender
-          birthday
-          name
-          contact {
-            email
-            phone
-          }
-          location {
-            state
-            city
-            address
-          }
-        }
-        meta {
-
-          description
-        }
-        isFeatured
-      }
-      title
-      location {
-        state
-        city
-        address
-        coordinates {
-          lat
-          lng
-        }
-      }
+    getProperty(url: $url) {
+      property {
+      _id
+      price
+      specialPrice
+      type
+      area
       description {
         text
         isDeeded
         hasAllServices
       }
+      code
+      media {
+        video
+        images
+      }
+      location {
+        city
+        state
+        address
+        coordinates{
+          lat
+          lng
+        }
+      }
+      vendors {
+        gender
+        birthday
+        name
+        contact {
+          email
+          phone
+        }
+        location {
+          state
+          city
+          address
+        }
+      }
+      meta {
+        url
+        description
+      }
+      isFeatured
     }
     relatedProperties {
+      _id
       status
       type
       zone
-      area
-      location {
-        state
-        city
-        address
-      }
-      price
-      currency
       specialPrice
       onPayments
+      price
+      currency
       media {
         images
       }
@@ -312,7 +293,8 @@ export const GET_PROPERTY = gql`
         url
       }
     }
-  }
+    }
+      
   }
 `
 

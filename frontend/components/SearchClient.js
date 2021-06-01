@@ -33,28 +33,53 @@ function SearchClient({
         return defaultClients
     }
 
-    return (
-        <Autocomplete 
-            multiple
-            limitTags={2}
-            options={clients}
-            defaultValue={setDefaultValues()}
-            getOptionLabel={(option) => option.name}
-            renderOption={(option) => (
-                <Typography>
-                    {option.name} - {option.contact.phone}
-                </Typography>
-            )}
-            onChange={handleChange}
-            renderInput={(params) => (
-                <TextField 
-                    {...params} 
-                    label='Elija un cliente'
-                    variant='filled'
-                />
-            )}
-        />
-    )
+    if(selectedClients !== null) {
+        return (
+            <Autocomplete 
+                multiple
+                limitTags={2}
+                options={clients}
+                defaultValue={setDefaultValues()}
+                getOptionLabel={(option) => option.name}
+                renderOption={(option) => (
+                    <Typography>
+                        {option.name} - {option.contact.phone}
+                    </Typography>
+                )}
+                onChange={handleChange}
+                renderInput={(params) => (
+                    <TextField 
+                        {...params} 
+                        label='Elija un cliente'
+                        variant='filled'
+                    />
+                )}
+            />
+        )
+    }
+    else {
+        return (
+            <Autocomplete 
+                multiple
+                limitTags={2}
+                options={clients}
+                getOptionLabel={(option) => option.name}
+                renderOption={(option) => (
+                    <Typography>
+                        {option.name} - {option.contact.phone}
+                    </Typography>
+                )}
+                onChange={handleChange}
+                renderInput={(params) => (
+                    <TextField 
+                        {...params} 
+                        label='Elija un cliente'
+                        variant='filled'
+                    />
+                )}
+            />
+        )
+    }
 }
 
 export default SearchClient

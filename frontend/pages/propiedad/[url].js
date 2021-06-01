@@ -144,6 +144,9 @@ const useStyles = makeStyles(({
     },
     description: {
         margin: 10
+    },
+    a: {
+        textDecoration: 'none'
     }
 }))
 
@@ -159,6 +162,8 @@ export default function SinglePropertyPage(){
 
     if(loading) return (<LoadingCircle />)
     if(error) return `Error! ${error.message}`
+
+    console.log(data)
 
     const property = data.getProperty.property
     const relatedProperties = data.getProperty.relatedProperties
@@ -221,11 +226,15 @@ export default function SinglePropertyPage(){
                     switch(n.type){
                         case 'bulleted-list': return(
                             <ul key={i}>
-                                {n.children.map((children, i) => {
-                                    if(children.bold) return <li key={i}><Typography gutterBottom><strong>{children.text}</strong></Typography></li>
-                                    if(children.italic) return <li key={i}><Typography gutterBottom><em>{children.text}</em></Typography></li>
-                                    if(children.underline) return <li key={i}><Typography gutterBottom><u>{children.text}</u></Typography></li>
-                                    return <li key={i}><Typography gutterBottom>{children.text}</Typography></li>
+                                {n.children.map((firstChild, i) => {
+                                    console.log(firstChild)
+                                    if(firstChild.type === 'list-item'){
+                                        return(
+                                            <li key={i}>
+                                                {firstChild.children[0].text}
+                                            </li>
+                                        )
+                                    }
                                 })}  
                             </ul>           
                         ) 
@@ -251,11 +260,15 @@ export default function SinglePropertyPage(){
                         )
                         case 'numbered-list': return(
                             <ol key={i}>
-                                {n.children.map((children, i) => {
-                                    if(children.bold) return <li key={i}><Typography gutterBottom><strong>{children.text}</strong></Typography></li>
-                                    if(children.italic) return <li key={i}><Typography gutterBottom><em>{children.text}</em></Typography></li>
-                                    if(children.underline) return <li key={i}><Typography gutterBottom><u>{children.text}</u></Typography></li>
-                                    return <li key={i}><Typography gutterBottom>{children.text}</Typography></li>
+                                {n.children.map((firstChild, i) => {
+                                    console.log(firstChild)
+                                    if(firstChild.type === 'list-item'){
+                                        return(
+                                            <li key={i}>
+                                                {firstChild.children[0].text}
+                                            </li>
+                                        )
+                                    }
                                 })}  
                             </ol>           
                         )
@@ -319,7 +332,9 @@ export default function SinglePropertyPage(){
                 }
             </div>
             {/* Contact Button */}
-            <GreenButton>Contactar</GreenButton>
+            <a className={classes.a} target='_blank' href='https://api.whatsapp.com/send?phone=+526653922230'>
+                <GreenButton>Contactar</GreenButton>
+            </a>
             {/* Social Media Icons */}
             <Grid container className={classes.socialMediaContainer}>
                 <Grid item xs={12} className={classes.socialMediaGridItem}>
