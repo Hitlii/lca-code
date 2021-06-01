@@ -5,9 +5,11 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         position: 'relative',
         display: 'flex',
         flexDirection: 'row',
-        width: 347,
+        maxWidth: 600,
+        minWidth: 300,
         height: 178,
         padding: 0,
+        margin: 'auto',
         marginBottom: 10,
     },
     coverDiv: {

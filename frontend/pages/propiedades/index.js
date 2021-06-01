@@ -102,6 +102,9 @@ const useStyles = makeStyles((theme) => ({
     color: "red",
     justifyContent: "center",
   },
+  cards: {
+    margin:'auto'
+  }
 
 }));
 
@@ -280,7 +283,8 @@ export default function AllPropertiesPage(props) {
       resetPageNumber();
 
     }
-    
+    setShowOrderComponent(false)
+    setShowFilterComponent(false)
     
 
   }
@@ -348,17 +352,18 @@ export default function AllPropertiesPage(props) {
     </Grid>
       
 
-      <Grid container justify="center">
+      <Grid container justify="center" >
       {stateNoFound ? (
         <NoFoundComponent search={filterProperty.values.search} />
       ) : (
         properties.map((property) => {
           return (
+            <Grid item xs={12} className={classes.cards} key={property._id}>
             <PropertyCard
-              key={property._id}
               orientation="horizontal"
               property={property}
             />
+            </Grid>
           );
         })
       )}
