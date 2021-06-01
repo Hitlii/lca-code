@@ -86,7 +86,6 @@ const useStyles = makeStyles(({
     ticketDiv: {
         padding: 12,
         display: 'flex',
-        flexDirection: 'column',
     },
     backButton: {
         position: 'absolute',
@@ -182,18 +181,18 @@ export default function AdminSinglePropertyPage(){
                 Dueño
             </Typography>
             <Divider className={classes.divider} />
-            <div className={classes.ticketDiv}>
+            <Grid container>
                 {adminProperty.vendors.map((vendor,i)=>{
                     return(
-                        <div key={vendor._id}>
+                        <Grid item xs={12} key={vendor._id}>
                             <ClientCard
                                 client={vendor}
                             />
                             {i !== adminProperty.vendors.length - 1 && <Divider className={classes.divider} />}
-                        </div>
+                        </Grid>
                     )
                 })}
-            </div>
+            </Grid>
             <Typography className={classes.header}>
                 Comprador
             </Typography>
