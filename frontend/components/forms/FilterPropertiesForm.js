@@ -84,8 +84,6 @@ function FilterPropertiesForm(props) {
   const cities = ["Tecate", "Ensenada", "Rosarito", "Tijuana", "Mexicali"];
 
 
-
-
   return (
     <div>
       <Grid container className={classes.root}>
@@ -167,9 +165,8 @@ function FilterPropertiesForm(props) {
                 <Typography gutterBottom >Tipo</Typography>
               </Grid>
                {types.map((type, index) =>
-                <Grid item xs={4}>             
+                <Grid item xs={4} key={type}>             
                     <FilterButton
-                      key={type}
                       name={type}
                       text={type}
                       index={index}
@@ -184,9 +181,8 @@ function FilterPropertiesForm(props) {
                 <Typography gutterBottom >Estado</Typography>
               </Grid>
               {status.map((type, index) =>
-                <Grid item xs={4}>             
+                <Grid item xs={4} key={type}>             
                     <FilterButton
-                      key={type}
                       name={type}
                       text={type}
                       index={index}
@@ -200,9 +196,8 @@ function FilterPropertiesForm(props) {
                 <Typography gutterBottom >Ciudad</Typography>
               </Grid>
                {cities.map((type, index) =>
-                <Grid item xs={4}>             
+                <Grid item xs={4} key={type}>             
                     <FilterButton
-                      key={type}
                       name={type}
                       text={type}
                       index={index}
@@ -218,13 +213,13 @@ function FilterPropertiesForm(props) {
               
               <Grid item xs={6}>
                 <TextField
-                  id="price.minPrice"
-                  name="price.minPrice"
+                  id="minPrice"
+                  name="minPrice"
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
                   onChange={props.filterProperty.handleChange}
-                  value={props.filterProperty.values.price.minPrice}
+                  value={props.filterProperty.values.minPrice}
                   helperText={props.filterProperty.errors.minArea? "Introduce el precio mínimo":null}
                   label="Min"
                   error={props.filterProperty.errors.minPrice? true:false}
@@ -232,14 +227,14 @@ function FilterPropertiesForm(props) {
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="price.maxPrice"
-                  name="price.maxPrice"
+                  id="maxPrice"
+                  name="maxPrice"
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
                   helperText={props.filterProperty.errors.minArea? "Introduce el precio máximo":null}
                   onChange={props.filterProperty.handleChange}
-                  value={props.filterProperty.values.price.maxPrice}
+                  value={props.filterProperty.values.maxPrice}
                   error={props.filterProperty.errors.maxPrice? true:false}
                   label="Máx"
                 />
@@ -252,14 +247,14 @@ function FilterPropertiesForm(props) {
               </Grid>       
               <Grid item xs={6}>
                 <TextField
-                  id="area.minArea"
-                  name="area.minArea"
+                  id="minArea"
+                  name="minArea"
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
                   helperText={props.filterProperty.errors.minArea? "Introduce el área minima":null}
                   onChange={props.filterProperty.handleChange}
-                  value={props.filterProperty.values.area.minArea}
+                  value={props.filterProperty.values.minArea}
                   error={props.filterProperty.errors.minArea? true:false}
                   label="Min"
                 />
@@ -267,14 +262,14 @@ function FilterPropertiesForm(props) {
 
               <Grid item xs={6}>
                 <TextField
-                  id="area.maxArea"
-                  name="area.maxArea"
+                  id="maxArea"
+                  name="maxArea"
                   type="number"
                   fullWidth
                   inputProps={{step:"0.01"}}
                   helperText={props.filterProperty.errors.maxArea? "Introduce el área maxima":null }
                   onChange={props.filterProperty.handleChange}
-                  value={props.filterProperty.values.area.maxArea}
+                  value={props.filterProperty.values.maxArea}
                   error={props.filterProperty.errors.maxArea? true:false}
                   label="Min"
                 />
@@ -295,56 +290,3 @@ function FilterPropertiesForm(props) {
 
 export default FilterPropertiesForm;
 
-
-{/* 
-
-      <form onSubmit={props.handleSubmit}>
-        <Grid container spacing={2}>
-          <Typography className={classes.marginText}>Zona</Typography>
-          <Grid item xs={4}>
-
-               
-          </Grid>
-          <Grid item xs={4}>
-          
-
-              
-          </Grid>
-               
-            </Grid>
-
-           
-
-            <Typography className={classes.marginText}>Estado</Typography>
-              {status.map((type, index) => {
-                return (
-                    <FilterButton
-                      key={type}
-                      name={type}
-                      text={type}
-                      index={index}
-                      onChange={props.onChangeStatus}
-                      stateButton={props.stateStatusButton[index]}
-                    />
-                );
-              })}
-            <Typography className={classes.marginText}>Ciudad</Typography>
-              {cities.map((type, index) => {
-                return (
-                    <FilterButton
-                      key={type}
-                      name={type}
-                      text={type}
-                      index={index}
-                      onChange={props.onChangeCities}
-                      stateButton={props.stateCitiesButton[index]}
-                    />
-                );
-              })}
-
-               
-
-       
-
-          </Grid>
-        </form> */}

@@ -260,7 +260,7 @@ export const GET_PROPERTY = gql`
           }
         }
         meta {
-          url
+
           description
         }
         isFeatured

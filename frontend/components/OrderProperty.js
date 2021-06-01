@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 function OrderProperty(props) {
   const classes = useStyles();
-
   return (
     <Grid container spacing={2} className={classes.root}>
       <Grid item xs={12}>
