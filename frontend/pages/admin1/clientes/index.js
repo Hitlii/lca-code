@@ -4,6 +4,8 @@ import client from "../../../lib/apollo-client";
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 
+import Link from 'next/link'
+
 import ClientCard from '../../../components/cards/ClientCard'
 import NavBar from '../../../components/bars/NavBar'
 
@@ -103,9 +105,11 @@ export default function AllClientsPage(props){
                     </div>
                 )
             })}
-            <IconButton href='/admin1/clientes/post-cliente' className={classes.addButton}>
-              <AddCircleIcon className={classes.addIcon} />
-            </IconButton>
+            <Link href='/admin1/clientes/post-cliente'>
+                <IconButton className={classes.addButton}>
+                    <AddCircleIcon className={classes.addIcon} />
+                </IconButton>
+            </Link>
             <NavBar/>
         </div>
     )

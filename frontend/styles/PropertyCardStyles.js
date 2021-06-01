@@ -13,6 +13,7 @@ export const HorizontalPropertyCardStyle = makeStyles(({
     coverDiv: {
         height: 178,
         width: 169,
+        cursor: 'pointer',
     },
     blueTag:{
         zIndex: 2,
@@ -80,8 +81,9 @@ export const HorizontalPropertyCardStyle = makeStyles(({
     },
     statusText: {
         color: 'white',
-        padding: '5px 10px',
-        fontSize: 10,
+        paddingLeft: 10,
+        paddingTop: 2,
+        fontSize: 16,
         fontFamily: 'Bebas Neue'
     },
     area: {
@@ -120,6 +122,7 @@ export const VerticalPropertyCardStyle = makeStyles(({
         height: 219,
         width: 207,
         marginBottom: 5,
+        cursor: 'pointer',
     },
     blueTag:{
         zIndex: 2,

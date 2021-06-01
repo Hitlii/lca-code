@@ -11,7 +11,9 @@ import {
     Typography,
 } from '@material-ui/core'
 
-import { drawerStyles, StyledPaper } from '../../styles/DrawerStyles'
+import DeleteButton from '../buttons/DeleteButton'
+
+import { drawerStyles, StyledPaper, DeletePaper } from '../../styles/DrawerStyles'
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -44,9 +46,15 @@ function ClientCard({ client }) {
 
     const router = useRouter()
     const [options, showOptions] = useState(false)
+    const [deleteDrawer, setDeleteDrawer] = useState(false)
 
     function onClick() {
         showOptions(current => !current)
+    }
+
+    function onClickDelete() {
+        onClick()
+        setDeleteDrawer(current => !current)
     }
 
     function onEditClick() {
@@ -55,7 +63,7 @@ function ClientCard({ client }) {
             query: { ID: client._id }
         })
     }
-
+    
     const [deleteClient] = useMutation(DELETE_CLIENT, {
         update (
         _,
@@ -70,6 +78,7 @@ function ClientCard({ client }) {
 
     function onDeleteClient() {
         deleteClient()
+        onClickDelete()
         onClick()
         router.push('/admin1/clientes')
     }
@@ -124,13 +133,24 @@ function ClientCard({ client }) {
                 <Divider className={drawerClasses.divider}/>
                 <IconButton 
                     className={drawerClasses.drawerButton}
-                    onClick={onDeleteClient}
+                    onClick={onClickDelete}
                 >
                     <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
                     <Typography className={drawerClasses.deleteText}>
                         Eliminar
                     </Typography>
                 </IconButton>
+            </Drawer>
+            <Drawer
+                PaperProps={{ component: DeletePaper }}
+                anchor='bottom'
+                open={deleteDrawer}
+                onClose={onClickDelete}
+            >
+                <Typography className={drawerClasses.confirmText}>
+                    ¿Estás seguro?
+                </Typography>
+                <DeleteButton onClick={onDeleteClient}/>
             </Drawer>
         </>
     )

@@ -6,9 +6,10 @@ import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { GET_ADMIN_PROPERTY } from '../../../graphql/queries'
 
+import ClientCard from '../../../components/cards/ClientCard'
+import LoadingCircle from '../../../components/LoadingCircle'
 import GreenButton from '../../../components/buttons/GreenButton'
 import TicketCard from '../../../components/cards/TicketCard'
-import ClientCard from '../../../components/cards/ClientCard'
 
 import {
     Divider,
@@ -33,6 +34,7 @@ const useStyles = makeStyles(({
     img: {
         width: '100%',
         borderRadius: '0px 0px 15px 15px',
+        zIndex: 1
     },
     iconButton: {
         margin: 10,
@@ -81,6 +83,11 @@ const useStyles = makeStyles(({
         display: 'flex',
         justifyContent: 'space-between'
     }, 
+    ticketDiv: {
+        padding: 12,
+        display: 'flex',
+        flexDirection: 'column',
+    },
     backButton: {
         position: 'absolute',
         marginLeft: 10,
@@ -90,9 +97,11 @@ const useStyles = makeStyles(({
         height:40,
         backgroundColor: '#f2f2f2',
         color: '#4A4C4B',
+        zIndex: 2
     }, 
     backIcon: {
-        fontSize: 28
+        fontSize: 28,
+        zIndex: 2
     }
 }))
 
@@ -106,11 +115,10 @@ export default function AdminSinglePropertyPage(){
         }
     })
 
-    if (loading) return null
+    if (loading) return <LoadingCircle />
     if(error) return `Error! ${error}`
 
     const adminProperty = data.getAdminProperty
-    
 
     return(
         <div className={classes.root}>
@@ -122,7 +130,7 @@ export default function AdminSinglePropertyPage(){
                     className={classes.img}
                     src={'/'+adminProperty.media.images[0]} 
                     layout='responsive'
-                    width={700}
+                    width={360}
                     height={265}
                 />
             </div>
@@ -174,17 +182,34 @@ export default function AdminSinglePropertyPage(){
                 Dueño
             </Typography>
             <Divider className={classes.divider} />
-            <div className={classes.clientDiv}>
-                <ClientCard client={adminProperty.vendors[0]}/>
+            <div className={classes.ticketDiv}>
+                {adminProperty.vendors.map((vendor,i)=>{
+                    return(
+                        <div key={vendor._id}>
+                            <ClientCard
+                                client={vendor}
+                            />
+                            {i !== adminProperty.vendors.length - 1 && <Divider className={classes.divider} />}
+                        </div>
+                    )
+                })}
             </div>
-            <Divider className={classes.divider} />
             <Typography className={classes.header}>
                 Comprador
             </Typography>
-            <div className={classes.clientDiv}>
-                {adminProperty.tickets.length > 0 && <TicketCard 
-                    ticket={adminProperty.tickets[0]}
-                />}
+            <Divider className={classes.divider} />
+            <div className={classes.ticketDiv}>
+                {adminProperty.tickets.map((ticket,i)=>{
+                    return(
+                        <div key={ticket._id}>
+                            <TicketCard
+                                ticket={ticket}
+                                propertyId={adminProperty._id}
+                            />
+                            {i !== adminProperty.tickets.length - 1 && <Divider className={classes.divider} />}
+                        </div>
+                    )
+                })}
             </div>
         </div>
     )

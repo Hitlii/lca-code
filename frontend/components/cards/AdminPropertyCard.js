@@ -1,20 +1,23 @@
 import React, { useState} from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+
+import DeleteButton from '../buttons/DeleteButton'
 
 import { 
     Avatar,
     Card,
     CardContent,
-    CardMedia,
     Divider,
     Drawer,
     IconButton,
     Typography
 } from '@material-ui/core'
 
-import { drawerStyles, StyledPaper } from '../../styles/DrawerStyles'
+import { drawerStyles, StyledPaper, DeletePaper } from '../../styles/DrawerStyles'
 import { makeStyles } from '@material-ui/core';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -79,10 +82,41 @@ function AdminPropertyCard({ property }) {
     const classes = useStyles();
     const drawerClasses = drawerStyles()
     const [options, showOptions] = useState(false)
+    const [deleteDrawer, setDeleteDrawer] = useState(false)
     const router = useRouter()
+
+    const [deleteProperty] = useMutation(DELETE_PROPERTY, {
+        update (
+        _,
+        { data }
+        ) {
+            console.log(data)
+        },
+        variables: {
+            _id: property._id
+        }
+    })
 
     function onClick() {
         showOptions(current => !current)
+    }
+    function onClickDelete() {
+        onClick()
+        setDeleteDrawer(current => !current)
+    }
+
+    function onDeleteProperty() {
+        deleteProperty()
+        onClickDelete()
+        onClick()
+        router.push('/admin1')
+    }
+
+    function onSellProperty() {
+        router.push({
+            pathname: '/admin1/ticket/post-pagare',
+            query: { ID: property._id }
+        })
     }
 
     function pickZoneDotColor(zone){
@@ -95,8 +129,6 @@ function AdminPropertyCard({ property }) {
     }
 
     const zoneDot = pickZoneDotColor(property.zone)
-
-    console.log(property.media.images[0])
 
     return (
         <>
@@ -139,7 +171,7 @@ function AdminPropertyCard({ property }) {
             >
                 <IconButton 
                     className={drawerClasses.drawerButton}
-                    href='/admin1/ticket/post-pagare'
+                    onClick={onSellProperty}
                 >
                     <MonetizationOnOutlinedIcon className={drawerClasses.createIcon}/>
                     <Typography className={drawerClasses.createText}>
@@ -154,15 +186,37 @@ function AdminPropertyCard({ property }) {
                     </Typography>
                 </IconButton>
                 <Divider className={drawerClasses.divider}/>
-                <IconButton className={drawerClasses.drawerButton}>
+                <IconButton className={drawerClasses.drawerButton} onClick={onClickDelete}>
                     <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
                     <Typography className={drawerClasses.deleteText}>
                         Eliminar 
                     </Typography>
                 </IconButton>
             </Drawer>
+
+            <Drawer
+                PaperProps={{ component: DeletePaper }}
+                anchor='bottom'
+                open={deleteDrawer}
+                onClose={onClickDelete}
+            >
+                <Typography className={drawerClasses.confirmText}>
+                    ¿Estás seguro?
+                </Typography>
+                <DeleteButton onClick={onDeleteProperty}/>
+            </Drawer>
         </>
     )
 }
+
+const DELETE_PROPERTY = gql`
+    mutation deleteProperty($_id: ID!) {
+        deleteProperty( _id: $_id) {
+            success
+            code
+            message
+        }
+    } 
+`
 
 export default AdminPropertyCard

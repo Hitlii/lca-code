@@ -199,20 +199,30 @@ export const GET_ADMIN_PROPERTY = gql `
       }
       tickets {
         _id
+        area
+        price
+        currency
+        emissionDate
+        promissory {
+          months
+          payment
+        }
+        paymentLocation
+        paymentAddress
         clients {
           _id
-        name
-        gender
-        birthday
-        contact {
-          email
-          phone
-        }
-        location {
-          state
-          city
-          address
-        }
+          name
+          gender
+          birthday
+          contact {
+            email
+            phone
+          }
+          location {
+           state
+            city
+            address
+          }
         }
       }
     }
@@ -287,6 +297,30 @@ export const GET_PROPERTY = gql`
           url
         }
       }
+    }
+  }
+`
+
+export const GET_TICKET = gql`
+  query getTicket($_id: ID!) {
+    getTicket(_id: $_id) {
+      _id 
+  propertyId
+  status
+  area
+    price
+    currency
+  	emissionDate
+    promissory{
+      months
+      payment
+    }
+    paymentLocation
+    paymentAddress
+    clients{
+      _id
+      name
+    }
     }
   }
 `

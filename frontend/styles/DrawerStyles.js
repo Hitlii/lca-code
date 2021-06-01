@@ -30,6 +30,22 @@ export const drawerStyles = makeStyles(({
     }, 
     divider: {
         backgroundColor: '#F2F2F2'
+    },
+    confirmText: {
+        display: 'flex',
+        justifyContent: 'center',
+        fontSize: 18,
+        fontWeight: 400,
+        color: 'black',
+        paddingTop: 20,
+    },
+    confirmTextIcon: {
+        display: 'flex',
+        justifyContent: 'center',
+        fontSize: 18,
+        fontWeight: 400,
+        color: 'black',
+        paddingTop: 20,
     }
 }))
 
@@ -42,6 +58,18 @@ export const StyledPaper = styled(Paper)({
     boxShadow: '0px -2px 4px rgba(0, 0, 0, 0.25)',
     paddingBottom: 20,
     maxWidth: 600,
+})
+
+export const DeletePaper = styled(Paper)({
+    display: 'flex',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    padding: 0,
+    borderRadius: '15px 15px 0px 0px',
+    boxShadow: '0px -2px 4px rgba(0, 0, 0, 0.25)',
+    paddingBottom: 20,
+    maxWidth: 600,
+    paddingBottom: 30,
 })
 
 export const StyledPaperLarge = styled(Paper)({
