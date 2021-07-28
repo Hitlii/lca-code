@@ -44,4 +44,7 @@ const ClientSchema = new Schema({
   }
 })
 
+
+// Defining indexes 
+ClientSchema.index({ name: 'text' })
 module.exports = mongoose.model('clients', ClientSchema)
