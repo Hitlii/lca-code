@@ -1,4 +1,5 @@
 const Property = require('../../models/properties')
+const Ticket = require('../../models/tickets')
 const ObjectId = require('mongoose').Types.ObjectId
 const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
@@ -106,6 +107,14 @@ module.exports = {
       // 409 Cannot delete property
       if (property.tickets.length > 0) {
         error = new Error('No puedes eliminar una propiedad que ya tiene tickets.')
+        error.solution = 'Si desea eliminar esta propiedad, primero deberá de eliminar los tickets'
+        error.code = 409
+        throw error
+      }
+
+      const ticket = await Ticket.findOne({propertyId: _id})
+      if (ticket) {
+        error = new Error('No puedes eliminar una propiedad con tickets en proceso.')
         error.solution = 'Si desea eliminar esta propiedad, primero deberá de eliminar los tickets'
         error.code = 409
         throw error
