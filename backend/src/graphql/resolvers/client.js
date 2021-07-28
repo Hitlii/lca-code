@@ -13,9 +13,15 @@ module.exports = {
         throw error
       }
     },
-    getClients: async () => {
+    getClients: async (_, { name }) => {
       try {
-        const clients = await Client.find({})
+        let search = {}
+
+        if(name)
+        search = { $text: { $search: name } }
+        
+      
+        const clients = await Client.find({...search})
         return clients || null
       } catch (error) {
         console.log(error)
