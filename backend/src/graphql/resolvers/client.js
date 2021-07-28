@@ -62,7 +62,7 @@ module.exports = {
         throw error
       }
 
-      // Find client to delete
+      // Find client to update
       const client = await Client.findById(ObjectId(_id))
 
       // Client not found
