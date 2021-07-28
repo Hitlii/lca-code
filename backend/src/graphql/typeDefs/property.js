@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express')
+const { gql } = require('apollo-server')
 
 module.exports = gql`
     extend type Mutation {
@@ -20,6 +20,8 @@ module.exports = gql`
         getAdminProperty(url: String!): Property
         "Returns the featured properties"
         getFeaturedProperties:[Property!]
+        "Returns all properties without pagination"
+        getAllProperties(isAdminCard: Boolean):[Property]
 
     }
     
