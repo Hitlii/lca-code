@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
-
+import client from '../../lib/apollo-client'
 
 import {
     Divider,
@@ -56,11 +56,9 @@ function ClientCard({ client }) {
         onClick()
         setDeleteDrawer(current => !current)
     }
-
     function onEditClick() {
         router.push({
-            pathname: '/admin1/clientes/edit-cliente',
-            query: { ID: client._id }
+            pathname: `/admin1/clientes/edit-cliente/${client._id}`
         })
     }
     
@@ -75,6 +73,7 @@ function ClientCard({ client }) {
             _id: client._id
         }
     })
+
 
     function onDeleteClient() {
         deleteClient()

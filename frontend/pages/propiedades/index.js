@@ -3,37 +3,35 @@ import React, { useState, useRef } from "react";
 // Material UI Imports ------------------------------
 
 import Divider from '@material-ui/core/Divider'
-
+import Grid from '@material-ui/core/Grid'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import FilledInput from '@material-ui/core/FilledInput'
+import InputAdornment from '@material-ui/core/InputAdornment'
 
 import {
   IconButton,
-  InputBase,
-  Paper,
   Drawer,
   Typography,
 } from "@material-ui/core";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { makeStyles } from "@material-ui/core/styles";
 import OrderFilterButton from "../../components/buttons/OrderFilterButton";
 import NoFoundComponent from "../../components/NoFoundComponent";
 //ICONS
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
 import SearchIcon from "@material-ui/icons/Search";
-//import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
-import FormControl from '@material-ui/core/FormControl'
-import InputLabel from '@material-ui/core/InputLabel'
-import FilledInput from '@material-ui/core/FilledInput'
-import InputAdornment from '@material-ui/core/InputAdornment'
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
-import client from "../../lib/apollo-client";
+//COMPONENET
+import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
+import PropertyCard from "../../components/cards/PropertyCard";
+import OrderProperty from "../../components/OrderProperty";
 import useFilterForm from "../../hooks/useFilterForm";
+
+//STYLE
 import {
-  drawerStyles,
   StyledPaperLarge,
   StyledPaper,
 } from "../../styles/DrawerStyles";
@@ -45,12 +43,8 @@ import {
 
 // Graph QL Imports ------------------------------
 
-import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
-import SentimentVeryDissatisfiedIcon from "@material-ui/icons/SentimentVeryDissatisfied";
-import PropertyCard from "../../components/cards/PropertyCard";
-import OrderProperty from "../../components/OrderProperty";
 
+import client from "../../lib/apollo-client";
 import { GET_PROPERTIES } from "../../graphql/queries";
 
 
@@ -109,7 +103,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AllPropertiesPage(props) {
   const classes = useStyles();
-  const router = useRouter();
   const [errors, setErrors] = useState();
   const pageNumber = useRef(1);
   const [properties, setProperties] = useState(props.properties);
@@ -242,6 +235,7 @@ export default function AllPropertiesPage(props) {
         }
       }
     });
+    
     if (
       filterProperty.values.minArea !== "" &&
       filterProperty.values.maxArea !== ""
@@ -267,11 +261,13 @@ export default function AllPropertiesPage(props) {
     e.preventDefault();
     let variables = getParamsFilterQuery();
     variables.pageNumber = 1;
+
     const { data } = await client.query({
       query: GET_PROPERTIES,
       variables,
     });
     pageNumber.current = 1;
+
     if (data.getProperties.length) {
       setProperties(data.getProperties);
       setStateNoFound(false);
@@ -281,6 +277,7 @@ export default function AllPropertiesPage(props) {
       resetPageNumber();
 
     }
+
     setShowOrderComponent(false)
     setShowFilterComponent(false)
 
@@ -298,6 +295,9 @@ export default function AllPropertiesPage(props) {
   function handleShowFilterComponent() {
     setShowFilterComponent((current) => !current);
   }
+
+
+
    return (
     <div>
       <Grid className={classes.root} spacing={3} container justify="center">
@@ -320,6 +320,7 @@ export default function AllPropertiesPage(props) {
               type="text"
               value={filterProperty.values.search}
               onChange={filterProperty.handleChange}
+              onKeyPress={(e)=>{if(e.key === 'Enter' ) handleSubmit(e)}}
               autoFocus
               fullWidth
               className={classes.search}
@@ -344,8 +345,6 @@ export default function AllPropertiesPage(props) {
         <span>{stateNoFound? 0: properties?properties.length:0} resultado(s) </span>
         <Divider/>
       </Grid>
-      
-
     </Grid>
       
 

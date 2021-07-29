@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import client from "../../../lib/apollo-client";
 import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
-
+import {GET_CLIENTS} from "../../../graphql/queries"
 import Link from 'next/link'
 
 import ClientCard from '../../../components/cards/ClientCard'
@@ -65,15 +65,15 @@ export default function AllClientsPage(props){
 
     const classes = useStyles()
     const router = useRouter()
-
+    const [clientName,setClientName]=useState()
+    const [clients,setClients]=useState(props.clients)
     const refreshData = () => {
         router.replace(router.asPath);
     }
 
-    useEffect(() => {
-        refreshData()
-    }, [props])
-
+    // useEffect(() => {
+    //     refreshData()
+    // }, [props])
 
     
     if(props.error) {
@@ -83,19 +83,37 @@ export default function AllClientsPage(props){
         )
     }
     
+    async function findClient(){
+        const { data } = await client.query({query: GET_CLIENTS,variables:{name:clientName}})
+        console.log(data)
+        setClients(data.getClients)
+    }
+
+    function onChange(e){ 
+        setClientName(e.target.value)
+        
+    }
+
+    function handleSubmit(e){
+        e.preventDefault()
+        findClient()
+    }
+    
     return(
         <div>
             <Paper className={classes.root} elevation={0}>
                 <InputBase
                     className={classes.input}
+                    onChange={onChange}
                     placeholder='Buscar Cliente'
+                    onKeyPress={(e)=>{if(e.key === "Enter"){handleSubmit(e)}}}
                     variant='outlined'
                 />
                 <IconButton type="submit" className={classes.iconButton}>
                     <SearchIcon />
                 </IconButton>
             </Paper>
-            {props.clients.map((client) => {
+            {clients.map((client) => {
                 return (
                     <div 
                         className={classes.clientCard}
@@ -107,6 +125,7 @@ export default function AllClientsPage(props){
                     </div>
                 )
             })}
+            
             <Link href='/admin1/clientes/post-cliente'>
                 <IconButton className={classes.addButton}>
                     <AddCircleIcon className={classes.addIcon} />
@@ -118,19 +137,8 @@ export default function AllClientsPage(props){
 }
 
 export async function getStaticProps(){
-    const GET_ALL_CLIENTS = gql`
-        query GetAllClients{
-            getClients{
-                _id
-                name
-                contact{
-                phone
-                email
-                }
-            }
-        }
-    `
-    const { data } = await client.query({query: GET_ALL_CLIENTS})
+
+    const { data } = await client.query({query: GET_CLIENTS})
     
     if(!data) return {
         props: {

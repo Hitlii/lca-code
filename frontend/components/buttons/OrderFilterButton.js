@@ -19,10 +19,12 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
     bottom: 61,
+    zIndex: 100,
     
   },
   button:{
-    textTransform:'lowercase'
+    textTransform:'lowercase',
+    
   }
 }));
 function OrderFilterButton({ onChangeOrder, onChangeFilter }) {
