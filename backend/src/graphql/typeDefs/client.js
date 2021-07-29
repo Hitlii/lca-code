@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express')
+const { gql } = require('apollo-server')
 
 module.exports = gql`
     type Client {
@@ -22,10 +22,11 @@ module.exports = gql`
     }
 
     extend type Query {
-        "Returns all registered clients"
-        getClients: [Client]
-        "Returns a client given its name"
+        "Returns all registered clients by name"
+        getClients(name:String): [Client]
+        "Returns a client by id"
         getClient(_id: ID!): Client
+
     }
 
      input ClientInput {

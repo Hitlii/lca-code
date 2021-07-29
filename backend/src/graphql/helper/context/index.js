@@ -6,7 +6,6 @@ module.exports.verifyUser = async (req) => {
     if (bearerHeader) {
       // Splits Bearer and Token
       const token = bearerHeader.split(' ')[1]
-      console.log('token===', token)
 
       //  Gets the payload
       const payload = jwt.verify(token, process.env.SUPER_SECRET)

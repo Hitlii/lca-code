@@ -1,4 +1,5 @@
 const Property = require('../../models/properties')
+const Ticket = require('../../models/tickets')
 const ObjectId = require('mongoose').Types.ObjectId
 const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
@@ -111,6 +112,14 @@ module.exports = {
         throw error
       }
 
+      const ticket = await Ticket.findOne({propertyId: _id})
+      if (ticket) {
+        error = new Error('No puedes eliminar una propiedad con tickets en proceso.')
+        error.solution = 'Si desea eliminar esta propiedad, primero deberá de eliminar los tickets'
+        error.code = 409
+        throw error
+      }
+
       // Deleting property.
       await Property.deleteOne({ _id: property._id })
 
@@ -201,7 +210,7 @@ module.exports = {
     getAdminProperties: combineResolvers(isAuthenticated, async (_, { filter, pagination }) => {
       const mongoSkip = pagination.pageNumber > 0 ? (pagination.pageNumber - 1) * PROPERTIES_PER_PAGE : 0
       let search = {}
-      if (filter.search) { search = { $text: { $search: filter.search } } }
+      if (filter && filter.search) { search = { $text: { $search: filter.search } } }
       try {
         const properties = await Property.find({ ...search }, ADMIN_PROPERTY_CARD).skip(mongoSkip).limit(PROPERTIES_PER_PAGE)
         return properties
@@ -239,6 +248,17 @@ module.exports = {
       } catch (error) {
         error.message = 'Error al cargar las propiedades destacadas'
         error.code = 400
+        throw error
+      }
+    },
+    getAllProperties: async (isAdminCard) =>{
+      try{  
+        const allProperties = await Property.find({}, isAdminCard? ADMIN_PROPERTY_CARD:CLIENT_PROPERTY_CARD).exec()
+        return allProperties
+      }catch(error){
+        error.message = 'Error al cargar todas las propiedades'
+        error.code= 400
+        throw error
       }
     }
 
