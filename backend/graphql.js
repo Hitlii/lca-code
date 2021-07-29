@@ -126,7 +126,7 @@ const server = new ApolloServer({
 mongoose.set('debug', true)
 mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
   .then(() => {
-    server.listen().then( url => console.log(`${url}`))
+    server.listen(8000).then( url => console.log(`${url}`))
   })
   .catch(err => console.error(err))
   

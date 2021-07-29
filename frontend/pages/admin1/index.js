@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_ADMIN_PROPERTIES } from '../../graphql/queries'
+import client from '../../lib/apollo-client'
 
 import {
   IconButton,
@@ -59,21 +60,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function AllAdminPropertiesPage(){
+function AllAdminPropertiesPage({ properties }){
 
   const classes = useStyles()
+  console.log(properties)
 
-  const { loading, data, error } = useQuery(GET_ADMIN_PROPERTIES, {
-    variables: { pagination:{pageNumber: 1}}
-  })
+  // const { loading, data, error } = useQuery(GET_ADMIN_PROPERTIES, {
+  //   variables: { pagination:{pageNumber: 1}}
+  // })
 
-  if(loading) return <LoadingCircle />
+  // if(loading) return <LoadingCircle />
 
-  if(error) {
-    return `Error! ${error}`
-  }
+  // if(error) {
+  //   return `Error! ${error}`
+  // }
 
-  const properties = data.getAdminProperties
+  //const properties = data.getAdminProperties
 
   return (
       <div>
@@ -107,6 +109,31 @@ function AllAdminPropertiesPage(){
         <NavBar />
     </div>
   )
+}
+
+// Codigo a utilizar cuando se arregle el problema de autorizacion
+export async function getStaticProps(){
+  const { data } = await client.query({
+    query: GET_ADMIN_PROPERTIES,
+    variables: {
+      pagination: {
+        pageNumber: 1
+      }
+    }
+  })
+
+  if (!data)
+    return {
+      props: {
+        error: "Error",
+      },
+    }
+
+  return {
+    props: {
+      properties: data.getAdminProperties
+    }
+  }
 }
 
 export default AllAdminPropertiesPage

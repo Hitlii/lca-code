@@ -4,7 +4,8 @@ import Image from 'next/image'
 
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
-import { GET_ADMIN_PROPERTY } from '../../../graphql/queries'
+import { GET_ADMIN_PROPERTY, GET_ALL_PROPERTIES } from '../../../graphql/queries'
+import client from '../../../lib/apollo-client'
 
 import ClientCard from '../../../components/cards/ClientCard'
 import LoadingCircle from '../../../components/LoadingCircle'
@@ -104,20 +105,20 @@ const useStyles = makeStyles(({
     }
 }))
 
-export default function AdminSinglePropertyPage(){
+export default function AdminSinglePropertyPage({ adminProperty }){
     const classes = useStyles()
     const router = useRouter()
 
-    const { data, loading, error } = useQuery(GET_ADMIN_PROPERTY, {
-        variables: { 
-            url: router.query.url
-        }
-    })
+    // const { data, loading, error } = useQuery(GET_ADMIN_PROPERTY, {
+    //     variables: { 
+    //         url: router.query.url
+    //     }
+    // })
 
-    if (loading) return <LoadingCircle />
-    if(error) return `Error! ${error}`
+    // if (loading) return <LoadingCircle />
+    // if(error) return `Error! ${error}`
 
-    const adminProperty = data.getAdminProperty
+    // const adminProperty = data.getAdminProperty
 
     return(
         <div className={classes.root}>
@@ -212,4 +213,45 @@ export default function AdminSinglePropertyPage(){
             </div>
         </div>
     )
+}
+
+// Codigo a utilizar cuando se arregle el problema de autorizacion
+export async function getStaticPaths() {
+    const { data } = await client.query({
+        query: GET_ALL_PROPERTIES,
+        variables: {
+            isAdminCard: true
+        }
+    })
+
+    const properties = data.getAllProperties
+
+    const paths = properties.map(property => ({
+        params: { url: property.meta.url }
+    }))
+
+    return {
+        paths, 
+        fallback: false
+    }
+}
+
+export async function getStaticProps({ params }) {
+    const { data } = await client.query({
+        query: GET_ADMIN_PROPERTY,
+        variables: { url: params.url }
+    })
+
+    if (!data)
+    return {
+      props: {
+        error: "Error",
+      },
+    }
+
+    return {
+        props: {
+            adminProperty: data.getAdminProperty,
+        }
+    }
 }
