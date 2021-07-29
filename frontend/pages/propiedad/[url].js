@@ -1,7 +1,8 @@
 import { Fragment, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
-import { GET_PROPERTY } from '../../graphql/queries'
+import { GET_PROPERTY, GET_ALL_PROPERTIES } from '../../graphql/queries'
+import client from '../../lib/apollo-client'
 
 import Image from 'next/image'
 import Link from 'next/link' 
@@ -43,7 +44,7 @@ const useStyles = makeStyles(({
     },
     img: {
         width: '100%',
-        borderRadius: '0px 0px 15px 15px',
+        borderRadius: '0px 0px 5px 5px',
         zIndex: 1
     },
     backButton: {
@@ -150,39 +151,38 @@ const useStyles = makeStyles(({
     }
 }))
 
-export default function SinglePropertyPage(){
+export default function SinglePropertyPage({ property, relatedProperties }){
     const classes = useStyles()
     const [map, setMap] = useState(false)
     const router = useRouter()
     const url = router.query.url
     
-    const { data, loading, error } = useQuery(GET_PROPERTY, { 
-        variables: { url: url }
-    })
+    // const { data, loading, error } = useQuery(GET_PROPERTY, { 
+    //     variables: { url: url }
+    // })
 
-    if(loading) return (<LoadingCircle />)
-    if(error) return `Error! ${error.message}`
+    // if(loading) return (<LoadingCircle />)
+    // if(error) return `Error! ${error.message}`
 
-    console.log(data)
-
-    const property = data.getProperty.property
-    const relatedProperties = data.getProperty.relatedProperties
-    const slateText = JSON.parse(property.description.text)
-    console.log(property)
+    // const property = data.getProperty.property
+    // const relatedProperties = data.getProperty.relatedProperties
+    // const slateText = JSON.parse(property.description.text)
     function onClickMap() { 
         setMap(current => !current)
     }
+
+    const slateText = JSON.parse(property.description.text)
      
     return(
         <div className={classes.root}>
-            {/* Back Button */}
+        {/* Back Button */}
             <Link href='/propiedades'>
                 <IconButton className={classes.backButton}>
                     <ChevronLeftIcon className={classes.backIcon}/>
                 </IconButton>
             </Link>
 
-            {/* Property Images */}
+            {/* Property Images*/}
             <Carousel
                 autoplay={true}
                 animation='fade'
@@ -199,7 +199,7 @@ export default function SinglePropertyPage(){
                                 src={'/'+image} 
                                 layout='responsive'
                                 width={600}
-                                height={337}
+                                height={600}
                             />
                         </div>
                     )
@@ -222,12 +222,10 @@ export default function SinglePropertyPage(){
             </div>
             <div className={classes.description}>
                 {slateText.map((n, i) => {
-                    console.log(n.type)
                     switch(n.type){
                         case 'bulleted-list': return(
                             <ul key={i}>
                                 {n.children.map((firstChild, i) => {
-                                    console.log(firstChild)
                                     if(firstChild.type === 'list-item'){
                                         return(
                                             <li key={i}>
@@ -261,7 +259,6 @@ export default function SinglePropertyPage(){
                         case 'numbered-list': return(
                             <ol key={i}>
                                 {n.children.map((firstChild, i) => {
-                                    console.log(firstChild)
                                     if(firstChild.type === 'list-item'){
                                         return(
                                             <li key={i}>
@@ -367,12 +364,14 @@ export default function SinglePropertyPage(){
                         <InstagramIcon className={classes.socialMediaIcon}/>
                     </a>
                 </Grid>
-            </Grid>
+            </Grid> 
             {/* Related Properties */}
+            {relatedProperties.length > 0 
+                && 
             <ZoneButton
                 href='#'
                 text='Relacionados'
-            />
+            />}
             <div className={classes.wrapper}>
             {relatedProperties.map((property => {
                 return (
@@ -386,4 +385,43 @@ export default function SinglePropertyPage(){
             </div>
         </div>
     )
+}
+
+export async function getStaticPaths() {
+    const { data } = await client.query({ 
+        query: GET_ALL_PROPERTIES, 
+        variables: {isAdminCard: false}
+    })
+    
+    const properties = data.getAllProperties
+
+    const paths = properties.map(property => ({
+        params: { url: property.meta.url }
+    }))
+
+    return { 
+        paths,
+        fallback: false
+    }
+}
+
+export async function getStaticProps({ params }) {
+    const { data } = await client.query({
+        query: GET_PROPERTY,
+        variables: { url: params.url }
+    })
+
+    if (!data)
+    return {
+      props: {
+        error: "Error",
+      },
+    };  
+
+    return {
+        props: {
+            property: data.getProperty.property,
+            relatedProperties: data.getProperty.relatedProperties
+        }
+    }
 }

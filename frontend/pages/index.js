@@ -3,6 +3,7 @@ import client from '../lib/apollo-client'
 import { GET_FEATURED_PROPERTIES } from '../graphql/queries'
 
 import MenuBar from '../components/bars/MenuBar'
+import HorizontalScrollDiv from '../components/HorizontalScrollDiv'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -24,13 +25,6 @@ const useStyles = makeStyles(({
     maxWidth: 766,
     maxHeight: 300,
     borderRadius: '0px 0px 15px 15px',
-  }, 
-  wrapper: {
-    maxHeight: 400,
-    display: 'flex',
-    overflowX: 'auto',
-    marginLeft: 10,
-
   }, 
   item: {
     marginRight: 5,
@@ -66,7 +60,7 @@ const Home = ({ properties }) => {
         href='#'
         text='Zona Comercial'
       />
-      <div className={classes.wrapper}>
+      <HorizontalScrollDiv>
         {comercial.map((property => {
           return (
             <div key={property.meta.url} className={classes.item}>
@@ -76,12 +70,12 @@ const Home = ({ properties }) => {
             </div>
           )
         }))}
-      </div>
+      </HorizontalScrollDiv>
       <ZoneButton
         href='#'
         text='Zona Campestre'
       />
-      <div className={classes.wrapper}>
+      <HorizontalScrollDiv>
         {country.map((property => {
           return (
             <div key={property.meta.url} className={classes.item}>
@@ -91,12 +85,12 @@ const Home = ({ properties }) => {
             </div>
           )
         }))}
-      </div>
+      </HorizontalScrollDiv>
       <ZoneButton
         href='#'
         text='Zona Urbana'
       />
-      <div className={classes.wrapper}>
+      <HorizontalScrollDiv>
         {residential.map((property => {
           return (
             <div key={property.meta.url} className={classes.item}>
@@ -106,8 +100,9 @@ const Home = ({ properties }) => {
             </div>
           )
         }))}
-      </div>
+      </HorizontalScrollDiv>
     </div>
+
   )
 }
 

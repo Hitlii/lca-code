@@ -33,7 +33,7 @@ const useStyles = makeStyles(({
     },
     img: {
         width: '100%',
-        borderRadius: '0px 0px 15px 15px',
+        borderRadius: '0px 0px 5px 5px',
         zIndex: 1
     },
     iconButton: {
@@ -129,7 +129,7 @@ export default function AdminSinglePropertyPage(){
                     className={classes.img}
                     src={'/'+adminProperty.media.images[0]} 
                     layout='responsive'
-                    width={360}
+                    width={265}
                     height={265}
                 />
             </div>

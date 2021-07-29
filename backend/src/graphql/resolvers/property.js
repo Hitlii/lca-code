@@ -222,6 +222,16 @@ module.exports = {
         throw error
       }
     }),
+    getAllProperties: async (isAdminCard) =>{
+      try{  
+        const allProperties = await Property.find({}, isAdminCard? ADMIN_PROPERTY_CARD:CLIENT_PROPERTY_CARD).exec()
+        return allProperties
+      }catch(error){
+        error.message = 'Error al cargar todas las propiedades'
+        error.code= 400
+        throw error
+      }
+    },
     getFeaturedProperties: async () => {
       try {
         const featuredProperties = await Property.find({ isFeatured: true }, CLIENT_PROPERTY_CARD).exec()

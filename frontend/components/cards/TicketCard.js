@@ -4,15 +4,15 @@ import { useRouter } from 'next/router'
 
 import {
     Divider,
-    Drawer,
     Grid,
     IconButton,
     Typography,
 } from '@material-ui/core'
 
-import DeleteButton from '../buttons/DeleteButton'
+import CardDrawer from '../drawers/CardDrawer'
+import DeleteDrawer from '../drawers/DeleteDrawer'
 
-import { drawerStyles, StyledPaper, DeletePaper } from '../../styles/DrawerStyles'
+import { drawerStyles } from '../../styles/DrawerStyles'
 
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined';
@@ -80,7 +80,7 @@ function TicketCard({ ticket, propertyId }) {
         setDeleteDrawer(current => !current)
     }
 
-    function onDeleteProperty() {
+    function onDeleteTicket() {
         deleteTicket()
         onClickDelete()
         onClick()
@@ -129,9 +129,7 @@ function TicketCard({ ticket, propertyId }) {
                     </Typography>
                 </Grid>
             </Grid>
-            <Drawer
-                PaperProps={{ component: StyledPaper }}
-                anchor='bottom'
+            <CardDrawer
                 open={options}
                 onClose={onClick}
             >
@@ -158,18 +156,12 @@ function TicketCard({ ticket, propertyId }) {
                         Eliminar
                     </Typography>
                 </IconButton>
-            </Drawer>
-            <Drawer
-                PaperProps={{ component: DeletePaper }}
-                anchor='bottom'
+            </CardDrawer>
+            <DeleteDrawer
                 open={deleteDrawer}
                 onClose={onClickDelete}
-            >
-                <Typography className={drawerClasses.confirmText}>
-                    ¿Estás seguro?
-                </Typography>
-                <DeleteButton onClick={onDeleteProperty}/>
-            </Drawer>
+                onDelete={onDeleteTicket}
+            />
         </>
     )
 }

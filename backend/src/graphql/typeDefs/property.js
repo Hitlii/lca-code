@@ -20,6 +20,8 @@ module.exports = gql`
         getAdminProperty(url: String!): Property
         "Returns the featured properties"
         getFeaturedProperties:[Property!]
+        "Returns all properties without pagination"
+        getAllProperties(isAdminCard: Boolean):[Property]
 
     }
     
@@ -240,5 +242,7 @@ module.exports = gql`
         property: Property,
         relatedProperties: [Property!]
     }
+
+    
 
 `

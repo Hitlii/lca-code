@@ -5,19 +5,19 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import DeleteButton from '../buttons/DeleteButton'
+import CardDrawer from '../drawers/CardDrawer'
+import DeleteDrawer from '../drawers/DeleteDrawer'
 
 import { 
     Avatar,
     Card,
     CardContent,
     Divider,
-    Drawer,
     IconButton,
     Typography
 } from '@material-ui/core'
 
-import { drawerStyles, StyledPaper, DeletePaper } from '../../styles/DrawerStyles'
+import { drawerStyles } from '../../styles/DrawerStyles'
 import { makeStyles } from '@material-ui/core';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     cover: {
         width: 100,
         height: 100,
-        borderRadius:15,
+        borderRadius:5,
         cursor: 'pointer',
     },
     button: {
@@ -163,9 +163,7 @@ function AdminPropertyCard({ property }) {
             </Card>
             
 
-            <Drawer
-                PaperProps={{ component: StyledPaper }}
-                anchor='bottom'
+            <CardDrawer
                 open={options}
                 onClose={onClick}
             >
@@ -192,19 +190,13 @@ function AdminPropertyCard({ property }) {
                         Eliminar 
                     </Typography>
                 </IconButton>
-            </Drawer>
+            </CardDrawer>
 
-            <Drawer
-                PaperProps={{ component: DeletePaper }}
-                anchor='bottom'
+            <DeleteDrawer
                 open={deleteDrawer}
                 onClose={onClickDelete}
-            >
-                <Typography className={drawerClasses.confirmText}>
-                    ¿Estás seguro?
-                </Typography>
-                <DeleteButton onClick={onDeleteProperty}/>
-            </Drawer>
+                onDelete={onDeleteProperty}
+            />
         </>
     )
 }

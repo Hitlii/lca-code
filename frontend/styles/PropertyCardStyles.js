@@ -17,42 +17,12 @@ export const HorizontalPropertyCardStyle = makeStyles(({
         width: 169,
         cursor: 'pointer',
     },
-    blueTag:{
-        zIndex: 2,
-        padding:0,
-        position:'absolute',
-        width: 141,
-        height: 24,
-        backgroundColor: '#01509D',
-        left: 28,
-        borderRadius: '15px 15px 0px 15px'
-    },
-    greenTag:{
-        zIndex: 2,
-        padding:0,
-        position:'absolute',
-        width: 140,
-        height: 24,
-        backgroundColor: '#6DB432',
-        left: 29,
-        borderRadius: '15px 15px 0px 15px'
-    },
-    redTag:{
-        zIndex: 2,
-        padding:0,
-        position:'absolute',
-        width: 122,
-        height: 24,
-        backgroundColor: '#E41E2B',
-        left: 47,
-        borderRadius: '15px 15px 0px 15px'
-    },
     cover: {
         zIndex: 1,
         height: 169,
         width: 169,
         marginTop: 9,
-        borderRadius: 15,
+        borderRadius: 5,
     }, 
     details: {
         display: 'flex',
@@ -126,35 +96,11 @@ export const VerticalPropertyCardStyle = makeStyles(({
         marginBottom: 5,
         cursor: 'pointer',
     },
-    blueTag:{
-        zIndex: 2,
-        position:'absolute',
-        width: 141,
-        height: 24,
-        borderRadius: '15px 15px 15px 0px',
-        backgroundColor: '#01509D'
-    },
-    greenTag:{
-        zIndex: 2,
-        position:'absolute',
-        width: 140,
-        height: 24,
-        borderRadius: '15px 15px 15px 0px',
-        backgroundColor: '#6DB432'
-    },
-    redTag:{
-        zIndex: 2,
-        position:'absolute',
-        width: 122,
-        height: 24,
-        borderRadius: '15px 15px 15px 0px',
-        backgroundColor: '#E41E2B'
-    },
     cover: {
         zIndex: 1,
         width: 207,
         height: 207,
-        borderRadius: 15,
+        borderRadius: 5,
         marginTop: 12,
     }, 
     details: {
@@ -182,7 +128,6 @@ export const VerticalPropertyCardStyle = makeStyles(({
         marginTop:5,
         marginBottom: 5,
         marginleft:0,
-    
         borderRadius: 15,
     },
     statusRedBackground: {
@@ -192,7 +137,6 @@ export const VerticalPropertyCardStyle = makeStyles(({
         marginTop:5,
         marginBottom: 10,
         marginleft:0,
-        
         borderRadius: 15,
     },
     statusText: {

@@ -282,10 +282,16 @@ export const GET_PROPERTY = gql`
       status
       type
       zone
+      area
       specialPrice
       onPayments
       price
       currency
+      location {
+        state
+        city
+        address
+      }
       media {
         images
       }
@@ -302,22 +308,33 @@ export const GET_TICKET = gql`
   query getTicket($_id: ID!) {
     getTicket(_id: $_id) {
       _id 
-  propertyId
-  status
-  area
-    price
-    currency
-  	emissionDate
-    promissory{
-      months
-      payment
+      propertyId
+      status
+      area
+      price
+      currency
+  	  emissionDate
+      promissory{
+        months
+        payment
+      }
+      paymentLocation
+      paymentAddress
+      clients{
+        _id
+        name
+      }
     }
-    paymentLocation
-    paymentAddress
-    clients{
+  }
+`
+
+export const GET_ALL_PROPERTIES = gql`
+  query getAllProperties($isAdminCard: Boolean) {
+    getAllProperties(isAdminCard: $isAdminCard) {
       _id
-      name
-    }
+      meta {
+        url
+      }
     }
   }
 `
