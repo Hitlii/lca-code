@@ -101,6 +101,36 @@ module.exports = {
         { new: true }
       )
 
+      // Search and update client-owned properties
+      const clientProperties = await Property.updateMany(
+        { 'vendors._id': client._id },
+        {
+          '$set': {
+            "vendors.$": {
+              '_id': client._id,
+              'name': updatedClient.name,
+              'contact.email': updatedClient.email,
+              'contact.phone': updatedClient.phone
+            }
+          }
+        })
+      console.log(clientProperties.n + ' properties found.')
+      console.log(clientProperties.nModified + ' properties updated.')
+
+      // Search and update client-owned tickets
+      const clientTickets = await Ticket.updateMany(
+        { 'clients._id': client._id }, 
+        {
+          '$set': {
+            'clients.$': {
+              '_id': client._id,
+              'name': updatedClient.name
+            }
+          }
+        })
+      console.log(clientTickets.n + ' ticket(s) found.')
+      console.log(clientTickets.nModified + ' ticket(s) updated.')
+
       // Return updated fields
       return {
         code: 200,
