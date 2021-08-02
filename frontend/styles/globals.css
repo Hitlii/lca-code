@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300&display=swap');  
 :root {
-    --mesenger-blue: #2196F3
+    --mesenger-blue: #2196F3;
+    --gray6: #F2F2F2;
+    --gray-hover: #bdbdbd;
+    --neutral-light: #4A4C4B;
+    --whatsapp-color: #4CAF50;
+    --green-hover: #2e7d32;
 }
 
 body{
@@ -8,6 +13,9 @@ body{
     padding-bottom: 120px;
     margin:0;
     font-family: Open Sans;    
+}
+a {
+  text-decoration: none;
 }
 
 a:hover {

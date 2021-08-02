@@ -1,19 +1,17 @@
 import { Fragment, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
 import { GET_PROPERTY, GET_ALL_PROPERTIES } from '../../graphql/queries'
 import client from '../../lib/apollo-client'
 
 import Image from 'next/image'
 import Link from 'next/link' 
 
-import GreenButton from '../../components/buttons/GreenButton'
-import LoadingCircle from '../../components/LoadingCircle'
+import Carousel from 'react-material-ui-carousel'
+import GreenLgButton from '../../components/GreenLgButton'
+import HorizontalScroll from '../../components/HorizontalScroll'
 import Map from '../../components/map'
 import PropertyCard from '../../components/cards/PropertyCard'
-import ZoneButton from '../../components/buttons/ZoneButton'
-
-import Carousel from 'react-material-ui-carousel'
+import ZoneTag from '../../components/ZoneTag'
 
 import {
     Grid,
@@ -113,13 +111,6 @@ const useStyles = makeStyles(({
         fontSize: 34,
         color: lightNeutral
     },
-    wrapper: {
-        maxHeight: 360,
-        display: 'flex',
-        overflowX: 'auto',
-        marginLeft: 10,
-        marginTop: 20
-    },
     wrapperItem: {
         marginRight: 5
     }, 
@@ -155,18 +146,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
     const classes = useStyles()
     const [map, setMap] = useState(false)
     const router = useRouter()
-    const url = router.query.url
-    
-    // const { data, loading, error } = useQuery(GET_PROPERTY, { 
-    //     variables: { url: url }
-    // })
 
-    // if(loading) return (<LoadingCircle />)
-    // if(error) return `Error! ${error.message}`
-
-    // const property = data.getProperty.property
-    // const relatedProperties = data.getProperty.relatedProperties
-    // const slateText = JSON.parse(property.description.text)
     function onClickMap() { 
         setMap(current => !current)
     }
@@ -175,7 +155,6 @@ export default function SinglePropertyPage({ property, relatedProperties }){
      
     return(
         <div className={classes.root}>
-        {/* Back Button */}
             <Link href='/propiedades'>
                 <IconButton className={classes.backButton}>
                     <ChevronLeftIcon className={classes.backIcon}/>
@@ -329,9 +308,11 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 }
             </div>
             {/* Contact Button */}
-            <a className={classes.a} target='_blank' href='https://api.whatsapp.com/send?phone=+526653922230'>
-                <GreenButton>Contactar</GreenButton>
-            </a>
+            <Link href='https://api.whatsapp.com/send?phone=+526653922230' passHref>
+                <a target='_blank'>
+                    <GreenLgButton>Contactar</GreenLgButton>
+                </a>
+            </Link>
             {/* Social Media Icons */}
             <Grid container className={classes.socialMediaContainer}>
                 <Grid item xs={12} className={classes.socialMediaGridItem}>
@@ -340,39 +321,49 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                     </Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.socialMediaGridItem}>
-                    <a target="_blank" href='https://www.facebook.com/lcabienesraices'>
-                        <FacebookIcon className={classes.socialMediaIcon} />
-                    </a>
+                    <Link href='https://www.facebook.com/lcabienesraices' passHref>
+                        <a target="_blank">
+                            <FacebookIcon className={classes.socialMediaIcon} />
+                        </a>
+                    </Link>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <a target="_blank" href='https://www.tiktok.com/@lcabienesraices?_d=secCgYIASAHKAESMgowYT1TrB3ng6pzY72Dpd5OkxEysU%2BHzTSImHyPRc6vk9fandDCg5slJJ2OCL4rxcSTGgA%3D&_r=1&checksum=2f1cbed0b1a1be3ba092cf36c081a5f3ac54b254ab2aa90055a0be7bede6a117&language=es&sec_uid=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&sec_user_id=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&share_app_id=1233&share_author_id=6915514760588149766&share_link_id=202F5DC7-9C7C-45E2-8ADD-CABE60553F51&source=h5_m&tt_from=copy&u_code=dgd0bm0e8e085e&user_id=6915514760588149766&utm_campaign=client_share&utm_medium=ios&utm_source=copy'>
-                        <IoLogoTiktok className={classes.socialMediaIcon} />
-                    </a>
+                    <Link href='https://www.tiktok.com/@lcabienesraices?_d=secCgYIASAHKAESMgowYT1TrB3ng6pzY72Dpd5OkxEysU%2BHzTSImHyPRc6vk9fandDCg5slJJ2OCL4rxcSTGgA%3D&_r=1&checksum=2f1cbed0b1a1be3ba092cf36c081a5f3ac54b254ab2aa90055a0be7bede6a117&language=es&sec_uid=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&sec_user_id=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&share_app_id=1233&share_author_id=6915514760588149766&share_link_id=202F5DC7-9C7C-45E2-8ADD-CABE60553F51&source=h5_m&tt_from=copy&u_code=dgd0bm0e8e085e&user_id=6915514760588149766&utm_campaign=client_share&utm_medium=ios&utm_source=copy' passHref>
+                        <a target="_blank">
+                            <IoLogoTiktok className={classes.socialMediaIcon} />
+                        </a>
+                    </Link>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <a target="_blank" href='https://www.youtube.com/channel/UCej0jSusZmWgqmUDey8UeJQ'>
-                        <YouTubeIcon className={classes.socialMediaIcon}/>
-                    </a>
+                    <Link href='https://www.youtube.com/channel/UCej0jSusZmWgqmUDey8UeJQ' passHref>
+                        <a target="_blank">
+                            <YouTubeIcon className={classes.socialMediaIcon}/>
+                        </a>
+                    </Link>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <a target="_blank" href='https://www.google.com/maps/place/LCA+Bienes+Raices/@32.5661397,-116.590919,17z/data=!3m1!4b1!4m5!3m4!1s0x80d90d6db4b0bd7d:0xcc6fe9ea04043c0e!8m2!3d32.5661397!4d-116.5887303'>
-                        <IoLogoGoogleplus className={classes.socialMediaIcon} />
-                    </a>
+                    <Link href='https://www.google.com/maps/place/LCA+Bienes+Raices/@32.5661397,-116.590919,17z/data=!3m1!4b1!4m5!3m4!1s0x80d90d6db4b0bd7d:0xcc6fe9ea04043c0e!8m2!3d32.5661397!4d-116.5887303' passHref>
+                        <a target="_blank">
+                            <IoLogoGoogleplus className={classes.socialMediaIcon} />
+                        </a>
+                    </Link>
                 </Grid>
                 <Grid item xs={3} className={classes.socialMediaGridItem}>
-                    <a target="_blank" href='https://www.instagram.com/lca_bienesraices/'>
-                        <InstagramIcon className={classes.socialMediaIcon}/>
-                    </a>
+                    <Link href='https://www.instagram.com/lca_bienesraices/' passHref>
+                        <a target="_blank">
+                            <InstagramIcon className={classes.socialMediaIcon}/>
+                        </a>
+                    </Link>
                 </Grid>
             </Grid> 
             {/* Related Properties */}
             {relatedProperties.length > 0 
                 && 
-            <ZoneButton
+            <ZoneTag
                 href='#'
                 text='Relacionados'
             />}
-            <div className={classes.wrapper}>
+            <HorizontalScroll>
             {relatedProperties.map((property => {
                 return (
                     <div key={property._id} className={classes.wrapperItem}>
@@ -382,7 +373,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                     </div>
                 )
             }))}
-            </div>
+            </HorizontalScroll>
         </div>
     )
 }

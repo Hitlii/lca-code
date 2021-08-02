@@ -1,5 +1,5 @@
 import React from "react";
-import MenuBar from "../components/bars/MenuBar";
+import Navbar from '../components/Navbar'
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography"
@@ -20,8 +20,8 @@ const useStyles = makeStyles({
 function Servicios() {
   const classes = useStyles();
   return (
-    <div>
-      <MenuBar />
+    <div className={classes.root}>
+      <Navbar />
 
       <main className={classes.root} role="main">
         <div className={classes.text}>

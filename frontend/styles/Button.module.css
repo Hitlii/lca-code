@@ -1,0 +1,66 @@
+.circular_btn {
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--gray6);
+    color: var(--neutral-light);
+    margin: 5px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+.circular_btn:hover {
+    background-color: var(--gray-hover);
+}
+.circular_btn:focus {
+    background-color: var(--gray-hover);
+}
+
+
+.grey_md_btn {
+    border: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 15px;
+    background-color: var(--gray6);
+    cursor: pointer;
+    color: var(--neutral-light);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 5px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.grey_md_btn:hover {
+    background-color: var(--gray-hover);
+}
+.grey_md_btn:focus {
+    background-color: var(--gray-hover);
+}
+
+
+.green_lg_btn {
+    border: none;
+    width: 320px;
+    height: 40px;
+    border-radius: 15px;
+    background-color: var(--whatsapp-color);
+    cursor: pointer;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+.green_lg_btn:hover {
+    background-color: var(--green-hover);
+}
+.green_lg_btn:focus {
+    background-color: var(--green-hover);
+}

@@ -7,7 +7,6 @@ module.exports = {
     googleMapsAPIKey: 'AIzaSyDVEF5nE9KpC2qQ6mKLly5eYkiXwMnoDqs'
   },
   images: {
-    loader: 'imgix',
-    path: 'http://localhost:8000',
+    
   }
 }

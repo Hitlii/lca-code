@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import MenuBar from "../components/bars/MenuBar";
+import Navbar from '../components/Navbar'
 import Grid from "@material-ui/core/Grid"
 import Typography from "@material-ui/core/Typography"
 
@@ -8,8 +8,8 @@ const useStyles = makeStyles({
   root: {
     maxWidth: 600,
     minWidth: 320,
-    margin:'auto',
-    padding: 20,
+    marginRight: 'auto',
+    marginLeft: 'auto',
     textAlign:'justify',
     
   }, 
@@ -20,8 +20,8 @@ function Nosotros() {
   const classes = useStyles();
 
   return (
-    <div>
-      <MenuBar />
+    <div className={classes.root}>
+      <Navbar />
         <main className={classes.root} role="main">
         <div className={classes.text}>
           <Typography variant="h2">Nosotros</Typography>
