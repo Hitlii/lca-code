@@ -14,24 +14,10 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core'
-import SubmitButton from '../buttons/GreenButton'
-import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        maxWidth: 600,
-        minWidth: 320,
-        margin: 'auto',
-        padding: 10,
-    },
-    map: {
-        display: 'float'
-    },
-    multiline: {
-        width: 320,
-        marginBottom: 20
-    }
-}))
+import SubmitButton from '../GreenLgButton'
+
+import { useStyles, defaultInputProps ,defaultTypoProps, requiredInputs } from './styles'
 
 function ClientForm ({ editClient }) {
     const classes = useStyles()
@@ -107,25 +93,6 @@ function ClientForm ({ editClient }) {
         },
         variables: formikInput.values
     })
-
-    const defaultInputProps = {
-        fullWidth: true,
-        size: 'medium',
-        margin: 'dense',
-        variant: 'filled',
-    }
-    
-    const defaultTypoProps = {
-        align: 'left',
-        display: 'block',
-        gutterBottom: true,
-        variant: 'h5'
-    }
-    
-    const requiredInputs ={
-        required: true,
-        title: 'Por favor, llene este campo.'
-    }
 
     return (
         <div className={classes.root}>

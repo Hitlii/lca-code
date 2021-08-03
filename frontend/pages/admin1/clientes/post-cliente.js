@@ -1,9 +1,9 @@
 // Estara el formulario de clientes
 import {Fragment} from 'react'
-import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
-import { GET_CLIENT } from '../../../graphql/queries'
-import ClientForm from '../../../components/forms/ClientForm'
+import ClientForm from '../../../components/ClientForm'
+
+import Link from 'next/link'
+
 import {
     AppBar,
     IconButton,
@@ -49,9 +49,11 @@ export default function PostClientPage(){
         <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className={classes.iconButton} href='/admin1/clientes'>
-                        <ChevronLeftIcon className={classes.icon}/>
-                    </IconButton>
+                    <Link href='/admin1/clientes'>
+                        <IconButton className={classes.iconButton}>
+                            <ChevronLeftIcon className={classes.icon}/>
+                        </IconButton>
+                    </Link>
                     <Typography className={classes.typo}>
                         Agregar cliente
                     </Typography>

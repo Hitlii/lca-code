@@ -1,16 +1,14 @@
 import React from 'react'
 
-import Image from 'next/image'
-
-import { useRouter } from 'next/router'
-import { useQuery } from '@apollo/client'
 import { GET_ADMIN_PROPERTY, GET_ALL_PROPERTIES } from '../../../graphql/queries'
 import client from '../../../lib/apollo-client'
 
-import ClientCard from '../../../components/cards/ClientCard'
-import LoadingCircle from '../../../components/LoadingCircle'
-import GreenButton from '../../../components/buttons/GreenButton'
-import TicketCard from '../../../components/cards/TicketCard'
+import Image from 'next/image'
+import Link from 'next/link'
+
+import ClientCard from '../../../components/ClientCard'
+import GreenButton from '../../../components/GreenLgButton'
+import TicketCard from '../../../components/TicketCard'
 
 import {
     Divider,
@@ -107,24 +105,14 @@ const useStyles = makeStyles(({
 
 export default function AdminSinglePropertyPage({ adminProperty }){
     const classes = useStyles()
-    const router = useRouter()
-
-    // const { data, loading, error } = useQuery(GET_ADMIN_PROPERTY, {
-    //     variables: { 
-    //         url: router.query.url
-    //     }
-    // })
-
-    // if (loading) return <LoadingCircle />
-    // if(error) return `Error! ${error}`
-
-    // const adminProperty = data.getAdminProperty
 
     return(
         <div className={classes.root}>
-             <IconButton className={classes.backButton} href='/admin1'>
-                <ChevronLeftIcon className={classes.backIcon}/>
-            </IconButton>
+            <Link  href='/admin1'>
+                <IconButton className={classes.backButton}>
+                    <ChevronLeftIcon className={classes.backIcon}/>
+                </IconButton>
+            </Link>
             <div className={classes.img}>
                 <Image 
                     className={classes.img}
@@ -182,18 +170,18 @@ export default function AdminSinglePropertyPage({ adminProperty }){
                 Dueño
             </Typography>
             <Divider className={classes.divider} />
-            <Grid container>
+            <div className={classes.ticketDiv}>
                 {adminProperty.vendors.map((vendor,i)=>{
                     return(
-                        <Grid item xs={12} key={vendor._id}>
+                        <div key={vendor._id}>
                             <ClientCard
                                 client={vendor}
                             />
                             {i !== adminProperty.vendors.length - 1 && <Divider className={classes.divider} />}
-                        </Grid>
+                        </div>
                     )
                 })}
-            </Grid>
+            </div>
             <Typography className={classes.header}>
                 Comprador
             </Typography>

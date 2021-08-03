@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { GET_TICKET } from '../../../graphql/queries'
 
-import TicketForm from '../../../components/forms/TicketForm'
+import TicketForm from '../../../components/TicketForm'
 import LoadingCircle from '../../../components/LoadingCircle'
 
 import {
@@ -72,9 +72,11 @@ export default function EditTicket(props){
         <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className={classes.iconButton} href='/admin1'>
-                        <ChevronLeftIcon className={classes.icon}/>
-                    </IconButton>
+                    <Link href='/admin1'>
+                        <IconButton className={classes.iconButton}>
+                            <ChevronLeftIcon className={classes.icon}/>
+                        </IconButton>
+                    </Link>
                     <Typography className={classes.typo}>
                         Editar Ticket
                     </Typography>

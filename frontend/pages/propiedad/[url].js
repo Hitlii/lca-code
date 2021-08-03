@@ -10,7 +10,7 @@ import Carousel from 'react-material-ui-carousel'
 import GreenLgButton from '../../components/GreenLgButton'
 import HorizontalScroll from '../../components/HorizontalScroll'
 import Map from '../../components/map'
-import PropertyCard from '../../components/cards/PropertyCard'
+import PropertyCard from '../../components/PropertyCard'
 import ZoneTag from '../../components/ZoneTag'
 
 import {

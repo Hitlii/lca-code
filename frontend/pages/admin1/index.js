@@ -1,6 +1,6 @@
-import React, { useState ,useRef} from 'react'
-import { useQuery } from '@apollo/client'
-import { GET_ADMIN_PROPERTIES } from '../../graphql/queries'
+import React, { useState , useRef } from 'react'
+import useFilterForm from "../../hooks/useFilterForm";
+import { GET_PROPERTIES, GET_ADMIN_PROPERTIES } from "../../graphql/queries";
 import client from '../../lib/apollo-client'
 
 import {
@@ -9,33 +9,22 @@ import {
   Paper,
 } from '@material-ui/core'
 
-import LoadingCircle from '../../components/LoadingCircle'
 
 import { makeStyles } from '@material-ui/core/styles'
-import AdminPropertyCard from '../../components/cards/AdminPropertyCard'
-import NavBar from '../../components/bars/NavBar'
+import AdminPropertyCard from '../../components/AdminPropertyCard'
+import AdminNavbar from '../../components/AdminNavBar'
+import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
+import OrderPropertiesForm from "../../components/forms/OrderPropertiesForm";
 
 import SearchIcon from '@material-ui/icons/Search'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 
-
 import {
   Drawer,
-  Typography,
 } from "@material-ui/core";
-
 
 import OrderFilterButton from "../../components/buttons/OrderFilterButton";
 import NoFoundIcon from "../../components/NoFoundIcon";
-
-
-
-
-//COMPONENET
-import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
-import OrderPropertiesForm from "../../components/forms/OrderPropertiesForm";
-import useFilterForm from "../../hooks/useFilterForm";
-import { GET_PROPERTIES } from "../../graphql/queries";
 
 
 import {
@@ -414,7 +403,7 @@ function AllAdminPropertiesPage({ data }){
         <IconButton href='/admin1/propiedades/post-propiedad' className={classes.addButton}>
           <AddCircleIcon className={classes.addIcon} />
         </IconButton>
-        <NavBar />
+        <AdminNavbar />
     </div>
   )
 }

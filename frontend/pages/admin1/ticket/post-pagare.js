@@ -1,6 +1,11 @@
 import {Fragment} from 'react'
+import { gql } from '@apollo/client';
+import client from "../../../lib/apollo-client";
 
-import TicketForm from '../../../components/forms/TicketForm'
+import Link from 'next/link'
+
+import TicketForm from '../../../components/TicketForm'
+
 import {
     AppBar,
     IconButton,
@@ -11,8 +16,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import client from "../../../lib/apollo-client";
-import {gql} from '@apollo/client';
 
   const useStyles = makeStyles({
     appbar: {
@@ -51,9 +54,11 @@ export default function PostTicket(props){
         <Fragment>
             <AppBar position='static' elevation={0} className={classes.appbar}>
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className={classes.iconButton} href='/admin1'>
-                        <ChevronLeftIcon className={classes.icon}/>
-                    </IconButton>
+                    <Link href='/admin1'>
+                        <IconButton className={classes.iconButton}>
+                            <ChevronLeftIcon className={classes.icon}/>
+                        </IconButton>
+                    </Link>
                     <Typography className={classes.typo}>
                         Crear Ticket
                     </Typography>

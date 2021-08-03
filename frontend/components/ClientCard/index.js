@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
-import client from '../../lib/apollo-client'
+
+import CardDrawer from '../CardDrawer'
+import DeleteDrawer from '../DeleteDrawer'
 
 import {
     Divider,
@@ -10,40 +12,15 @@ import {
     Typography,
 } from '@material-ui/core'
 
-import CardDrawer from '../drawers/CardDrawer'
-import DeleteDrawer from '../drawers/DeleteDrawer'
-
-import { drawerStyles } from '../../styles/DrawerStyles'
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(({
-    container: {
-        width: 340,
-        marginBottom: 10,
-    },
-    header: {
-        fontSize: 16,
-        fontWeight: 500,
-        marginBottom: 0
-    },
-    body: {
-        fontSize: 14,
-        color: '#4A4C4B'
-    },
-    button: {
-        padding: 0,
-        paddingLeft: 20,
-    }, 
-}))
+import { useStyles } from './styles'
 
-function ClientCard({ client }) {
+export default function ClientCard({ client }) {
 
     const classes = useStyles()
-    const drawerClasses = drawerStyles()
-
     const router = useRouter()
     const [options, showOptions] = useState(false)
     const [deleteDrawer, setDeleteDrawer] = useState(false)
@@ -83,7 +60,7 @@ function ClientCard({ client }) {
     }
 
     return (
-        <>
+        <div>
             <Grid container
                 className={classes.container}
             >
@@ -121,19 +98,19 @@ function ClientCard({ client }) {
                 open={options}
                 onClose={onClick}
             >
-                <IconButton className={drawerClasses.drawerButton} onClick={onEditClick}>
-                    <CreateOutlinedIcon className={drawerClasses.createIcon}/>
-                    <Typography className={drawerClasses.createText}>
+                <IconButton className={classes.drawerButton} onClick={onEditClick}>
+                    <CreateOutlinedIcon className={classes.createIcon}/>
+                    <Typography className={classes.createText}>
                         Editar cliente
                     </Typography>
                 </IconButton>
-                <Divider className={drawerClasses.divider}/>
+                <Divider className={classes.divider}/>
                 <IconButton 
-                    className={drawerClasses.drawerButton}
+                    className={classes.drawerButton}
                     onClick={onClickDelete}
                 >
-                    <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
-                    <Typography className={drawerClasses.deleteText}>
+                    <DeleteOutlineIcon className={classes.deleteIcon}/>                    
+                    <Typography className={classes.deleteText}>
                         Eliminar
                     </Typography>
                 </IconButton>
@@ -143,7 +120,7 @@ function ClientCard({ client }) {
                 onClose={onClickDelete}
                 onDelete={onDeleteClient}
             />
-        </>
+        </div>
     )
 }
 
@@ -156,5 +133,3 @@ const DELETE_CLIENT = gql`
         }
     } 
 `
-
-export default ClientCard

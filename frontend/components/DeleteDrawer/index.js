@@ -4,11 +4,11 @@ import {
     Drawer,
     Typography
 } from '@material-ui/core'
-import DeleteButton from '../buttons/DeleteButton'
-import { drawerStyles, DeletePaper } from '../../styles/DrawerStyles'
+import DeleteButton from '../DeleteButton'
+import { DeletePaper, useStyles } from './styles'
 
 function DeleteDrawer({ open, onClose, onDelete}) {
-    const drawerClasses = drawerStyles()
+    const classes = useStyles()
     return (
         <Drawer
                 PaperProps={{ component: DeletePaper }}
@@ -16,7 +16,7 @@ function DeleteDrawer({ open, onClose, onDelete}) {
                 open={open}
                 onClose={onClose}
             >
-                <Typography className={drawerClasses.confirmText}>
+                <Typography className={classes.confirmText}>
                     ¿Estás seguro?
                 </Typography>
                 <DeleteButton onClick={onDelete}/>

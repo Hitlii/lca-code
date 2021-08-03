@@ -58,15 +58,13 @@ function PropertyCard({ orientation, property }) {
         <Card className={classes.root} elevation={0}>
             <div className={classes.coverDiv}>
                 <Link href={`/propiedad/${property.meta.url}`}>
-                    <Avatar className={classes.cover}>
-                        <Image
-                            className={classes.cover}
-                            src={`/${property.media.images[0].replace(/\\/g,'/')}`}
-                            width={width}
-                            height={height}
-                            alt={`${property.type} en ${property.location.city}`}
-                        />
-                    </Avatar>
+                    <Image
+                        className={classes.cover}
+                        src={`/${property.media.images[0].replace(/\\/g,'/')}`}
+                        width={width}
+                        height={height}
+                        alt={`${property.type} en ${property.location.city}`}
+                    />
                 </Link>
             </div>
             <div className={classes.details}>

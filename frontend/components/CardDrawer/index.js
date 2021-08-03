@@ -1,15 +1,11 @@
 import React from 'react'
+import { styledPaper } from './styles'
+import Drawer from '@material-ui/core/Drawer'
 
-import {
-    Drawer,
-} from '@material-ui/core'
-
-import { StyledPaper } from '../../styles/DrawerStyles'
-
-function CardDrawer({ open, onClose, children }) {
+function CardDrawer({ open, onClose, children}) {
     return (
         <Drawer
-            PaperProps={{ component: StyledPaper }}
+            PaperProps={{component: styledPaper }}
             anchor='bottom'
             open={open}
             onClose={onClose}

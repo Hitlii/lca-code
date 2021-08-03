@@ -1,19 +1,19 @@
 // Todos lo clientes.
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import client from "../../../lib/apollo-client";
-import { gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 import {GET_CLIENTS} from "../../../graphql/queries"
 import Link from 'next/link'
 
-import ClientCard from '../../../components/cards/ClientCard'
-import NavBar from '../../../components/bars/NavBar'
+import ClientCard from '../../../components/ClientCard'
+import AdminNavbar from '../../../components/AdminNavbar'
 
 import { 
     IconButton,
     InputBase,
     Paper
 } from '@material-ui/core'
+
 import { makeStyles } from '@material-ui/core/styles'
 
 import SearchIcon from '@material-ui/icons/Search'
@@ -131,7 +131,7 @@ export default function AllClientsPage(props){
                     <AddCircleIcon className={classes.addIcon} />
                 </IconButton>
             </Link>
-            <NavBar/>
+            <AdminNavbar/>
         </div>
     )
 }

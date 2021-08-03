@@ -9,43 +9,19 @@ import {
     Typography,
 } from '@material-ui/core'
 
-import CardDrawer from '../drawers/CardDrawer'
-import DeleteDrawer from '../drawers/DeleteDrawer'
+import CardDrawer from '../CardDrawer'
+import DeleteDrawer from '../DeleteDrawer'
 
-import { drawerStyles } from '../../styles/DrawerStyles'
+import { useStyles } from './styles'
 
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined';
 import CreateOutlinedIcon from '@material-ui/icons/CreateOutlined';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
-import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(({
-    container: {
-        width: 340,
-        marginBottom: 10,
-    },
-    header: {
-        fontSize: 16,
-        fontWeight: 500,
-        marginBottom: 0
-    },
-    body: {
-        fontSize: 14,
-        color: '#4A4C4B'
-    },
-    icon: {
+export default function TicketCard({ ticket, propertyId }) {
 
-    },
-    button: {
-        padding: 0,
-        paddingLeft: 20,
-    }
-}))
-
-function TicketCard({ ticket, propertyId }) {
     const classes = useStyles()
-    const drawerClasses = drawerStyles()
     const router = useRouter()
     const [options, showOptions] = useState(false)
     const [deleteDrawer, setDeleteDrawer] = useState(false)
@@ -95,7 +71,7 @@ function TicketCard({ ticket, propertyId }) {
     }
 
     return (
-        <>
+        <div>
             <Grid container
                 className={classes.container}
             >
@@ -133,26 +109,26 @@ function TicketCard({ ticket, propertyId }) {
                 open={options}
                 onClose={onClick}
             >
-                <IconButton className={drawerClasses.drawerButton}>
-                    <MonetizationOnOutlinedIcon className={drawerClasses.createIcon}/>
-                    <Typography className={drawerClasses.createText}>
+                <IconButton className={classes.drawerButton}>
+                    <MonetizationOnOutlinedIcon className={classes.createIcon}/>
+                    <Typography className={classes.createText}>
                         Descargar PDF
                     </Typography>
                 </IconButton>
-                <Divider className={drawerClasses.divider}/>
-                <IconButton className={drawerClasses.drawerButton} onClick={onEditTicket}>
-                    <CreateOutlinedIcon className={drawerClasses.createIcon}/>
-                    <Typography className={drawerClasses.createText}>
+                <Divider className={classes.divider}/>
+                <IconButton className={classes.drawerButton} onClick={onEditTicket}>
+                    <CreateOutlinedIcon className={classes.createIcon}/>
+                    <Typography className={classes.createText}>
                         Editar ticket
                     </Typography>
                 </IconButton>
-                <Divider className={drawerClasses.divider}/>
+                <Divider className={classes.divider}/>
                 <IconButton 
-                    className={drawerClasses.drawerButton}
+                    className={classes.drawerButton}
                     onClick={onClickDelete}
                 >
-                    <DeleteOutlineIcon className={drawerClasses.deleteIcon}/>                    
-                    <Typography className={drawerClasses.deleteText}>
+                    <DeleteOutlineIcon className={classes.deleteIcon}/>                    
+                    <Typography className={classes.deleteText}>
                         Eliminar
                     </Typography>
                 </IconButton>
@@ -162,7 +138,7 @@ function TicketCard({ ticket, propertyId }) {
                 onClose={onClickDelete}
                 onDelete={onDeleteTicket}
             />
-        </>
+        </div>
     )
 }
 
@@ -181,5 +157,3 @@ const DELETE_TICKET = gql`
         }
     }
 `
-
-export default TicketCard

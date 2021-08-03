@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { GET_CLIENT } from '../../../graphql/queries'
-import ClientForm from '../../../components/forms/ClientForm'
+import ClientForm from '../../../components/ClientForm'
 
 import Link from 'next/link'
 
