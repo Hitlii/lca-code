@@ -12,69 +12,12 @@ import HomeIcon from "@material-ui/icons/Home";
 import WorkIcon from "@material-ui/icons/Work";
 
 // My imports ------------------------------
-import FilterIconButton from "../buttons/FilterIconButton";
-import SliderInput from "../inputs/SliderInput";
-import useFilterForm from "../../hooks/useFilterForm";
-import FilterButton from "../buttons/FilterButton";
-import {
-  lightNeutral,
-  lightResidential,
-  darkNeutral,
-  grey,
-  whatsappColor,
-} from '../../public/colors'
+import FilterIconButton from "../../buttons/FilterIconButton";
+import {useStyles} from './styles'
+import FilterButton from "../../buttons/FilterButton";
 
-const useStyles = makeStyles(() => ({
-  form:{
-    margin: 20,
-    marginTop:0,
-    color: grey
-  },
-  icon: {
-    width: 38,
-    height: 37,
-    textAlign: "center",
-    color:lightNeutral
-  },
-  marginText: {
-    marginLeft: 20,
-  },
-  margin: {
-    marginLeft: 20,
-    marginBottom: 10,
-  },
-  container: {
-    padding: 0,
-    margin: 0,
-    borderRadius: 15,
-    boxShadow: "0 0 10px",
-  },
-  title: {
-    margin:20,
-  },
-  removeFilters: {
-    margin:20,
-    color: lightResidential,
-    textTransform:'lowercase'
-  },
-  greenButton: {
-    
-    minHeight: 40,
-    borderRadius: 15,
-    color: "white",
-    
-    marginBottom: 0,
-    marginTop: 60,
-    backgroundColor: whatsappColor,
-    "&:hover": {
-      backgroundColor: "#439A46",
-    },
-    inputwidth: {
-      width: 100,
-    },
 
-  },
-}));
+
 
 function FilterPropertiesForm(props) {
   const classes = useStyles();
@@ -289,4 +232,3 @@ function FilterPropertiesForm(props) {
 }
 
 export default FilterPropertiesForm;
-

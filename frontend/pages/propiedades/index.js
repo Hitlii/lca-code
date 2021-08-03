@@ -17,7 +17,7 @@ import {
 import Link from "next/link";
 import { makeStyles } from "@material-ui/core/styles";
 import OrderFilterButton from "../../components/buttons/OrderFilterButton";
-import NoFoundComponent from "../../components/NoFoundComponent";
+import NoFoundIcon from "../../components/NoFoundIcon";
 //ICONS
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -26,8 +26,8 @@ import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
 //COMPONENET
 import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
-import PropertyCard from "../../components/cards/PropertyCard";
-import OrderProperty from "../../components/OrderProperty";
+import PropertyCard from "../../components/PropertyCard";
+import OrderPropertyForm from "../../components/forms/OrderPropertiesForm";
 import useFilterForm from "../../hooks/useFilterForm";
 
 //STYLE
@@ -174,7 +174,7 @@ export default function AllPropertiesPage(props) {
       filterProperty.values.orderPrice === value ? "" : value
     );
     filterProperty.setFieldValue("areaOrder", "");
-    console.log(filterProperty.values)
+    
   };
   const updateOrderArea = (value) => {
     filterProperty.setFieldValue(
@@ -182,7 +182,7 @@ export default function AllPropertiesPage(props) {
       filterProperty.values.orderArea === value ? "" : value
     );
     filterProperty.setFieldValue("priceOrder", "");
-    console.log(filterProperty.values)
+    
   };
   const onChangeZone = (values, index) => {
     let array = [false, false, false];
@@ -350,7 +350,7 @@ export default function AllPropertiesPage(props) {
 
       <Grid container justify="center" >
       {stateNoFound ? (
-        <NoFoundComponent search={filterProperty.values.search} />
+        <NoFoundIcon search={filterProperty.values.search} />
       ) : (
         properties.map((property) => {
           return (
@@ -386,13 +386,15 @@ export default function AllPropertiesPage(props) {
             {<ArrowForwardIcon />}
           </IconButton>
         </div>
-      ) : null}
+      ) : ''}
+      
       {!stateNoFound ? (
         <Typography className={classes.errorMessage}>
           {errors ? errors.properties : ""}
         </Typography>
-      ) : null}
-      {!stateNoFound ? (
+      ) : ''}
+
+
         <Drawer
           PaperProps={{ component: StyledPaperLarge }}
           anchor="bottom"
@@ -413,15 +415,14 @@ export default function AllPropertiesPage(props) {
             reset={reset}
           />
         </Drawer>
-      ) : null}
-      {!stateNoFound ? (
+
         <Drawer
           PaperProps={{ component: StyledPaper }}
           anchor="bottom"
           open={showOrderComponent}
           onClose={onCloseOrderComponent}
         >
-          <OrderProperty
+          <OrderPropertyForm
             orderPrice={filterProperty.values.priceOrder}
             orderArea={filterProperty.values.areaOrder}
             updateOrderPrice={updateOrderPrice}
@@ -429,13 +430,12 @@ export default function AllPropertiesPage(props) {
             handleSubmit={handleSubmit}
           />
         </Drawer>
-      ) : null}
-      {!stateNoFound ? (
+
         <OrderFilterButton
           onChangeFilter={handleShowFilterComponent}
           onChangeOrder={handleShowOrderComponent}
         />
-      ) : null}
+      
     </div>
 
   );

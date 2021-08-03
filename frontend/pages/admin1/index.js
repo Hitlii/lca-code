@@ -26,14 +26,14 @@ import {
 
 
 import OrderFilterButton from "../../components/buttons/OrderFilterButton";
-import NoFoundComponent from "../../components/NoFoundComponent";
+import NoFoundIcon from "../../components/NoFoundIcon";
 
 
 
 
 //COMPONENET
 import FilterPropertiesForm from "../../components/forms/FilterPropertiesForm";
-import OrderProperty from "../../components/OrderProperty";
+import OrderPropertiesForm from "../../components/forms/OrderPropertiesForm";
 import useFilterForm from "../../hooks/useFilterForm";
 import { GET_PROPERTIES } from "../../graphql/queries";
 
@@ -202,7 +202,6 @@ function AllAdminPropertiesPage({ data }){
       filterProperty.values.orderPrice === value ? "" : value
     );
     filterProperty.setFieldValue("areaOrder", "");
-    console.log(filterProperty.values)
   };
   const updateOrderArea = (value) => {
     filterProperty.setFieldValue(
@@ -210,7 +209,7 @@ function AllAdminPropertiesPage({ data }){
       filterProperty.values.orderArea === value ? "" : value
     );
     filterProperty.setFieldValue("priceOrder", "");
-    console.log(filterProperty.values)
+
   };
   const onChangeZone = (values, index) => {
     let array = [false, false, false];
@@ -308,7 +307,7 @@ function AllAdminPropertiesPage({ data }){
 
     setShowOrderComponent(false)
     setShowFilterComponent(false)
-    console.log(variables)
+
 
   }
 
@@ -349,7 +348,6 @@ function AllAdminPropertiesPage({ data }){
           </IconButton>
         </Paper>
 
-        {!stateNoFound ? (
         <Drawer
           PaperProps={{ component: StyledPaperLarge }}
           anchor="bottom"
@@ -370,16 +368,16 @@ function AllAdminPropertiesPage({ data }){
             reset={reset}
           />
         </Drawer>
-      ) : null}
 
-      {!stateNoFound ? (
+
+
         <Drawer
           PaperProps={{ component: StyledPaper }}
           anchor="bottom"
           open={showOrderComponent}
           onClose={onCloseOrderComponent}
         >
-          <OrderProperty
+          <OrderPropertiesForm
             orderPrice={filterProperty.values.priceOrder}
             orderArea={filterProperty.values.areaOrder}
             updateOrderPrice={updateOrderPrice}
@@ -387,17 +385,17 @@ function AllAdminPropertiesPage({ data }){
             handleSubmit={handleSubmit}
           />
         </Drawer>
-      ) : null}
 
-      {!stateNoFound ? (
+
+
         <OrderFilterButton
           onChangeFilter={handleShowFilterComponent}
           onChangeOrder={handleShowOrderComponent}
         />
-      ) : null}
+
 
       {stateNoFound ? (
-        <NoFoundComponent search={filterProperty.values.search} />
+        <NoFoundIcon search={filterProperty.values.search} />
       ) : (
         properties.map((property) => {
           return (

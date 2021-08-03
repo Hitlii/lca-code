@@ -1,11 +1,10 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { MdSort } from "react-icons/Md";
 import {BsFilter} from "react-icons/Bs"
 import { Button, Container } from "@material-ui/core";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import SortIcon from "@material-ui/icons/Sort";
-import FilterListIcon from "@material-ui/icons/FilterList";
+
+import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "fixed",
