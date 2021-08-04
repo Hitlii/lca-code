@@ -80,13 +80,15 @@ export default function AdminPropertyCard({ property }) {
         <div>
             <Card className={classes.card} elevation={0}>
                 <Link href={`/admin1/propiedades/${property.meta.url}`}>
-                    <Image
-                        className={classes.cover}
-                        src={'/'+property.media.images[0]}
-                        width={100}
-                        height={100}
-                        alt={`${property.type} en ${property.location.city}`}
-                    />
+                    <a>
+                        <Image
+                            className={classes.cover}
+                            src={'/'+property.media.images[0]}
+                            width={100}
+                            height={100}
+                            alt={`${property.type} en ${property.location.city}`}
+                        />
+                    </a>
                 </Link>
                 <div className={classes.details}>
                     <CardContent className={classes.content}>

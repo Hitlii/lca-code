@@ -2,10 +2,9 @@ import {makeStyles} from '@material-ui/styles'
 import {
     lightNeutral,
     lightResidential,
-    darkNeutral,
-    grey,
-    whatsappColor,
-  } from '../../../public/colors'
+    gray6,
+    whatsapp,
+  } from '../../colors'
 
 
 export const useStyles = makeStyles(() => ({
@@ -49,7 +48,7 @@ export const useStyles = makeStyles(() => ({
       
       marginBottom: 0,
       marginTop: 60,
-      backgroundColor: whatsappColor,
+      backgroundColor: whatsapp,
       "&:hover": {
         backgroundColor: "#439A46",
       },

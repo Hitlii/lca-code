@@ -7,6 +7,7 @@ export const useStyles = makeStyles(({
         height: 100,
         justifyContent: 'flex-start',
         marginBottom: 10,
+        margin: 'auto',
     },
     details: {
         display: 'flex',

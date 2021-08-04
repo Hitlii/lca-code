@@ -1,7 +1,7 @@
 import { useState, Fragment } from "react";
 
 // Material UI Imports ------------------------------
-import { makeStyles } from "@material-ui/core/styles";
+
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -12,9 +12,9 @@ import HomeIcon from "@material-ui/icons/Home";
 import WorkIcon from "@material-ui/icons/Work";
 
 // My imports ------------------------------
-import FilterIconButton from "../../buttons/FilterIconButton";
+import FilterIconButton from "../FilterIconButton";
 import {useStyles} from './styles'
-import FilterButton from "../../buttons/FilterButton";
+import FilterButton from "../FilterButton";
 
 
 
