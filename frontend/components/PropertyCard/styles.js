@@ -88,7 +88,8 @@ export const VerticalPropertyCardStyle = makeStyles(({
         width: 207,
         height: 380,
         flexDirection: 'column',
-        marginRight: 20
+        marginRight: 20,
+        
     },
     coverDiv: {
         height: 219,

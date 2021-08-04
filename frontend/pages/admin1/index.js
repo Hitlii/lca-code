@@ -125,11 +125,7 @@ function AllAdminPropertiesPage(props){
 export async function getStaticProps(){
   const { data } = await client.query({
     query: GET_ADMIN_PROPERTIES,
-    variables: {
-      pagination: {
-        pageNumber: 1
-      }
-    }
+    variables: { pageNumber: 1 }
   })
 
   if (!data)

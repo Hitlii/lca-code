@@ -70,6 +70,11 @@ export const useStyles = makeStyles((theme) => ({
            height: 50,
            backgroundColor: gray6,
            borderRadius: 15,
+     },
+     center:{
+      display: "flex",
+      justifyContent: "center",
+      margin:'auto'
      }
    
    }));

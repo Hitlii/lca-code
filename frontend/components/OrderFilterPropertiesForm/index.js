@@ -106,8 +106,8 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
           query: GET_ADMIN_PROPERTIES,
           variables: variables,
         });
-        if (data.getProperties.length) {
-          setProperties(data.getProperties);
+        if (data.getAdminProperties.length) {
+          setProperties(data.getAdminProperties);
           setErrors();
         } else {
           pageNumber.current -= 1;
@@ -177,7 +177,6 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
           variables,
         });
         pageNumber.current = 1;
-    
         if (data.getAdminProperties.length) {
           setProperties(data.getAdminProperties);
           setStateNoFound(false);
@@ -205,7 +204,7 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
       
       setShowOrderComponent(false)
       setShowFilterComponent(false)
-  
+      
     }
   
     function onCloseFilterComponent() {
@@ -301,13 +300,13 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
       </Grid>
         
   
-        <Grid container justify="center" >
+        <Grid container >
         {stateNoFound ? (
           <NoFoundIcon search={filterProperty.values.search} />
         ) : (
           properties.map((property) => {
             return (
-              <Grid item xs={12} className={classes.cards} key={property._id}>
+              <Grid item xs={12}  key={property._id} className={classes.center}>
               {isAdmin ? 
               <AdminPropertyCard property={property}/>
               :
@@ -389,10 +388,10 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
             />
           </Drawer>
   
-          <OrderFilterButton
+          {!isAdmin ? <OrderFilterButton
             onChangeFilter={handleShowFilterComponent}
             onChangeOrder={handleShowOrderComponent}
-          />
+          />:''}
         
       </div>
   

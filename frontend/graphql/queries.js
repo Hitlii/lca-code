@@ -132,9 +132,9 @@ export const GET_ADMIN_PROPERTIES = gql`
     $status: String
     $city: String
     $search: String
-    $area: AreaInput
     $price: PriceInput
-    $pagination: PropertyPaginationInput!
+    $area: AreaInput
+    $pageNumber: Float!
   ) {
     getAdminProperties(
       filter:{
@@ -146,7 +146,9 @@ export const GET_ADMIN_PROPERTIES = gql`
       area: $area
       price: $price
       }
-      pagination: $pagination
+      pagination:{
+        pageNumber: $pageNumber
+      }
     ){
       _id
       code
