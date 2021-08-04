@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {numberWithCommas} from '../../helper/format'
 import { 
-    Avatar,
     Card,
     CardContent,
     Paper,
@@ -57,7 +56,7 @@ function PropertyCard({ orientation, property }) {
     return (
         <Card className={classes.root} elevation={0}>
             <div className={classes.coverDiv}>
-                <Link href={`/propiedad/${property.meta.url}`}>
+                <Link href={`/propiedad/${property.meta.url}`} passHref>
                     <a>
                         <Image
                             className={classes.cover}

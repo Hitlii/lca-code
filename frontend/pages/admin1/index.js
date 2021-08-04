@@ -12,7 +12,7 @@ import {
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import AdminNavbar from '../../components/AdminNavBar'
+import AdminNavbar from '../../components/AdminNavbar'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import OrderFilterPropertiesForm from '../../components/OrderFilterPropertiesForm';
 

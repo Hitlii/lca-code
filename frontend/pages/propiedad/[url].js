@@ -30,7 +30,7 @@ import YouTubeIcon from '@material-ui/icons/YouTube'
 import { IoLogoGoogleplus } from 'react-icons/io'
 import { IoLogoTiktok } from 'react-icons/io5'
 
-import { green, lightNeutral } from '../../public/colors'
+import { lightNeutral } from '../../colors'
 
 import { makeStyles } from "@material-ui/core/styles"
 

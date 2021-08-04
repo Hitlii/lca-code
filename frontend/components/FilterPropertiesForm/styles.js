@@ -1,9 +1,9 @@
 import {makeStyles} from '@material-ui/styles'
 import {
-    lightNeutral,
+    neutralLight,
     lightResidential,
-    gray6,
-    whatsapp,
+    gray3,
+    whatsappColor,
   } from '../../colors'
 
 
@@ -11,13 +11,13 @@ export const useStyles = makeStyles(() => ({
     form:{
       margin: 20,
       marginTop:0,
-      color: grey
+      color: gray3
     },
     icon: {
       width: 38,
       height: 37,
       textAlign: "center",
-      color:lightNeutral
+      color:neutralLight
     },
     marginText: {
       marginLeft: 20,
@@ -48,7 +48,7 @@ export const useStyles = makeStyles(() => ({
       
       marginBottom: 0,
       marginTop: 60,
-      backgroundColor: whatsapp,
+      backgroundColor: whatsappColor,
       "&:hover": {
         backgroundColor: "#439A46",
       },

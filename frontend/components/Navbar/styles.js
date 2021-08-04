@@ -1,9 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles"
 import {
     gray6,
-    messengerBlue,
-    neutralLight,
-    whatsapp,
+    messengerColor,
+    lightNeutral,
+    whatsappColor,
 } from '../../colors'
 export const useStyles = makeStyles(({
     navbar: {
@@ -27,7 +27,7 @@ export const useStyles = makeStyles(({
     iconButton: {
         width: 40,
         height: 40,
-        color: neutralLight,
+        color: lightNeutral,
         backgroundColor: gray6,
     },
     collapse: {
@@ -47,20 +47,20 @@ export const useStyles = makeStyles(({
         fontFamily: 'Open Sans',
         textTransform: 'none',
         fontSize: 16,
-        color: neutralLight,
+        color: lightNeutral,
         fontWeight: 700,
     },
     whatsappIcon: {
-        color: whatsapp
+        color: whatsappColor
     },
     messengerIcon: {
-        color: messengerBlue
+        color: messengerColor
     },
     text: {
         fontFamily: 'Open Sans',
         fontWeight: 'bold',
         fontStyle: 'normal',
-        color: neutralLight,
+        color: lightNeutral,
         marginLeft: 20,
         marginBottom: 10,
     }
@@ -69,7 +69,7 @@ export const useStyles = makeStyles(({
 export const iconButtonStyle = {
     width: 40,
     height: 40,
-    color: neutralLight,
+    color: lightNeutral,
     backgroundColor: gray6,
 }
 
@@ -82,6 +82,6 @@ export const buttonStyle = {
     fontFamily: 'Open Sans',
     textTransform: 'none',
     fontSize: 16,
-    color: neutralLight,
+    color: lightNeutral,
     fontWeight: 700,
 }

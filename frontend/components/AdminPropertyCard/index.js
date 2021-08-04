@@ -11,7 +11,6 @@ import DeleteDrawer from '../DeleteDrawer'
 import { useStyles } from './styles'
 
 import { 
-    Avatar,
     Card,
     CardContent,
     Divider,
@@ -79,7 +78,7 @@ export default function AdminPropertyCard({ property }) {
     return (
         <div>
             <Card className={classes.card} elevation={0}>
-                <Link href={`/admin1/propiedades/${property.meta.url}`}>
+                <Link href={`/admin1/propiedades/${property.meta.url}`} passHref>
                     <a>
                         <Image
                             className={classes.cover}
