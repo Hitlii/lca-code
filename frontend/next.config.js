@@ -7,6 +7,8 @@ module.exports = {
     googleMapsAPIKey: 'AIzaSyDVEF5nE9KpC2qQ6mKLly5eYkiXwMnoDqs'
   },
   images: {
-    
-  }
+    domains: ['sn3302files.storage.live.com']
+  },
 }
+
+// https://stackoverflow.com/questions/35568114/cannot-load-png-files-with-webpack-unexpected-character

@@ -41,7 +41,9 @@ const ClientSchema = new Schema({
       type: String,
       required: true
     }
-  }
+  },
+  note:String,
+  profession:String
 })
 
 

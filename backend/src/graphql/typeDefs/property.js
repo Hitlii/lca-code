@@ -88,6 +88,8 @@ module.exports = gql`
         specialPrice: String
         "Is the monthly payment of the property (optional) i.e  'en 72x $ 978 USD'"
         onPayments: String
+        "Is the first pay of the property (Enganche)"
+        hitch:Float
         
         "Price of the property"
         price: Float!
@@ -144,6 +146,8 @@ module.exports = gql`
         address: String!
         "Google Maps API Retrieved coordinates."
         coordinates: CoordinatesInput!
+        "Postal code of the property"
+        postalCode: String
     }
     
     "Google Maps Coordinates of the property"
@@ -170,6 +174,8 @@ module.exports = gql`
         specialPrice: String
         "Is the monthly payment of the property (optional) i.e  'en 72x $ 978 USD'"
         onPayments: String
+        "Is the first pay of the property when it is on payments"
+        hitch:Float
         
         "Price of the property"
         price: Float!
@@ -205,6 +211,8 @@ module.exports = gql`
         address: String!
         "Google Maps API Retrieved coordinates."
         coordinates: Coordinates!
+        "Postal code of the property"
+        postalCode: String
     }
     "Description of the property"
     type PropertyDescription {

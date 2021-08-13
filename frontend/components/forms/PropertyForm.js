@@ -2,12 +2,10 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik'
 import { gql, useMutation } from '@apollo/client'
 import Link from 'next/link'
-import {Node} from 'slate'
 
 // Material UI Imports --------------------------------
 import Alert from '@material-ui/lab/Alert'
 import AlertTitle from '@material-ui/lab/AlertTitle'
-import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
 import Divider from '@material-ui/core/Divider'
 import FormControl from '@material-ui/core/FormControl';
@@ -15,7 +13,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
-import Grid from '@material-ui/core/Grid'
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles'
@@ -28,14 +25,9 @@ import Typography from '@material-ui/core/Typography'
 // My Components --------------------------------
 import TextField from '../inputs/TextField'
 import SubmitButton from '../buttons/GreenButton'
-import ImageHandler from '../inputs/ImageHandler'
-import InputSelect from '../inputs/InputSelect'
-import InputText from '../inputs/InputText'
 import Map from '../map'
-import MultipleChoice from '../inputs/MultipleChoice'
 import SearchClient from '../SearchClient'
-import TextEditor from '../inputs/TextEditor'
-import useImageState from '../../hooks/useImageState'
+// import useImageState from '../../hooks/useImageState'
 import useAlert from '../../hooks/useAlert'
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -43,6 +35,38 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // Validator ----------------------------------------------------------------
 import {propertyValidationSchema} from '../../helper/propertyValidator'
 
+
+const NEW_PROPERTY_TEXT_VALUE = `
+# Titulo
+## Subtitulo 
+
+Venta de m² , ubicados en Loma Tova a 15 minutos de Tecate B.C
+
+📍 Mira cómo llegar aquí 👉
+📹 Mira los alrededores aquí👉
+
+🔐 Aparta con sólo $100 USD
+💳 En cómodos pagos a 5 o 6 años
+⚡ Entrega rápida (1 mes después de firma)
+
+### 📃 Documentos:
+Polígono mayor escriturado 
+
+### ⚙️ Servicios: 
+Agua y luz a unos metros 
+
+
+### Medidas y precio 
+📐**Medida:** **400 m²** (_20x 20m_)
+💰**Precio:**
+Contado $00,000.00 USD.
+En pago a **3** años: $00,000.00 USD
+Enganche: $0,000.00 USD
+Mensualidad: 00x $000.00 USD
+Ultimo pago de: $000.00 USD
+
+#LCABienesRaices #BienesRaices #RealState
+`
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 600,
@@ -62,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
+
 /**
   @description Property Form
   @param {autoCompleteClients} Object All clients for the auto complete.
@@ -78,28 +103,7 @@ function PropertyForm ({ autoCompleteClients }) {
         }
     }
   `
-
-  // State ----------------------------------------------------------------
-  const [isAlertOpen, alert, openAlert, closeAlert, handleAlert] = useAlert();
-  const [isFeatured, setFeatured] = useState(false);
-  const [backdrop, setBackdrop] = useState(false);
-  const [errors, setErrors] = useState({})
-  const [isDeeded, setIsDeeded] = useState(false);
-  const [hasAllServices, setHasAllServices] = useState(false)
-  const [vendors, setVendors] = useState([])
-  const { images, updateImages, orderImages, deleteImage, getPathImages, imagesPath } = useImageState([])
-  const [createProperty, { loading: mutationLoading, error: mutationError}] = useMutation(CREATE_PROPERTY)  
-  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 })
-  const classes = useStyles()
-  const [slateEditor, setSlateEditor] = useState([
-    {
-      type: 'paragraph',
-      children: [
-        { text: '' }
-      ]
-    }
-  ])
-
+  //Constants 
   const initialValues ={
     code:'',
     status:' ',
@@ -114,13 +118,41 @@ function PropertyForm ({ autoCompleteClients }) {
     address:'',
     title: '',
     description: '',
-    video: ''
+    video: '',
+    images:''
 
   }
+  // State ----------------------------------------------------------------
+  const [isAlertOpen, alert, openAlert, closeAlert, handleAlert] = useAlert();
+  const [isFeatured, setFeatured] = useState(false);
+  const [backdrop, setBackdrop] = useState(false);
+  const [errors, setErrors] = useState({})
+  const [isDeeded, setIsDeeded] = useState(false);
+  const [hasAllServices, setHasAllServices] = useState(false)
+  const [vendors, setVendors] = useState([])
+  const [text, setText] = useState(NEW_PROPERTY_TEXT_VALUE)
 
-  const serialize = nodes => {
-    return  nodes.map(n => Node.string(n)).join('\n');
+  // const { images, updateImages, orderImages, deleteImage, getPathImages, imagesPath } = useImageState([])
+  const [createProperty, { loading: mutationLoading, error: mutationError}] = useMutation(CREATE_PROPERTY)  
+  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 })
+  const classes = useStyles()
+  const [slateEditor, setSlateEditor] = useState([
+    {
+      type: 'paragraph',
+      children: [
+        { text: '' }
+      ]
+    }
+  ])
+
+ 
+
+  function handleTextChange(event){
+    setText(event.target.value)
   }
+  // const serialize = nodes => {
+  //   return  nodes.map(n => Node.string(n)).join('\n');
+  // }
   // Formik.
   const formikInput = useFormik({
         initialValues: initialValues,
@@ -141,17 +173,6 @@ function PropertyForm ({ autoCompleteClients }) {
         handleAlert(alert);
     
     }
-    if(images.length === 0){
-         alert = {
-          severity: 'error', 
-          title: 'Ingrese imagenes de la propiedad',
-          message: 'Las imagenes son requeridas',
-          success: false
-        }
-        setBackdrop(false);
-        handleAlert(alert);
-        return;
-    }
     if(vendors.length === 0){
        alert = {
           severity: 'error', 
@@ -163,7 +184,7 @@ function PropertyForm ({ autoCompleteClients }) {
         handleAlert(alert);
         return;
     }
-    const {
+    let {
       status,
       type,
       zone,
@@ -178,6 +199,7 @@ function PropertyForm ({ autoCompleteClients }) {
       address,
       video,
       description,
+      images,
       } = values;
 
     const {
@@ -187,7 +209,13 @@ function PropertyForm ({ autoCompleteClients }) {
 
     
     try {
-        await getPathImages(images);
+      
+        //Removing Line breaks and white spaces
+        images = images.replace(/\r?\n|\r/g,"")
+        images = images.replace(/ +/g,"").split(',')
+        // If there was a comma on the last link
+        if(images[images.length-1] === "") images.pop()
+       
         
         const variables = {
           property:{
@@ -206,7 +234,7 @@ function PropertyForm ({ autoCompleteClients }) {
             description:{
               hasAllServices,
               isDeeded,
-              text: JSON.stringify(slateEditor),
+              text
             }, 
 
             location: {
@@ -219,7 +247,7 @@ function PropertyForm ({ autoCompleteClients }) {
               }
             }, 
             media:{
-              images: imagesPath.current,
+              images,
               video,
             }, 
 
@@ -231,7 +259,8 @@ function PropertyForm ({ autoCompleteClients }) {
         }  
         const response =  await createProperty({variables});
         const data = response.data.createProperty;
-        if(response.data){
+     
+        if(data){
           setBackdrop(false);
           alert = {
             severity: 'success', 
@@ -283,13 +312,12 @@ function PropertyForm ({ autoCompleteClients }) {
     })
   }
 
- 
-
   async function postProperty (event) {
     event.preventDefault();
     formikInput.handleSubmit();
   }
 
+  
 /**
   @description Checks errors on Formik #handleSubmit
   @param {key} String Key of the formik Schema
@@ -316,7 +344,7 @@ function PropertyForm ({ autoCompleteClients }) {
   }
 
   const requiredInputs ={
-    required: true,
+    required: false,
     title: 'Por favor, llene este campo.'
   }
   return (
@@ -468,11 +496,21 @@ function PropertyForm ({ autoCompleteClients }) {
                 value={formikInput.values.title}
                 error={ isInputError('title')}
           />
-
-          <TextEditor
-                value={slateEditor}
-                onChange={onChangeSlateEditor}
+             <TextField 
+                {...requiredInputs}
+                {...defaultInputProps}
+                id="descriptin.text"
+                name="description.text"
+                label="Descripcion"
+                placeholder='Ingrese descripcion'
+                multiline
+                helperText= 'Escriba la descripcion con formato MD'
+                onChange={handleTextChange}
+                value={text}
+                
           />
+
+   
         
 {/* Location */}
           <Typography {...defaultTypoProps}>Ubicación</Typography>
@@ -536,12 +574,25 @@ function PropertyForm ({ autoCompleteClients }) {
           <Typography {...defaultTypoProps}>Imagenes</Typography>
           <Divider/>
 
-          {/* Images */}
-          <ImageHandler
+          {/* <ImageHandler
                   images={images}
                   updateImages={updateImages}
                   deleteImage={deleteImage}
                   orderImages={orderImages}
+          /> */}
+
+          {/* Images */}
+          <TextField
+          {...defaultInputProps}
+          {...requiredInputs}
+            id="images"
+            name="images"
+            label="Imagenes"
+            placeholder="Ingrese links(separados por comas)"
+            multiline
+            onChange={formikInput.handleChange}
+            value={formikInput.values.images}
+            
           />
 
            {/* Description */}

@@ -24,7 +24,6 @@ module.exports = {
         if(name)
         search = { $text: { $search: name } }
         
-      
         const clients = await Client.find({...search})
         return clients || null
       } catch (error) {

@@ -6,6 +6,7 @@ import client from '../../lib/apollo-client'
 import Image from 'next/image'
 import Link from 'next/link' 
 
+import MarkdownView from 'react-showdown'
 import Carousel from 'react-material-ui-carousel'
 import GreenLgButton from '../../components/GreenLgButton'
 import HorizontalScroll from '../../components/HorizontalScroll'
@@ -36,13 +37,14 @@ import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(({
     root: {
-        maxWidth: 600,
+        maxWidth: 800,
         minWidth: 320,
         margin: 'auto',
     },
     img: {
+        marginTop:70,
         width: '100%',
-        borderRadius: '0px 0px 5px 5px',
+        borderRadius: '5px 5px 5px 5px',
         zIndex: 1
     },
     backButton: {
@@ -132,7 +134,8 @@ const useStyles = makeStyles(({
     }, 
     map: {
         marginTop: 20,
-        marginBottom:  20
+        marginBottom:  20,
+
     },
     description: {
         margin: 10
@@ -145,13 +148,11 @@ const useStyles = makeStyles(({
 export default function SinglePropertyPage({ property, relatedProperties }){
     const classes = useStyles()
     const [map, setMap] = useState(false)
-    const router = useRouter()
 
     function onClickMap() { 
         setMap(current => !current)
     }
-
-    const slateText = JSON.parse(property.description.text)
+    console.log(property.media.images)
      
     return(
         <div className={classes.root}>
@@ -161,29 +162,30 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 </IconButton>
             </Link>
 
-            {/* Property Images*/}
             <Carousel
-                autoplay={true}
-                animation='fade'
+                autoplay={false}
+                animation='slide'
                 indicators={true}
                 timeout={500}
                 navButtonsAlwaysVisible={true}
                 navButtonsAlwaysInvisible={false}
             >
-                {property.media.images.map((image,i)=>{
+            {/* Property Images */}
+            {property.media.images.map((image,i)=>{
                     return(
                         <div key={i} className={classes.img}>
                             <Image 
                                 className={classes.img}
-                                src={'/'+image} 
+                                src={image} 
                                 layout='responsive'
-                                width={600}
-                                height={600}
+                                width={1200}
+                                height={1200}
                             />
                         </div>
                     )
-                })}       
-            </Carousel>
+            })}    
+            </Carousel>   
+            
 
             {/* Type of property */}
             <Typography  variant="h5" gutterBottom>
@@ -200,69 +202,10 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 <Typography className={classes.iconText}>Descripción</Typography>
             </div>
             <div className={classes.description}>
-                {slateText.map((n, i) => {
-                    switch(n.type){
-                        case 'bulleted-list': return(
-                            <ul key={i}>
-                                {n.children.map((firstChild, i) => {
-                                    if(firstChild.type === 'list-item'){
-                                        return(
-                                            <li key={i}>
-                                                {firstChild.children[0].text}
-                                            </li>
-                                        )
-                                    }
-                                })}  
-                            </ul>           
-                        ) 
-                        case 'heading-one': return(
-                            <Typography variant='h5' gutterBottom key={i}>
-                                {n.children.map((children, i) => {
-                                    if(children.bold) return <strong key={i}>{children.text}</strong>
-                                    if(children.italic) return <em key={i}>{children.text}</em>
-                                    if(children.underline) return <u key={i}>{children.text}</u>
-                                    return <Fragment key={i}>{children.text}</Fragment>
-                                })}  
-                            </Typography>           
-                        )
-                        case 'heading-two': return(
-                            <Typography variant='h6' gutterBottom key={i}>
-                                {n.children.map((children,i) => {
-                                    if(children.bold) return <strong key={i}>{children.text}</strong>
-                                    if(children.italic) return <em key={i}>{children.text}</em>
-                                    if(children.underline) return <u key={i}>{children.text}</u>
-                                    return <Fragment key={i}>{children.text}</Fragment>
-                                })}  
-                            </Typography>           
-                        )
-                        case 'numbered-list': return(
-                            <ol key={i}>
-                                {n.children.map((firstChild, i) => {
-                                    if(firstChild.type === 'list-item'){
-                                        return(
-                                            <li key={i}>
-                                                {firstChild.children[0].text}
-                                            </li>
-                                        )
-                                    }
-                                })}  
-                            </ol>           
-                        )
-                        default: {
-                            return (
-                                <Typography gutterBottom key={i}>
-                                    {n.children.map((children, i) => {
-                                        if(children.text === '') return <br/>
-                                        if(children.bold) return <strong key={i}>{children.text}</strong>
-                                        if(children.italic) return <em key={i}>{children.text}</em>
-                                        if(children.underline) return <u key={i}>{children.text}</u>
-                                        return <Fragment key={i}>{children.text}</Fragment>
-                                    })}
-                                </Typography>             
-                            )
-                        }
-                    }
-                })}
+                <MarkdownView
+                    markdown={property.description.text}
+                    options={{ emoji: true }}
+                />
             </div>
 
             {/* Video */}
@@ -321,39 +264,29 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                     </Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.socialMediaGridItem}>
-                    <Link href='https://www.facebook.com/lcabienesraices' passHref>
-                        <a target="_blank">
-                            <FacebookIcon className={classes.socialMediaIcon} />
-                        </a>
-                    </Link>
+                    <a target="_blank" href='https://bit.ly/facebook-LCABienesRaices'>
+                        <FacebookIcon className={classes.socialMediaIcon} />
+                    </a>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <Link href='https://www.tiktok.com/@lcabienesraices?_d=secCgYIASAHKAESMgowYT1TrB3ng6pzY72Dpd5OkxEysU%2BHzTSImHyPRc6vk9fandDCg5slJJ2OCL4rxcSTGgA%3D&_r=1&checksum=2f1cbed0b1a1be3ba092cf36c081a5f3ac54b254ab2aa90055a0be7bede6a117&language=es&sec_uid=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&sec_user_id=MS4wLjABAAAAEHUhxoahCJuxNW3FEA8Y5YOL76ei5M6aXlcDx9371YvFzBZX5kX5O-emah2w3Oyz&share_app_id=1233&share_author_id=6915514760588149766&share_link_id=202F5DC7-9C7C-45E2-8ADD-CABE60553F51&source=h5_m&tt_from=copy&u_code=dgd0bm0e8e085e&user_id=6915514760588149766&utm_campaign=client_share&utm_medium=ios&utm_source=copy' passHref>
-                        <a target="_blank">
-                            <IoLogoTiktok className={classes.socialMediaIcon} />
-                        </a>
-                    </Link>
+                    <a target="_blank" href='https://bit.ly/TitkTok-LCABienesRaices'>
+                        <IoLogoTiktok className={classes.socialMediaIcon} />
+                    </a>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <Link href='https://www.youtube.com/channel/UCej0jSusZmWgqmUDey8UeJQ' passHref>
-                        <a target="_blank">
-                            <YouTubeIcon className={classes.socialMediaIcon}/>
-                        </a>
-                    </Link>
+                    <a target="_blank" href='https://bit.ly/YouTube-LCABienesRaices'>
+                        <YouTubeIcon className={classes.socialMediaIcon}/>
+                    </a>
                 </Grid>
                 <Grid item xs={2} className={classes.socialMediaGridItem}>
-                    <Link href='https://www.google.com/maps/place/LCA+Bienes+Raices/@32.5661397,-116.590919,17z/data=!3m1!4b1!4m5!3m4!1s0x80d90d6db4b0bd7d:0xcc6fe9ea04043c0e!8m2!3d32.5661397!4d-116.5887303' passHref>
-                        <a target="_blank">
-                            <IoLogoGoogleplus className={classes.socialMediaIcon} />
-                        </a>
-                    </Link>
+                    <a target="_blank" href='https://bit.ly/Maps-LCABienesRaices'>
+                        <IoLogoGoogleplus className={classes.socialMediaIcon} />
+                    </a>
                 </Grid>
                 <Grid item xs={3} className={classes.socialMediaGridItem}>
-                    <Link href='https://www.instagram.com/lca_bienesraices/' passHref>
-                        <a target="_blank">
-                            <InstagramIcon className={classes.socialMediaIcon}/>
-                        </a>
-                    </Link>
+                    <a target="_blank" href='https://bit.ly/Instagram-LCABienesRaices'>
+                        <InstagramIcon className={classes.socialMediaIcon}/>
+                    </a>
                 </Grid>
             </Grid> 
             {/* Related Properties */}

@@ -47,7 +47,9 @@ const TicketsSchema = mongoose.Schema({
     required: true
   },
   paymentLocation: String,
-  paymentAddress: String
+  paymentAddress: String,
+  text: String,
+  document: String,
 }
 
 )

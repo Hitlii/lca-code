@@ -157,6 +157,9 @@ import * as yup from 'yup'
         description: yup 
             .string() 
             .max(160, 'La descripción es muy larga, trate de hacerla mas chica'),
+        images: yup
+            .string()
+            .required(),
 
         video: yup
         .string()

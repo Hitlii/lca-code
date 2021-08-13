@@ -8,6 +8,8 @@ module.exports = gql`
         birthday: String
         contact: Contact
         location: ClientLocation
+        note: String
+        profession: String
     }
 
     type Contact{
@@ -36,6 +38,8 @@ module.exports = gql`
         birthday: Date
         contact: ContactInput
         location: ClientLocationInput
+        note:String
+        profession:String
     }
 
     input ContactInput{
