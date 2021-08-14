@@ -152,7 +152,6 @@ export default function SinglePropertyPage({ property, relatedProperties }){
     function onClickMap() { 
         setMap(current => !current)
     }
-    console.log(property.media.images)
      
     return(
         <div className={classes.root}>

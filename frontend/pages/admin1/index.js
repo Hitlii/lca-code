@@ -111,11 +111,10 @@ function AllAdminPropertiesPage(props){
 
   return (
       <div>
-        <OrderFilterPropertiesForm propertiesData={props.propertiesData} isAdmin={true}/>
-
         <IconButton href='/admin1/propiedades/post-propiedad' className={classes.addButton}>
           <AddCircleIcon className={classes.addIcon} />
         </IconButton>
+        
         <AdminNavbar />
     </div>
   )

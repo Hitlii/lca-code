@@ -78,7 +78,7 @@ export const buttonStyle = {
     height: 40,
     borderRadius: 15,
     backgroundColor: gray6,
-    margin: '0px 20px 20px 20px',
+    margin: '0px 15px 15px 15px',
     fontFamily: 'Open Sans',
     textTransform: 'none',
     fontSize: 16,

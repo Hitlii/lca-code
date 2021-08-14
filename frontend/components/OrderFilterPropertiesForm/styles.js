@@ -75,6 +75,13 @@ export const useStyles = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "center",
       margin:'auto'
+     },
+
+     propertyContainer: {
+       display: 'block',
+       marginLeft: 'auto',
+       marginRight: 'auto',
+       maxWidth: 600,
      }
    
    }));

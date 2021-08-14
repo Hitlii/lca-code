@@ -18,8 +18,8 @@ function PropertyCard({ orientation, property }) {
     let height
     if(orientation === 'horizontal') {
         classes = HorizontalPropertyCardStyle()
-        width = 169
-        height = 169
+        width = 207
+        height = 207
     }
     else {
         classes = VerticalPropertyCardStyle()
@@ -60,9 +60,9 @@ function PropertyCard({ orientation, property }) {
                     <a>
                         <Image
                             className={classes.cover}
-                            src={`/${property.media.images[0].replace(/\\/g,'/')}`}
-                            width={width}
-                            height={height}
+                            src={property.media.images[0]}
+                            width={207}
+                            height={207}
                             alt={`${property.type} en ${property.location.city}`}
                         />
                     </a>

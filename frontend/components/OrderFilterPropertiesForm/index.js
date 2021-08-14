@@ -289,7 +289,7 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
             </FormControl>
             </Grid>
           </Grid>
-        </Grid>:''}
+        </Grid>:''} 
         
 
         
@@ -299,26 +299,22 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
         </Grid>
       </Grid>
         
-  
-        <Grid container >
-        {stateNoFound ? (
-          <NoFoundIcon search={filterProperty.values.search} />
-        ) : (
-          properties.map((property) => {
-            return (
-              <Grid item xs={12}  key={property._id} className={classes.center}>
-              {isAdmin ? 
-              <AdminPropertyCard property={property}/>
-              :
-              <PropertyCard
-                orientation="horizontal"
-                property={property}
-              />}
-              </Grid>
-            );
-          })
-        )}
-        </Grid>
+
+        <div className={classes.propertyContainer}>
+          {stateNoFound ? 
+              <NoFoundIcon search={filterProperty.values.search} />
+            :
+              properties.map(property => {
+                return (
+                  <PropertyCard
+                    key={property._id}
+                    orientation='horizontal'
+                    property={property}
+                  />
+                )
+              })
+          }
+        </div>
   
         {/* componente de siguiente pagina */}
         {!stateNoFound ? (
