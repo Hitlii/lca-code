@@ -75,7 +75,7 @@ function FilterPropertiesForm(props) {
                 <FilterIconButton
                     name={zones[1]}
                     Icon={
-                      <WorkIcon
+                      <FilterHdrIcon
                         className={classes.icon}
                         style={{ color: props.stateZonesButton[1] ? "white" : null }}
                       />
@@ -91,7 +91,7 @@ function FilterPropertiesForm(props) {
                 <FilterIconButton
                     name={zones[2]}
                     Icon={
-                      <FilterHdrIcon
+                      <WorkIcon
                         className={classes.icon}
                         style={{ color: props.stateZonesButton[2] ? "white" : null }}
                       />
