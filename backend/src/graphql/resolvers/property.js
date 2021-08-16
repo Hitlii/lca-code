@@ -56,7 +56,6 @@ const ADMIN_PROPERTY = {
 const CLIENT_PROPERTY = {
   vendors: 0,
   tickets: 0,
-  'media.images': { $slice: [1, 50] }
 }
 
 module.exports = {

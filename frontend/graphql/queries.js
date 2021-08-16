@@ -240,6 +240,7 @@ export const GET_PROPERTY = gql`
       specialPrice
       type
       area
+      title
       description {
         text
         isDeeded
@@ -278,6 +279,11 @@ export const GET_PROPERTY = gql`
         description
       }
       isFeatured
+      bitly{
+        map
+        video
+        web
+      }
     }
     relatedProperties {
       _id

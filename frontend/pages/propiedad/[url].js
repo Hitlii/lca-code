@@ -1,10 +1,10 @@
 import { Fragment, useState } from 'react'
-import { useRouter } from 'next/router'
 import { GET_PROPERTY, GET_ALL_PROPERTIES } from '../../graphql/queries'
 import client from '../../lib/apollo-client'
 
 import Image from 'next/image'
 import Link from 'next/link' 
+import Head from 'next/head'
 
 import MarkdownView from 'react-showdown'
 import Carousel from 'react-material-ui-carousel'
@@ -154,6 +154,11 @@ export default function SinglePropertyPage({ property, relatedProperties }){
     }
      
     return(
+        <>
+        <Head>
+            <title>{property.title}</title>
+            <meta name="description" content={property.meta.description}/>
+        </Head>
         <div className={classes.root}>
             <Link href='/propiedades'>
                 <IconButton className={classes.backButton}>
@@ -177,6 +182,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                                 className={classes.img}
                                 src={image} 
                                 layout='responsive'
+                                alt={i===0&&`${property.title}`}
                                 width={1200}
                                 height={1200}
                             />
@@ -187,25 +193,31 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             
 
             {/* Type of property */}
-            <Typography  variant="h5" gutterBottom>
-                {property.title}
-            </Typography>
+            <header>
+                <Typography  variant="h5" gutterBottom>
+                    {property.title}
+                </Typography>
 
-            {/* Location */}
-            <Typography variant="body2" className={classes.location} gutterBottom>
-                {property.location.address} {property.location.city} {property.location.state}
-            </Typography>
+                {/* Location */}
+                <Typography variant="body2" className={classes.location} gutterBottom>
+                    {property.location.address} {property.location.city} {property.location.state}
+                </Typography>
+            </header>
             {/* Description */}
             <div className={classes.iconDiv}>
                 <DescriptionIcon className={classes.icon}/>
                 <Typography className={classes.iconText}>Descripción</Typography>
             </div>
-            <div className={classes.description}>
+            <main className={classes.description}>
                 <MarkdownView
                     markdown={property.description.text}
-                    options={{ emoji: true }}
+                    options={{ 
+                        emoji: true, 
+                        requireSpaceBeforeHeadingText: true, 
+                        openLinksInNewWindow: true, 
+                        simplifiedAutoLink:true}}
                 />
-            </div>
+            </main>
 
             {/* Video */}
             <div className={classes.iconDiv}>
@@ -225,7 +237,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 <LocationOnIcon className={classes.icon}/>
                 <Typography className={classes.iconText}>Ubicación</Typography>
             </div>
-            <div className={classes.map}>
+            <div role="application" className={classes.map}>
                 {map ? 
                     <Map
                         marker={property.location.coordinates}
@@ -244,15 +256,21 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                         <img
                             width="100%"
                             src='/dontChargeMeGoogleMaps.png'
+                            alt="Da click al mapa para activarlo"
                         />
                     </IconButton>
                     </>
                 }
             </div>
             {/* Contact Button */}
-            <Link href='https://api.whatsapp.com/send?phone=+526653922230' passHref>
+            <Link href= {`https://api.whatsapp.com/send?phone=526653937090&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} passHref>
                 <a target='_blank'>
                     <GreenLgButton>Contactar</GreenLgButton>
+                </a>
+            </Link>
+            <Link href={property.bitly.map} passHref>
+                <a target='_blank'>
+                    Cómo llegar
                 </a>
             </Link>
             {/* Social Media Icons */}
@@ -296,7 +314,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 text='Relacionados'
             />}
             <HorizontalScroll>
-            {relatedProperties.map((property => {
+            {relatedProperties&&relatedProperties.map((property => {
                 return (
                     <div key={property._id} className={classes.wrapperItem}>
                         <PropertyCard 
@@ -307,6 +325,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             }))}
             </HorizontalScroll>
         </div>
+    </>
     )
 }
 

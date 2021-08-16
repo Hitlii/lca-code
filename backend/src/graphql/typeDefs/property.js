@@ -108,6 +108,8 @@ module.exports = gql`
         media: MediaInput!
         "Meta descriptors, such as description, keywords, author, and URL"
         meta: MetaInput!
+        "Bitly inputs" 
+        bitly: BitlyInput
 
     }
 
@@ -155,6 +157,11 @@ module.exports = gql`
         lat: Float!
         lng: Float!
     }
+    input BitlyInput{
+        web:String
+        video:String
+        map:String
+    }
 
     "Represents a Property"
     type Property{
@@ -198,7 +205,16 @@ module.exports = gql`
         "Property Vendors"
         vendors: [Client!] 
         tickets: [Ticket!]
+        bitly: Bitly
 
+    }
+    type Bitly {
+        "Bitly web page"
+        web: String
+        "Youtube video"
+        video: String
+        "Location on google maps"
+        map:String
     }
 
     "Location of the property, addess and coordinates"
