@@ -1,7 +1,8 @@
 import React from "react";
-import { MdSort } from "react-icons/Md";
-import {BsFilter} from "react-icons/Bs"
-import { Button, Container } from "@material-ui/core";
+
+import { MdSort } from "react-icons/lib/md";
+import {BsFilter} from "react-icons/lib/bs"
+import { Button } from "@material-ui/core";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import {useStyles} from './styles'
 function OrderFilterButton({ onChangeOrder, onChangeFilter }) {
