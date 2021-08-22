@@ -14,7 +14,6 @@ async function clientFilter (clients) {
 
   // Seperating existing clients from new clients
   for (const client of clients) {
-    client._id = client.id
     // A client with an id will be an existing client
     if (client.id) {
       existingClients.push(client)

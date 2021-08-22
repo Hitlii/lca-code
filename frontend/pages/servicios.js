@@ -1,37 +1,43 @@
 import React from "react";
-import MenuBar from "../components/bars/MenuBar";
+import Navbar from '../components/Navbar'
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography"
 const useStyles = makeStyles({
   root: {
-    margin: 10,
-    padding: 15,
-    fontFamily: "Roboto",
-    textAlign: "justify",
+    maxWidth: 600,
+    minWidth: 320,
+    margin:'auto',
+    textAlign:'justify'
   },
+  text:{
+
+    margin: 20
+  }
+
 });
 
 function Servicios() {
   const classes = useStyles();
   return (
-    <div>
-      <MenuBar />
-      <Paper className={classes.root}>
-        <h1>Servicios</h1>
-        <p>
-          {" "}
+    <div className={classes.root}>
+      <Navbar />
+
+      <main className={classes.root} role="main">
+        <div className={classes.text}>
+
+
+        <Typography variant="h2" gutterBottom>Servicios</Typography>
+        <Typography variant="subtitle1" gutterBottom> 
           En LCA Bienes Raíces ofrecemos la promoción de venta de bienes como lo
           son casas, departamentos, terrenos, entre otros; esto lo logramos
-          mediante el siguiente proceso:
-        </p>
-      </Paper>
-      <Paper className={classes.root}>
+          mediante el siguiente proceso: 
+        </Typography>
+          
         <img
           src="/LCA_Bienes_Raices_Proceso_de_venta-promocion.jpg"
           style={{ width: "100%" }}
         />
-      </Paper>
-      <Paper className={classes.root}>
         <p>
           Así mismo ofrecemos Consultoria en Materia Inmobiliaria ya sea que
           quiera vender, comprar, traspasar, rentar una propiedad o un bien
@@ -39,8 +45,6 @@ function Servicios() {
           habitacional, comercial o industrial podemos ayudarle a realizarlo con
           éxito.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
         <ul>
           <li>Compra-venta de propiedades (promoción).</li>
           <li>Asesoría inmobiliaria.</li>
@@ -54,7 +58,9 @@ function Servicios() {
           <li>Administración de propiedades.</li>
           <li>Apoyo en proyectos inmobiliarios independientes.</li>
         </ul>
-      </Paper>
+        </div>
+      </main>
+      
     </div>
   );
 }

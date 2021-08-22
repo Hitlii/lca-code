@@ -1,24 +1,78 @@
-const { gql } = require('apollo-server-express')
+const { gql } = require('apollo-server')
 
 module.exports = gql`
-   
-    
     extend type Mutation {
         "Creates a property, returns the URL generated"
-        createProperty(property: createPropertyInput!, clients: [ClientInput!]!):CreatePropertyMutationResponse!
+        createProperty(property: CreatePropertyInput!, vendors: [ClientInput!]!):CreatePropertyMutationResponse!
         "Deletes a property by ID, returns string with message if deleted, error if not"
-        deleteProperty(id: ID!): DeleteMutationResponse!
+        deleteProperty(_id: ID!): DeleteMutationResponse!
         
     }
 
+    extend type Query {
+        "Returns a property by url"
+        getProperty(url: String!):PropertyAndRelated
+        "Returns properties based on a optional filter"
+        getProperties(filter: PropertyFilterInput, order: PropertyOrderInput, pagination: PropertyPaginationInput!): [Property]
+        "Returns admin properties based on a filter"
+        getAdminProperties(filter: PropertyFilterInput, pagination: PropertyPaginationInput!):[Property]
+        "Returns admin property by url"
+        getAdminProperty(url: String!): Property
+        "Returns the featured properties"
+        getFeaturedProperties:[Property!]
+        "Returns all properties without pagination"
+        getAllProperties(isAdminCard: Boolean):[Property]
+
+    }
+    
     type CreatePropertyMutationResponse implements MutationResponse{
         message: String!
         code: Float!
         success: Boolean!
+        "The url of the created property"
         url: String
     }
 
-    input createPropertyInput{
+    "Property filter input."
+    input PropertyFilterInput{
+        zone: String,
+        type: String,
+        status: String
+        city: String,
+        # By now state will not be used because state is always 'B.C'
+        #state: String
+        price: PriceInput
+        area: AreaInput
+        "Search text"
+        search: String 
+    }
+
+    "Input for ordering properties"
+    input PropertyOrderInput{
+        "1 ascending and -1 descending order"
+        price: Float,
+        area: Float
+    }
+    input PropertyPaginationInput{
+        pageNumber: Float!
+    }
+
+
+    
+    "Price input for Filter Input"
+    input PriceInput{
+        minPrice: Float,
+        maxPrice: Float
+    }
+    "Area input for AreaInput"
+    input AreaInput{
+        minArea: Float,
+        maxArea: Float
+    }
+
+  
+
+    input CreatePropertyInput{
         "Status of the property, can be Venta, Renta, Vendido, Oculto"
         status: String!
         "Type of property i.e Casa, Terreno, Rancho"
@@ -27,11 +81,15 @@ module.exports = gql`
         zone: String!
         "Code of the property"
         code: String!
+        "If a property is a featured property"
+        isFeatured: Boolean
     
         "Special price, used when the property cost more than 150,000 USD (optional) i.e  880 USD / ha"
         specialPrice: String
         "Is the monthly payment of the property (optional) i.e  'en 72x $ 978 USD'"
         onPayments: String
+        "Is the first pay of the property (Enganche)"
+        hitch:Float
         
         "Price of the property"
         price: Float!
@@ -43,42 +101,45 @@ module.exports = gql`
         "Title of the property"
         title: String!
         
-        description: descriptionInput!
+        description: DescriptionInput!
         "Location of the property, address and coordinates"
-        location: locationInput!
+        location: LocationInput!
         "Media of the property, images and video url"
-        media: mediaInput!
+        media: MediaInput!
         "Meta descriptors, such as description, keywords, author, and URL"
-        meta: metaInput!
+        meta: MetaInput!
+        "Bitly inputs" 
+        bitly: BitlyInput
 
     }
 
-    input descriptionInput{
+    input DescriptionInput{
         "Slate stringified description"
         text: String!
         isDeeded: Boolean
         hasAllServices: Boolean
     }
 
-    
-
-    input mediaInput{
+    "Media input, images and video"
+    input MediaInput{
         "Images of the property in the carrousel/slider"
         images: [String!]
         "Video of the property, should be a youtube URL"
         video: String
     }
-    input metaInput{
+
+    "Metadescriptor Input"
+    input MetaInput{
         "Description of the property MAX 160 characters"
         description: String!
         "URL of the page"
         url: String
-        "Title of the page MAX 55 characters"
-        title: String!
+        # "Title of the page MAX 55 characters"
+        # title: String!
     }
 
     "Location of the property"
-    input locationInput {
+    input LocationInput {
         "State of the property, default B.C"
         state: String!
         "City of the property"
@@ -86,19 +147,28 @@ module.exports = gql`
         "Addres of the property"
         address: String!
         "Google Maps API Retrieved coordinates."
-        coordinates: coordinatesInput!
+        coordinates: CoordinatesInput!
+        "Postal code of the property"
+        postalCode: String
     }
     
     "Google Maps Coordinates of the property"
-    input coordinatesInput{
+    input CoordinatesInput{
         lat: Float!
         lng: Float!
+    }
+    input BitlyInput{
+        web:String
+        video:String
+        map:String
     }
 
     "Represents a Property"
     type Property{
         "ID of the property"
-        id: ID!
+        _id: ID!
+        "Checks if the property is a featured property"
+        isFeatured: Boolean
         "Status of the property, can be Venta, Renta, Vendido, Oculto"
         status: String!
         "Type of property i.e Casa, Terreno, Rancho"
@@ -111,6 +181,8 @@ module.exports = gql`
         specialPrice: String
         "Is the monthly payment of the property (optional) i.e  'en 72x $ 978 USD'"
         onPayments: String
+        "Is the first pay of the property when it is on payments"
+        hitch:Float
         
         "Price of the property"
         price: Float!
@@ -125,14 +197,24 @@ module.exports = gql`
         description: PropertyDescription!
 
         "Location of the property, address and coordinates"
-        location: Location!
+        location: PropertyLocation!
         "Media of the property, images and video url"
         media: Media!
         "Meta descriptors, such as description, keywords, author, and URL"
         meta: Meta!
         "Property Vendors"
-        vendors: [String!] 
+        vendors: [Client!] 
+        tickets: [Ticket!]
+        bitly: Bitly
 
+    }
+    type Bitly {
+        "Bitly web page"
+        web: String
+        "Youtube video"
+        video: String
+        "Location on google maps"
+        map:String
     }
 
     "Location of the property, addess and coordinates"
@@ -145,23 +227,28 @@ module.exports = gql`
         address: String!
         "Google Maps API Retrieved coordinates."
         coordinates: Coordinates!
+        "Postal code of the property"
+        postalCode: String
     }
+    "Description of the property"
     type PropertyDescription {
+        "Description of the property (Slate)"
         text: String!
         isDeeded: Boolean
         hasAllServices: Boolean
-
     }
 
+    "Metadescriptors of the property, useful for SEO"
     type Meta{
         "Description of the property MAX 160 characters"
         description: String!
         "URL of the page"
         url: String!
-        "Title of the page MAX 55 characters"
-        title: String!
+        # "Title of the page MAX 55 characters"
+        # title: String!
     }
 
+    "Coordinates of the property"
     type Coordinates{       
         lat: Float!
         lng: Float!
@@ -173,5 +260,13 @@ module.exports = gql`
         "Video of the property, should be a youtube URL"
         video: String
     }
+
+    "Property and related properties when we query getProperty"
+    type PropertyAndRelated {
+        property: Property,
+        relatedProperties: [Property!]
+    }
+
+    
 
 `

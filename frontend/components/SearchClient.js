@@ -2,57 +2,84 @@
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
 
-import { GET_ALL_CLIENTS } from '../graphql/queries'
 
-const useStyles = makeStyles(({
-    auto: {
-        marginBottom: 20,
-    },
-    textField: {
-        width: 340,
-        height: 40,
-        marginBottom: 30
-    }
-}))
 
 function SearchClient({
     onChange, 
     clients, 
-    handleChangeVendors 
-    
+    handleChangeVendors, 
+    selectedClients
     }) {
-
-    const classes = useStyles()
 
     function handleChange(event,value){ 
         handleChangeVendors(value);
         console.log(value);
     }
-    return (
-        <Autocomplete 
-            className={classes.auto}
-            multiple
-            limitTags={2}
-            options={clients}
-            getOptionLabel={(option) => option.name}
-            renderOption={(option) => (
-                <Typography>
-                    {option.name} - {option.contact.phone}
-                </Typography>
-            )}
-            onChange={handleChange}
-            renderInput={(params) => (
-                <TextField 
-                    className={classes.textField}
-                    {...params} 
-                    label='Elija un cliente'
-                    variant='outlined'
-                />
-            )}
-        />
-    )
+
+    function setDefaultValues(){
+        let i, j
+        let defaultClients = []
+        //Recorro arreglo de todos los clientes
+        for(i = 0; i < clients.length; i++) {
+            //Recorro arreglo de clientes seleccionados
+            for(j = 0; j < selectedClients.length; j++) {
+                //Si el cliente seleccionado coincide con arreglo de todos los clientes, metemos a 3er arreglo
+                if(clients[i]._id === selectedClients[j]._id) {
+                    defaultClients.push(clients[i])
+                }
+            }
+        }
+        return defaultClients
+    }
+
+    if(selectedClients !== null) {
+        return (
+            <Autocomplete 
+                multiple
+                limitTags={2}
+                options={clients}
+                defaultValue={setDefaultValues()}
+                getOptionLabel={(option) => option.name}
+                renderOption={(option) => (
+                    <Typography>
+                        {option.name} - {option.contact.phone}
+                    </Typography>
+                )}
+                onChange={handleChange}
+                renderInput={(params) => (
+                    <TextField 
+                        {...params} 
+                        label='Elija un cliente'
+                        variant='filled'
+                    />
+                )}
+            />
+        )
+    }
+    else {
+        return (
+            <Autocomplete 
+                multiple
+                limitTags={2}
+                options={clients}
+                getOptionLabel={(option) => option.name}
+                renderOption={(option) => (
+                    <Typography>
+                        {option.name} - {option.contact.phone}
+                    </Typography>
+                )}
+                onChange={handleChange}
+                renderInput={(params) => (
+                    <TextField 
+                        {...params} 
+                        label='Elija un cliente'
+                        variant='filled'
+                    />
+                )}
+            />
+        )
+    }
 }
 
 export default SearchClient

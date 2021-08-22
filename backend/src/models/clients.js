@@ -41,7 +41,12 @@ const ClientSchema = new Schema({
       type: String,
       required: true
     }
-  }
+  },
+  note:String,
+  profession:String
 })
 
+
+// Defining indexes 
+ClientSchema.index({ name: 'text' })
 module.exports = mongoose.model('clients', ClientSchema)

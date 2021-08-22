@@ -1,12 +1,14 @@
-const { gql } = require('apollo-server-express')
+const { gql } = require('apollo-server')
 
 module.exports = gql`
 
     extend type Mutation{
         "Creates a ticket, returns created ticket."
         createTicket(ticket: CreateTicketInput!, clients: [ClientInput!]!):CreateEditTicketMutationResponse!
+        "Updates a ticket, returns updated ticket."
+        updateTicket(ticket: UpdateTicketInput!, clients: [ClientInput!]): CreateEditTicketMutationResponse!
         "Deletes a ticket (id) from a property (propertyID)"
-        deleteTicket(id:ID!, propertyId: ID!): DeleteMutationResponse!
+        deleteTicket(_id:ID!, propertyId: ID!): DeleteMutationResponse!
 
 
     }
@@ -14,6 +16,8 @@ module.exports = gql`
     extend type Query {
         "Gets tickets by propertyId"
         getTickets(propertyId:ID): [Ticket]
+        "Gets a ticket by id"
+        getTicket(_id:ID): Ticket
     }
 
     type CreateEditTicketMutationResponse implements MutationResponse{
@@ -29,10 +33,22 @@ module.exports = gql`
         area: Float!
         price: Float!
         currency: String!
-        promissory: PromissoryInput
+        promissory: [PromissoryInput]
         emissionDate: Date!   
         paymentLocation: String!
         paymentAddress: String!
+    }
+    input UpdateTicketInput{
+        _id: ID!
+        propertyId: ID!
+        status: String
+        area: Float
+        price: Float
+        currency: String
+        promissory: [PromissoryInput]
+        emissionDate: Date   
+        paymentLocation: String
+        paymentAddress: String
     }
 
     input PromissoryInput{
@@ -42,7 +58,7 @@ module.exports = gql`
    
     type Ticket{
         "Ticket ID"
-        id: ID!
+        _id: ID!
         "Id of the property"
         propertyId: ID!
         "Arrangement of clients buying or renting a property"

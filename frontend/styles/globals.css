@@ -1,11 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300&display=swap');  
 :root {
-    --mesenger-blue: #2196F3
+    --mesenger-blue: #2196F3;
+    --gray6: #F2F2F2;
+    --gray-hover: #bdbdbd;
+    --neutral-light: #4A4C4B;
+    --whatsapp-color: #4CAF50;
+    --green-hover: #2e7d32;
 }
 
 body{
     padding:0;
+    padding-bottom: 120px;
     margin:0;
     font-family: Open Sans;    
 }
+a {
+  text-decoration: none;
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:wght@300&display=swap');  
+a:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+::-webkit-scrollbar {
+    width: 20px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #a8bbbf;
+  }

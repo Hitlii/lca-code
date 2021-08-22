@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const PropertiesSchema = mongoose.Schema({
+  isFeatured: Boolean,
   code: {
     type: String,
     required: true,
@@ -16,7 +17,7 @@ const PropertiesSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  // i.e Campestre, Residencial, Comercial  (Group Button)
+  // i.e Campestre, Urbana, Comercial  (Group Button)
   zone: {
     type: String,
     required: true
@@ -37,6 +38,7 @@ const PropertiesSchema = mongoose.Schema({
   specialPrice: String,
   // If a property is in payments, this field displays the monthly payment
   onPayments: String,
+  hitch:Number,
 
   // If area >= 10,000 m then area will be represeted as hectare
   area: {
@@ -68,6 +70,7 @@ const PropertiesSchema = mongoose.Schema({
       type: String,
       required: true
     },
+    postalCode:String,
     coordinates: { // Google maps API
       lat: {
         type: Number,
@@ -85,7 +88,23 @@ const PropertiesSchema = mongoose.Schema({
       required: true
     },
     // Youtube video, optional
-    video: String
+    video: String,
+    image360: String
+  },
+  
+  bitly:{
+    map: {
+      type: String,
+      required:true,
+    },
+    web:{
+      type: String,
+      required: true,
+    },
+    video:{
+      type: String,
+      required: true,
+    },
   },
 
   meta: {
@@ -98,10 +117,11 @@ const PropertiesSchema = mongoose.Schema({
       required: true,
       unique: true
     },
-    title: {
-      type: String,
-      required: true
-    }
+   
+    // title: {
+    //   type: String,
+    //   required: true
+    // }
   },
 
   vendors: [
@@ -123,9 +143,23 @@ const PropertiesSchema = mongoose.Schema({
       _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tickets'
-      }
+      },
+      clients: [{
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'clients'
+        },
+        name: String
+      }],
+      area: Number,
+      price: Number,
+      currency: String,
+      emissionDate: Date
+
     }
   ]
 })
 
+// Defining indexes
+PropertiesSchema.index({ title: 'text', code: 'text' })
 module.exports = mongoose.model('properties', PropertiesSchema)

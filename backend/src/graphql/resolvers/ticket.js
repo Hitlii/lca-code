@@ -1,31 +1,20 @@
 const Ticket = require('../../models/tickets')
-const { clientFilter } = require('../helper/filters')
-const { ticketInputValidator, isObjectIdValid } = require('../helper/validators')
-const Client = require('../../models/clients')
+const { isObjectIdValid } = require('../helper/validators')
+// const Client = require('../../models/clients')
 const Property = require('../../models/properties')
 const ObjectId = require('mongoose').Types.ObjectId
+const { combineResolvers } = require('graphql-resolvers')
+const { isAuthenticated } = require('./middleware')
 
 module.exports = {
   Mutation: {
     /**
-            @description Creates a ticket
-            @param {ticket} ticket A new ticket
-            @param {clients} clients Array of existing clients and new clients
-         */
-    createTicket: async (_, { ticket, clients }) => {
+      @description Creates a ticket
+      @param {ticket} ticket A new ticket
+      @param {clients} clients Array of existing clients and new clients
+    */
+    createTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }) => {
       let error = null
-      // Sanitizing and validating input
-      const ticketValidationErrors = ticketInputValidator(ticket)
-      const { existingClients, newClients, validationErrors: clientValidationErrors } = await clientFilter(clients)
-
-      // Joininig errors
-      if (ticketValidationErrors || clientValidationErrors) {
-        error = new Error('Error validando inputs')
-        error.data = { ...clientValidationErrors, ...ticketValidationErrors }
-        error.code = 400
-        error.solution = 'Modifique los campos'
-        throw error
-      }
 
       // Searching property.
       const property = await Property.findOne({ _id: ObjectId(ticket.propertyId) }).select('tickets')
@@ -38,11 +27,9 @@ module.exports = {
         throw error
       }
 
-      // Creating new clients
-      const createdClients = await Client.insertMany(newClients)
       // Creating new ticket
-      const newTicket = new Ticket({ ...ticket, clients: [...existingClients, ...createdClients] })
-      property.tickets ? property.tickets.push(newTicket._id) : property.tickets = [newTicket._id]
+      const newTicket = new Ticket({ ...ticket, clients })
+      property.tickets ? property.tickets.push(newTicket) : property.tickets = [newTicket]
 
       // Saving on DB
       await property.save()
@@ -54,24 +41,52 @@ module.exports = {
         success: true,
         ticket: newTicket
       }
-    },
+    }),
+    updateTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }) => {
+      try {
+        let updatedTicket = {
+          ...ticket, clients
+        }
+        updatedTicket = await Ticket.findByIdAndUpdate(
+          ObjectId(ticket._id),
+          { $set: updatedTicket },
+          { new: true }).exec()
+
+        if (updatedTicket === null) {
+          const error = new Error('Ticket no encontrado')
+          error.code = 404
+          throw error
+        }
+        return {
+          message: 'Ticket actualizado',
+          ticket: updatedTicket,
+          success: true,
+          code: 200
+        }
+      } catch (error) {
+        if (error.code && error.code === 404) throw error
+        error.message = 'Error al actualizar el ticket'
+        error.code = 500
+        throw error
+      }
+    }),
     /**
             @description Deletes a ticket
             @param {String} id id of the ticket
-            @returns {MutationResponse} With code and message
+            @returns {MutationResponse} With a code message and success status
          */
-    deleteTicket: async (_, { id, propertyId }) => {
+    deleteTicket: combineResolvers(isAuthenticated, async (_, { _id, propertyId }) => {
       let error = null
 
       // Invalid ID
-      if (!isObjectIdValid(id) || !isObjectIdValid(propertyId)) {
+      if (!isObjectIdValid(_id) || !isObjectIdValid(propertyId)) {
         error = new Error('\'Este ID no es valido\'')
         error.code = 400
         error.solution = 'Ingrese un ID valido (está mandando un string?)'
         throw error
       }
 
-      const ticket = await Ticket.findById(ObjectId(id), 'propertyId').exec()
+      const ticket = await Ticket.findById(ObjectId(_id), 'propertyId').exec()
       if (ticket === null) {
         error = new Error('Ticket no encontrado')
         error.solution = 'Es probable que este ticket haya sido eliminado, recargue la pagina para verificar'
@@ -97,10 +112,10 @@ module.exports = {
         success: true,
         code: 200
       }
-    }
+    })
   },
   Query: {
-    getTickets: async (_, { propertyId }) => {
+    getTickets: combineResolvers(isAuthenticated, async (_, { propertyId }) => {
       let error = null
       if (!isObjectIdValid(propertyId)) {
         error = new Error('\'Este ID no es valido\'')
@@ -111,6 +126,18 @@ module.exports = {
       // Need of pagination here?
       const tickets = await Ticket.find({ propertyId }, '-promissory -paymentLocation -paymentAddress')
       return tickets
-    }
+    }),
+    getTicket: combineResolvers(isAuthenticated, async (_, { _id }) => {
+      let error = null
+      if (!isObjectIdValid(_id)) {
+        error = new Error('\'Este ID no es valido\'')
+        error.code = 400
+        error.solution = 'Ingrese un ID valido (está mandando un string?)'
+        throw error
+      }
+
+      const ticket = await Ticket.findOne({ _id }).exec()
+      return ticket
+    })
   }
 }

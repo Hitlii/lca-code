@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 
 const loginStyles = makeStyles(({

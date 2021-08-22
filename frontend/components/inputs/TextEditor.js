@@ -63,7 +63,6 @@ function TextEditor ({ value, onChange }) {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
 
   return (
-        <Paper elevation={0} variant='outlined' className={classes.root}>
             <Slate
                 editor={editor}
                 value={value}
@@ -83,9 +82,19 @@ function TextEditor ({ value, onChange }) {
                     placeholder='Ingresa la descripcion aqui...'
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
+                    autoFocus
+                    spellCheck
+                    onKeyDown={(event) => {
+                      for(const hotkey in HOTKEYS) {
+                        if(isHotkey(hotkey, event)) {
+                          event.preventDefault()
+                          const mark = HOTKEYS[hotkey]
+                          toggleMark(editor, mark)
+                        }
+                      }
+                    }}
                 />
             </Slate>
-        </Paper>
   )
 }
 

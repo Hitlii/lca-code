@@ -63,26 +63,27 @@ function useImageState(initialVal) {
   }
 
   async function getPathImages(images) {
+    let token
+    if(typeof window !== 'undefined') {
+      token = localStorage.getItem('token')
+      if(!token) return;
+    }
+
     const formDatas = new FormData();
     images.map((image) => {
       formDatas.append("images", image.imageFile);
     });
-    await Axios.put("http://localhost:8000/post-images", formDatas, {
+   
+    const res = await Axios.put("http://localhost:8000/post-images", formDatas, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImxjYWJpZW5lc3JhaWNlc3RrdEBnbWFpbC5jb20iLCJpYXQiOjE2MjA0MjM0MTUsImV4cCI6MTYyMDQzNDIxNSwic3ViIjoiNjA3MTA5Yjk5OWUwNmIzOWM0NDNiN2ViIn0.aQ6ZBohZddfcwUY6HfGXmll-9GzZxQmnHHI5zmNrGD",
+          `Bearer ${token}`,
       },
     })
-      .then((res) => {
-        console.log(res);
-        if (res.data.code === 201) {
-          imagesPath.current = { filesPath: res.data.filesPath };
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (res.data.code === 201) {
+      imagesPath.current = res.data.filesPath;
+    }
   }
 
   // Handler when image is ordered
@@ -92,13 +93,10 @@ function useImageState(initialVal) {
     arrayImage.splice(initialPosition, 1, images[finalPosition]);
     arrayImage.splice(finalPosition, 1, initialImage);
     setImages(arrayImage);
-
-    //console.log(event)
   }
 
   // Handler when an image is deleted from the array
   function deleteImage(event) {
-    //console.log(event.target)
     setImages(
       images.filter(
         (image) => image.key !== event.target.getAttribute("data-index")

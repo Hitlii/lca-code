@@ -1,51 +1,52 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import MenuBar from "../components/bars/MenuBar";
-import Paper from "@material-ui/core/Paper";
+import Navbar from '../components/Navbar'
+import Grid from "@material-ui/core/Grid"
+import Typography from "@material-ui/core/Typography"
 
 const useStyles = makeStyles({
   root: {
-    margin: 10,
-    padding: 15,
-    fontFamily: "Roboto",
-    textAlign: "justify",
-  },
+    maxWidth: 600,
+    minWidth: 320,
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    textAlign:'justify',
+    
+  }, 
+  text:{margin:20}
 });
 
 function Nosotros() {
   const classes = useStyles();
 
   return (
-    <div>
-      <MenuBar />
-
-      <Paper className={classes.root}>
-        <h1>Nosotros</h1>
-        <p>
+    <div className={classes.root}>
+      <Navbar />
+        <main className={classes.root} role="main">
+        <div className={classes.text}>
+          <Typography variant="h2">Nosotros</Typography>
+        <Typography variant="subtitle1" gutterBottom> 
           LCA Bienes Raices y Asistencia Profesional, SAS de C.V. , “Juntos por
           tu patrimonio”. Somos una agencia inmobiliaria y de asistencia
           profesional con amplio sentido de servicio, profesionalismo y atención
           personalizada en la búsqueda y obtención de tu patrimonio, así como en
           la promoción de tus bienes y asitencia en áreas de ingeniería civil e
-          industrial.
-        </p>
+          industrial. 
+        </Typography>
         <p>
           En LCA Bienes Raíces te asesoramos de manera personalizada y te
           aclaramos tus dudas antes de iniciar con los trámites de compra o
           venta de tus bienes…también te acompañamos de inicio a fin en las
           instituciones correspondientes.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
-        <h2>Misión:</h2>
+
+        <Typography variant="h4" gutterBottom>Misión</Typography>
         <p>
           Ofrecer servicios inmobiliarios y de asistencia profesional de
           vanguardia que cumplan con las expectativas de nuestros clientes,
           estableciendo así bases sólidas y estables de servicio.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
-        <h2>Visión:</h2>
+        <Typography variant="h4" gutterBottom>Visión</Typography>
         <p>
           Queremos ser reconocidos como la principal y mejor agencia
           inmobiliaria del estado de Baja California, iniciando en la Ciudad de
@@ -55,21 +56,12 @@ function Nosotros() {
           logrando así un posicionamiento confiable en los potenciales
           compradores o vendedores de bienes inmuebles de la zona.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
-        <h2>Valores:</h2>
-        <p>
-          Desarrollar el potencial óptimo de nuestros asesores inmobiliarios a
-          través de la capacitación continua, logrando así capacidad de
-          respuesta a las necesidades y expectativas de nuestros clientes.
-        </p>
+        <Typography variant="h4" gutterBottom>Valores</Typography>
         <p>
           Nuestros principios son la Honestidad, Compromiso, Transparencia y
           Flexibilidad en Nuestros Servicios.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
-        <h2>Politica de privacidad</h2>
+        <Typography variant="h4" gutterBottom>Politica de privacidad</Typography>
         <p>
           El presente Política de Privacidad establece los términos en que LCA
           Bienes Raices usa y protege la información que es proporcionada por
@@ -82,8 +74,6 @@ function Nosotros() {
           le recomendamos y enfatizamos revisar continuamente esta página para
           asegurarse que está de acuerdo con dichos cambios.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
         <p>
           <strong>Información que es recogida</strong>
         </p>
@@ -94,8 +84,6 @@ function Nosotros() {
           podrá ser requerida información específica para procesar algún pedido
           o realizar una entrega o facturación.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
         <p>
           <strong>Uso de la información recogida</strong>
         </p>
@@ -116,8 +104,6 @@ function Nosotros() {
           avanzados y los actualizamos constantemente para asegurarnos que no
           exista ningún acceso no autorizado.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
         <p>
           <strong>Cookies</strong>
         </p>
@@ -145,8 +131,6 @@ function Nosotros() {
           cookies. Si se declinan es posible que no pueda utilizar algunos de
           nuestros servicios.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
         <p>
           <strong>Enlace a terceros</strong>
         </p>
@@ -160,8 +144,6 @@ function Nosotros() {
           privacidad por lo cual es recomendable que los consulte para confirmar
           que usted está de acuerdo con estas.
         </p>
-      </Paper>
-      <Paper className={classes.root}>
         <p>
           <strong>Control de su información personal</strong>
         </p>
@@ -187,7 +169,8 @@ function Nosotros() {
           Esta politica de privacidad se han generado en
           politicadeprivacidadplantilla.com.
         </p>
-      </Paper>
+        </div>
+      </main>
     </div>
   );
 }
