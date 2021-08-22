@@ -1,7 +1,7 @@
-const Ticket = require('../../models/tickets')
 const { isObjectIdValid } = require('../helper/validators')
 // const Client = require('../../models/clients')
-const Property = require('../../models/properties')
+const TicketSchema = require('../../models/tickets')
+const PropertySchema = require('../../models/properties')
 const ObjectId = require('mongoose').Types.ObjectId
 const { combineResolvers } = require('graphql-resolvers')
 const { isAuthenticated } = require('./middleware')
@@ -13,9 +13,10 @@ module.exports = {
       @param {ticket} ticket A new ticket
       @param {clients} clients Array of existing clients and new clients
     */
-    createTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }) => {
+    createTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }, context) => {
       let error = null
-
+      const Property = context.dbConn.model('properties', PropertySchema)
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
       // Searching property.
       const property = await Property.findOne({ _id: ObjectId(ticket.propertyId) }).select('tickets')
 
@@ -42,8 +43,9 @@ module.exports = {
         ticket: newTicket
       }
     }),
-    updateTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }) => {
+    updateTicket: combineResolvers(isAuthenticated, async (_, { ticket, clients }, context) => {
       try {
+        const Ticket = context.dbConn.model('tickets', TicketSchema)
         let updatedTicket = {
           ...ticket, clients
         }
@@ -75,7 +77,10 @@ module.exports = {
             @param {String} id id of the ticket
             @returns {MutationResponse} With a code message and success status
          */
-    deleteTicket: combineResolvers(isAuthenticated, async (_, { _id, propertyId }) => {
+    deleteTicket: combineResolvers(isAuthenticated, async (_, { _id, propertyId }, context) => {
+      const Property = context.dbConn.model('properties', PropertySchema)
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
+      
       let error = null
 
       // Invalid ID
@@ -115,7 +120,8 @@ module.exports = {
     })
   },
   Query: {
-    getTickets: combineResolvers(isAuthenticated, async (_, { propertyId }) => {
+    getTickets: combineResolvers(isAuthenticated, async (_, { propertyId }, context) => {
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
       let error = null
       if (!isObjectIdValid(propertyId)) {
         error = new Error('\'Este ID no es valido\'')
@@ -127,8 +133,10 @@ module.exports = {
       const tickets = await Ticket.find({ propertyId }, '-promissory -paymentLocation -paymentAddress')
       return tickets
     }),
-    getTicket: combineResolvers(isAuthenticated, async (_, { _id }) => {
+    getTicket: combineResolvers(isAuthenticated, async (_, { _id },context) => {
       let error = null
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
+
       if (!isObjectIdValid(_id)) {
         error = new Error('\'Este ID no es valido\'')
         error.code = 400

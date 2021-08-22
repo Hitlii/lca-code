@@ -1,4 +1,4 @@
-const User = require('../../models/user.js')
+const UserSchema = require('../../models/user.js')
 const { UserInputError } = require('apollo-server')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -10,15 +10,19 @@ module.exports = {
   Query: {
     // We combine the 'isAuthenticated' resolver middleware
     // to check if user is authenticated, if it is then the next resolver is executed
-    user: combineResolvers(isAuthenticated, async (_, { id }, { email }) => {
-      const user = await User.findOne({ email })
+    user: combineResolvers(isAuthenticated, async (_, { id }, context) => {
+      const User = context.dbConn.model('users', UserSchema)
+      const user = await User.findOne(context.email)
+
       return user || null
     })
   },
   Mutation: {
-    login: async (_, { input }) => {
+    login: async (_, { input },context) => {
       try {
         // Find User
+        const User = context.dbConn.model('users', UserSchema)
+
         const user = await User.findOne({ email: input.email })
         // User not found
         if (!user) throw new UserInputError('Correo no registrado')
