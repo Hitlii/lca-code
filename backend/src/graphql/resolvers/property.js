@@ -49,6 +49,7 @@ const ADMIN_PROPERTY = {
   'meta.url': 1,
   'media.images': { $slice: [1, 1] },
   vendors: 1,
+ 
   tickets: 1
 }
 
@@ -160,7 +161,7 @@ module.exports = {
             mongoFilter[key] = { $lte: maxPrice, $gte: minPrice }
             return
           }
-          if (key === 'title') mongoFilter[key] = { $nin: ['Vendido', 'Oculto'] }
+          if (key === 'status') mongoFilter[key] = { $nin: ['Vendido', 'Oculto'] }
           if (key === 'area') {
             const { minArea, maxArea } = filter.area
             mongoFilter[key] = { $lte: maxArea, $gte: minArea }
@@ -251,7 +252,7 @@ module.exports = {
     getFeaturedProperties: async (_,args,context) => {
       try {
         const Property = context.dbConn.model('properties', PropertySchema)
-        const featuredProperties = await Property.find({ isFeatured: true }, CLIENT_PROPERTY_CARD).exec()
+        const featuredProperties = await Property.find({status:{$nin:["Oculto","Vendido"]}}, CLIENT_PROPERTY_CARD).exec()
         return featuredProperties
       } catch (error) {
         error.message = 'Error al cargar las propiedades destacadas'
