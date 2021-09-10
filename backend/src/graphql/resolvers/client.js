@@ -1,15 +1,19 @@
-const Client = require('../../models/clients')
-const Ticket = require('../../models/tickets')
-const Property = require('../../models/properties')
+const ClientSchema = require('../../models/clients')
+const TicketSchema = require('../../models/tickets')
+const PropertySchema = require('../../models/properties')
 const ObjectId = require('mongoose').Types.ObjectId
 const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
 const { isAuthenticated } = require('./middleware')
 
+// 
+
 module.exports = {
   Query: {
-    getClient: combineResolvers(isAuthenticated, async (_, { _id }) => {
+    getClient: combineResolvers(isAuthenticated, async (_, { _id }, context) => {
       try {
+        const Client = context.dbConn.model('clients', ClientSchema)
+
         const client = await Client.findById(ObjectId(_id))
         return client || null
       } catch (error) {
@@ -17,9 +21,10 @@ module.exports = {
         throw error
       }
     }),
-    getClients: combineResolvers(isAuthenticated, async (_,{name}) => {
+    getClients: combineResolvers(isAuthenticated, async (_,{name}, context) => {
       try {
         let search = {}
+        const Client = context.dbConn.model('clients', ClientSchema)
 
         if(name)
         search = { $text: { $search: name } }
@@ -33,7 +38,7 @@ module.exports = {
     })
   },
   Mutation: {
-    createClient: combineResolvers(isAuthenticated, async (_, { client }) => {
+    createClient: combineResolvers(isAuthenticated, async (_, { client },context) => {
       // Input validation
       // const clientValidationError = new clientInputValidator(client)
 
@@ -45,6 +50,8 @@ module.exports = {
         error.solution = 'Revise los campos enviados'
         throw error
       } */
+
+      const Client = context.dbConn.model('clients', ClientSchema)
 
       const newClient = new Client({ ...client })
 
@@ -58,7 +65,10 @@ module.exports = {
         client: newClient
       }
     }),
-    updateClient: combineResolvers(isAuthenticated, async (_, { _id, name, gender, birthday, email, phone, city, state, address }) => {
+    updateClient: combineResolvers(isAuthenticated, async (_, { _id, name, gender, birthday, email, phone, city, state, address }, context) => {
+      const Client = context.dbConn.model('clients', ClientSchema)
+      const Property = context.dbConn.model('properties', PropertySchema)
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
       let error = null
       if (!isObjectIdValid(_id)) {
         error = new Error('Este ID no es válido')
@@ -101,7 +111,7 @@ module.exports = {
       )
 
       // Search and update client-owned properties
-      const clientProperties = await Property.updateMany(
+      await Property.updateMany(
         { 'vendors._id': client._id },
         {
           '$set': {
@@ -113,11 +123,11 @@ module.exports = {
             }
           }
         })
-      console.log(clientProperties.n + ' properties found.')
-      console.log(clientProperties.nModified + ' properties updated.')
+      // console.log(clientProperties.n + ' properties found.')
+      // console.log(clientProperties.nModified + ' properties updated.')
 
       // Search and update client-owned tickets
-      const clientTickets = await Ticket.updateMany(
+      await Ticket.updateMany(
         { 'clients._id': client._id }, 
         {
           '$set': {
@@ -127,8 +137,8 @@ module.exports = {
             }
           }
         })
-      console.log(clientTickets.n + ' ticket(s) found.')
-      console.log(clientTickets.nModified + ' ticket(s) updated.')
+      // console.log(clientTickets.n + ' ticket(s) found.')
+      // console.log(clientTickets.nModified + ' ticket(s) updated.')
 
       // Return updated fields
       return {
@@ -138,8 +148,11 @@ module.exports = {
         client: updatedClient
       }
     }),
-    deleteClient: combineResolvers(isAuthenticated, async(_, { _id }) => {
+    deleteClient: combineResolvers(isAuthenticated, async(_, { _id }, context) => {
       let error = null
+      const Property = context.dbConn.model('properties', PropertySchema)
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
+      const Client = context.dbConn.model('clients', ClientSchema)
       // Invalid user input
       if (!isObjectIdValid(_id)) {
         error = new Error('Este ID no es válido')
@@ -170,7 +183,7 @@ module.exports = {
 
       // Check whether the client has registered tickets, throw error if so.
       const tickets = await Ticket.findOne({clients: {$elemMatch: {_id: client._id}}})
-      console.log(tickets)
+      // console.log(tickets)
       if (tickets) {
         error = new Error('Cliente incapaz de ser eliminado')
         error.code = 409

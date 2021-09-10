@@ -33,6 +33,7 @@ module.exports = gql`
         url: String
     }
 
+
     "Property filter input."
     input PropertyFilterInput{
         zone: String,
@@ -100,7 +101,8 @@ module.exports = gql`
 
         "Title of the property"
         title: String!
-        
+        quantity: Float
+        available:Float
         description: DescriptionInput!
         "Location of the property, address and coordinates"
         location: LocationInput!
@@ -110,6 +112,8 @@ module.exports = gql`
         meta: MetaInput!
         "Bitly inputs" 
         bitly: BitlyInput
+        legal: LegalInput
+        note: String
 
     }
 
@@ -163,6 +167,28 @@ module.exports = gql`
         map:String
     }
 
+    input LegalInput{
+        "Date when the contract starts"
+        contractStart: Date
+        "Date when the contract ends"
+        contractEnd: Date
+        "Contract"
+        contract: String
+        "Percentage of comission"
+        comission: Float
+        "Extra files"
+        files: [FileInput]
+    }
+
+    input FileInput{
+        "Type of file"
+        name:String
+        "One drive link"
+        url:String
+    }
+
+    
+
     "Represents a Property"
     type Property{
         "ID of the property"
@@ -183,7 +209,10 @@ module.exports = gql`
         onPayments: String
         "Is the first pay of the property when it is on payments"
         hitch:Float
-        
+        "Total of properties being offered"
+        quantity: Float
+        "Available properties"
+        available:Float
         "Price of the property"
         price: Float!
         "Currency of the property USD/MXN"
@@ -206,8 +235,32 @@ module.exports = gql`
         vendors: [Client!] 
         tickets: [Ticket!]
         bitly: Bitly
+        "Legal information about the property"
+        legal: Legal
+        note: String
 
     }
+
+    type Legal{
+        "Date when the contract starts"
+        contractStart: Date
+        "Date when the contract ends"
+        contractEnd: Date
+        "Contract"
+        contract: String
+        "Percentage of comission"
+        comission: Float
+        "Extra files"
+        files: [Files]
+    }
+
+    type Files{
+        "Type of file"
+        name:String
+        "One drive link"
+        url:String
+    }
+
     type Bitly {
         "Bitly web page"
         web: String
@@ -232,7 +285,7 @@ module.exports = gql`
     }
     "Description of the property"
     type PropertyDescription {
-        "Description of the property (Slate)"
+        "Description of the property (Markdown)"
         text: String!
         isDeeded: Boolean
         hasAllServices: Boolean

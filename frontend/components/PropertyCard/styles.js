@@ -2,12 +2,11 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const HorizontalPropertyCardStyle = makeStyles(({
     root: {
-        position: 'relative',
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
         minWidth: 320,
-        height: 207,
+        height: 250,
         padding: 0,
         marginBottom: 20,
     },

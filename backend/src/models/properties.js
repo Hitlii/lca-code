@@ -7,6 +7,21 @@ const PropertiesSchema = mongoose.Schema({
     required: true,
     unique: true
   },
+  note:String,
+  quantity: Number,
+  available: Number,
+  legal:{
+    contractStart: Date,
+    contractEnd: Date,
+    contract: String,
+    comission: Number,
+    files:[
+      {
+        name: String,
+        url: String,
+      }
+    ]
+  },
   // i.e Venta, Renta, Vendido, Oculto
   status: {
     type: String,
@@ -162,4 +177,5 @@ const PropertiesSchema = mongoose.Schema({
 
 // Defining indexes
 PropertiesSchema.index({ title: 'text', code: 'text' })
-module.exports = mongoose.model('properties', PropertiesSchema)
+// module.exports = mongoose.model('properties', PropertiesSchema)
+module.exports = PropertiesSchema

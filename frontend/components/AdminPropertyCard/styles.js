@@ -2,12 +2,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles(({
     card: {
-        display: 'flex',
         width: 340,
         height: 100,
-        justifyContent: 'flex-start',
         marginBottom: 10,
-        margin: 'auto',
     },
     details: {
         display: 'flex',
