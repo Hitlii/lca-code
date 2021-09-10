@@ -1,0 +1,7 @@
+# Allow all user agents.
+User-agent: *
+Allow: /
+
+# User agent "Googlebot" should not crawl the `http://lcabianesraices.com/admin1/` folder or any of its subdirectories.
+User-agent: Googlebot
+Disallow: /admin1/

@@ -54,6 +54,10 @@ export const useStyles = makeStyles((theme) => ({
      cards: {
        margin:'auto'
      },
+     container:{
+        maxWidth:600,
+        margin:'auto'
+     },
      input: {
        marginLeft: theme.spacing(1),
        flex: 1,
@@ -72,9 +76,6 @@ export const useStyles = makeStyles((theme) => ({
            borderRadius: 15,
      },
      center:{
-      display: "flex",
-      justifyContent: "center",
-      margin:'auto'
      },
 
      propertyContainer: {

@@ -259,6 +259,7 @@ export const GET_PROPERTY = gql`
           lat
           lng
         }
+        postalCode
       }
       vendors {
         gender

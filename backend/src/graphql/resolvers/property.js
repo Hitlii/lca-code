@@ -137,13 +137,12 @@ module.exports = {
   Query: {
     getProperties: async (_, { filter, order, pagination }, context) => {
       const Property = context.dbConn.model('properties', PropertySchema)
-      const mongoSkip = pagination.pageNumber > 0 ? (pagination.pageNumber - 1) * PROPERTIES_PER_PAGE : 0
+      const mongoSkip = (pagination.pageNumber > 0) ? ((pagination.pageNumber - 1) * PROPERTIES_PER_PAGE): 0
       const mongoSort = {}
       const mongoFilter = {}
       let search = {}
       if (filter !== {}) {
         const keys = Object.keys(filter)
-
         // Get Fields for filter
         keys.forEach(key => {
           if (key === 'city') {

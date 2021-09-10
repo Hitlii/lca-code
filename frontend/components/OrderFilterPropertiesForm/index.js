@@ -226,69 +226,68 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
       <div>
 
         <Grid className={classes.root} spacing={3} container justify="center">
-        
-
-        {/* admin search input */}
-        {isAdmin ? <Grid item xs={12} className={classes.inputBox}>
-        <InputBase
-            id="search"
-            name="search"
-            type="text"
-            className={classes.input}
-            placeholder='Buscar Propiedad'
-            value={filterProperty.values.search}
-            onChange={filterProperty.handleChange}
-            onKeyPress={(e)=>{if(e.key === 'Enter' ) handleSubmit(e)}}
-            variant='outlined'
-          />
-          <IconButton type="submit" className={classes.iconButton}
-            onClick={handleSubmit}>
-            <SearchIcon />
-          </IconButton>
-        </Grid>
-        :''}
-
-        {/* client search input */}
-        {!isAdmin ? 
-         <Grid item xs={12}>
-           <Grid container spacing={3}>
-            <Grid item xs={2}>
-              <Link href="/">
-                 <IconButton className={classes.iconButton}>
-                   <KeyboardBackspaceIcon />
-                 </IconButton>
-               </Link>
-             </Grid>
-
-            <Grid item xs={10}>
-              <FormControl fullWidth variant="filled">
-               <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
-               <FilledInput
-                id="search"
-                name="search"
-                type="text"
-                value={filterProperty.values.search}
-                onChange={filterProperty.handleChange}
-                onKeyPress={(e)=>{if(e.key === 'Enter' ) handleSubmit(e)}}
-                autoFocus
-                fullWidth
-                className={classes.search}
-                disableUnderline
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="search button"
-                      onClick={handleSubmit}
-                      edge="end"
-                    >
-                        <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
-            </FormControl>
-            </Grid>
+         
+          {/* admin search input */}
+          {isAdmin ? <Grid item xs={12} className={classes.inputBox}>
+          <InputBase
+              id="search"
+              name="search"
+              type="text"
+              className={classes.input}
+              placeholder='Buscar Propiedad'
+              value={filterProperty.values.search}
+              onChange={filterProperty.handleChange}
+              onKeyPress={(e)=>{if(e.key === 'Enter' ) handleSubmit(e)}}
+              variant='outlined'
+            />
+            <IconButton type="submit" className={classes.iconButton}
+              onClick={handleSubmit}>
+              <SearchIcon />
+            </IconButton>
           </Grid>
+          :''}
+
+          {/* client search input */}
+          {!isAdmin ? 
+          <Grid item xs={12}>
+            <Grid container spacing={3}>
+              <Grid item xs={2}>
+                <Link href="/">
+                  <IconButton className={classes.iconButton}>
+                    <KeyboardBackspaceIcon />
+                  </IconButton>
+                </Link>
+              </Grid>
+
+              <Grid item xs={10}>
+                <FormControl fullWidth variant="filled">
+                <InputLabel htmlFor="search">Buscar propiedad</InputLabel>
+                <FilledInput
+                  id="search"
+                  name="search"
+                  type="text"
+                  value={filterProperty.values.search}
+                  onChange={filterProperty.handleChange}
+                  onKeyPress={(e)=>{if(e.key === 'Enter' ) handleSubmit(e)}}
+                  autoFocus
+                  fullWidth
+                  className={classes.search}
+                  disableUnderline
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="search button"
+                        onClick={handleSubmit}
+                        edge="end"
+                      >
+                          <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              </Grid>
+            </Grid>
         </Grid>:''} 
         
 
@@ -315,27 +314,26 @@ export default function OrderFilterPropertiesForm({propertiesData,isAdmin}) {
               })
           }
         </div> */}
-  
-        <Grid container justify="center">
-        {stateNoFound ? (
-          <NoFoundIcon search={filterProperty.values.search} />
-        ) : (
-          properties.map((property) => {
-            return (
-              <Grid item xs={12}  key={property._id} className={classes.center}>
-              {isAdmin ? 
-              <AdminPropertyCard property={property}/>
-              :
-              <PropertyCard
+        <main role="main" className={classes.container}>
+          {stateNoFound ? (
+            <NoFoundIcon search={filterProperty.values.search} />
+            ) : (
+              properties.map((property) => {
+                return (
+                  <div  key={property._id}>
+                {isAdmin ? 
+                <AdminPropertyCard property={property}/>
+                :
+                <PropertyCard
                 orientation="horizontal"
                 property={property}
-              />}
-              </Grid>
-            );
-          })
-        )}
-        </Grid>
-  
+                />}
+                </div>
+              );
+            })
+            )}
+        </main>
+
         {/* componente de siguiente pagina */}
         {!stateNoFound ? (
           <div className={classes.containerIcons}>
