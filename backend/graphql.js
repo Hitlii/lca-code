@@ -2,6 +2,8 @@
 require('dotenv').config()
 
 const { ApolloServer } = require('apollo-server')
+// const { ApolloServer } = require('apollo-server-lambda')
+// const jwt = require('jsonwebtoken')
 // const express = require('express')
 // const expressJwt = require('express-jwt')
 const mongoose = require('mongoose')
@@ -123,6 +125,7 @@ const server = new ApolloServer({
 
 // server.applyMiddleware({ app })
 
+// Development
 mongoose.set('debug', true)
 mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
   .then(() => {
@@ -130,10 +133,16 @@ mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
   })
   .catch(err => console.error(err))
   
+
+
+//Production
   // const handler = server.createHandler({
   //   cors: {
-  //     origin: true,
+  //     origin: "https://studio.apollographql.com",
   //     credentials: true,
+  //     methods:"POST, GET"
   //   },
   // });
-  // exports.graphqlHandler = handler
+
+
+// exports.graphqlHandler = handler
