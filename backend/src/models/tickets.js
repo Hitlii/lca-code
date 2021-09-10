@@ -54,4 +54,5 @@ const TicketsSchema = mongoose.Schema({
 
 )
 
-module.exports = mongoose.model('tickets', TicketsSchema)
+// module.exports = mongoose.model('tickets', TicketsSchema)
+module.exports = TicketsSchema

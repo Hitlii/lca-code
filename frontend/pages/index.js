@@ -1,14 +1,14 @@
 import React from 'react'
 import client from '../lib/apollo-client'
 import { GET_FEATURED_PROPERTIES } from '../graphql/queries'
-
+import Pixel from '../components/Pixel'
 import HorizontalScroll from '../components/HorizontalScroll'
 import PropertyCard from '../components/PropertyCard'
 import Navbar from '../components/Navbar'
 import ZoneTag from '../components/ZoneTag'
 
 import Image from 'next/image'
-
+import Head from 'next/head'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -42,10 +42,16 @@ const Home = ({ properties }) => {
 
   return (
     <div className={classes.root}>
+    <Head>
+        <title>LCA Bienes Raices | Juntos por tu patrimonio</title>
+        <meta name="description" content="Somos una inmobiliaria y vendemos propiedades, grandes, chicas, medianas, baratas, con vista o planos, nuestro fuerte son los terrenos en zona campestre, nos aseguramos que nuestras propiedades esten al margen de la ley y que tu estes lo mas informado posible."/>
+    </Head>
+    <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />
       <Image
         className={classes.cover}
-        src='/tecate.jpg'
+        src='/main.png'
+        alt="Encuentra tu propiedad en zona campestre, urbana o comercial"
         width={600}
         height={400}
         layout='responsive'

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 
-
-
+import Head from 'next/head'
+import Pixel from '../../components/Pixel'
 import client from "../../lib/apollo-client";
 import { GET_PROPERTIES } from "../../graphql/queries";
 
@@ -12,7 +12,14 @@ export default function AllPropertiesPage(props) {
 
    return (
     <div>
-     <OrderFilterPropertiesForm propertiesData={props.propertiesData} isAdmin={false}/>
+      <Head>
+            <title>Buscar Propiedades</title>
+            <meta name="description" content="Encuentra tu propiedad ideal, ya sea en zona campestre, comercial o urbana."/>
+      </Head>
+      <Pixel name='FACEBOOK_PIXEL_1'/>
+      <main role="main">
+        <OrderFilterPropertiesForm propertiesData={props.propertiesData} isAdmin={false}/>
+      </main>
     </div>
 
   );

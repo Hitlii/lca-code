@@ -2,8 +2,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Navbar from '../components/Navbar'
 import Grid from "@material-ui/core/Grid"
+import Pixel from '../components/Pixel'
 import Typography from "@material-ui/core/Typography"
-
+import Head from 'next/head'
 const useStyles = makeStyles({
   root: {
     maxWidth: 600,
@@ -21,10 +22,15 @@ function Nosotros() {
 
   return (
     <div className={classes.root}>
+      <Head>
+            <title>LCA - Nosotros</title>
+            <meta name="description" content="Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil, industrial y de sistemas"/>
+      </Head>
+      <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />
         <main className={classes.root} role="main">
         <div className={classes.text}>
-          <Typography variant="h2">Nosotros</Typography>
+        <h1 id="nosotros">Nosotros</h1>
         <Typography variant="subtitle1" gutterBottom> 
           LCA Bienes Raices y Asistencia Profesional, SAS de C.V. , “Juntos por
           tu patrimonio”. Somos una agencia inmobiliaria y de asistencia
@@ -36,17 +42,17 @@ function Nosotros() {
         <p>
           En LCA Bienes Raíces te asesoramos de manera personalizada y te
           aclaramos tus dudas antes de iniciar con los trámites de compra o
-          venta de tus bienes…también te acompañamos de inicio a fin en las
+          venta de tus bienes. También te acompañamos de inicio a fin en las
           instituciones correspondientes.
         </p>
 
-        <Typography variant="h4" gutterBottom>Misión</Typography>
+        <Typography variant="h4" gutterBottom id="mision">Misión</Typography>
         <p>
           Ofrecer servicios inmobiliarios y de asistencia profesional de
           vanguardia que cumplan con las expectativas de nuestros clientes,
           estableciendo así bases sólidas y estables de servicio.
         </p>
-        <Typography variant="h4" gutterBottom>Visión</Typography>
+        <Typography variant="h4" gutterBottom id="vision">Visión</Typography>
         <p>
           Queremos ser reconocidos como la principal y mejor agencia
           inmobiliaria del estado de Baja California, iniciando en la Ciudad de
@@ -56,12 +62,15 @@ function Nosotros() {
           logrando así un posicionamiento confiable en los potenciales
           compradores o vendedores de bienes inmuebles de la zona.
         </p>
-        <Typography variant="h4" gutterBottom>Valores</Typography>
+        <Typography variant="h4" gutterBottom id="valores">Valores</Typography>
         <p>
           Nuestros principios son la Honestidad, Compromiso, Transparencia y
           Flexibilidad en Nuestros Servicios.
         </p>
-        <Typography variant="h4" gutterBottom>Politica de privacidad</Typography>
+        <p>
+          En memoria de Cesar Ayala Bombela, no te tocó ver esta página terminada antes de tú partida pero estoy seguro que estarias orgulloso, buen viaje papá.
+        </p>
+        <Typography variant="h4" gutterBottom id="politica-de-privacidad">Politica de privacidad</Typography>
         <p>
           El presente Política de Privacidad establece los términos en que LCA
           Bienes Raices usa y protege la información que es proporcionada por

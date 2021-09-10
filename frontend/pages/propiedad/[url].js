@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { GET_PROPERTY, GET_ALL_PROPERTIES } from '../../graphql/queries'
 import client from '../../lib/apollo-client'
 
@@ -13,13 +13,14 @@ import HorizontalScroll from '../../components/HorizontalScroll'
 import Map from '../../components/map'
 import PropertyCard from '../../components/PropertyCard'
 import ZoneTag from '../../components/ZoneTag'
+import Pixel from '../../components/Pixel'
 
 import {
     Grid,
     IconButton,
     Typography
 } from '@material-ui/core'
-
+import { Button } from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import DescriptionIcon from '@material-ui/icons/Description'
 import FacebookIcon from '@material-ui/icons/Facebook'
@@ -40,6 +41,13 @@ const useStyles = makeStyles(({
         maxWidth: 800,
         minWidth: 320,
         margin: 'auto',
+    },
+    button:{
+        marginTop:15,
+        borderRadius:15,
+        backgroundColor:"#2196F3",
+        color:"white"
+
     },
     img: {
         marginTop:70,
@@ -159,6 +167,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             <title>{property.title}</title>
             <meta name="description" content={property.meta.description}/>
         </Head>
+        <Pixel name='FACEBOOK_PIXEL_1'/>
         <div className={classes.root}>
             <Link href='/propiedades'>
                 <IconButton className={classes.backButton}>
@@ -194,19 +203,18 @@ export default function SinglePropertyPage({ property, relatedProperties }){
 
             {/* Type of property */}
             <header>
-                <Typography  variant="h5" gutterBottom>
+                <h1 id="titulo">
                     {property.title}
-                </Typography>
-
+                </h1>
                 {/* Location */}
                 <Typography variant="body2" className={classes.location} gutterBottom>
-                    {property.location.address} {property.location.city} {property.location.state}
+                    {property.location.address}, {property.location.city}, {property.location.state} | {property.location.postalCode}
                 </Typography>
             </header>
             {/* Description */}
             <div className={classes.iconDiv}>
                 <DescriptionIcon className={classes.icon}/>
-                <Typography className={classes.iconText}>Descripción</Typography>
+                <Typography className={classes.iconText} id="descripcion">Descripción</Typography>
             </div>
             <main className={classes.description}>
                 <MarkdownView
@@ -222,7 +230,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             {/* Video */}
             <div className={classes.iconDiv}>
                 <PlayArrowIcon className={classes.icon}/>
-                <Typography gutterBottom className={classes.iconText}>Video</Typography>
+                <Typography gutterBottom className={classes.iconText} id="video">Video</Typography>
             </div>
             <div className={classes.iframeContainer}>
                 <iframe 
@@ -235,7 +243,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             {/* Google Maps */}
             <div className={classes.iconDiv}>
                 <LocationOnIcon className={classes.icon}/>
-                <Typography className={classes.iconText}>Ubicación</Typography>
+                <Typography className={classes.iconText} id="ubicacion">Ubicación</Typography>
             </div>
             <div role="application" className={classes.map}>
                 {map ? 
@@ -269,8 +277,10 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 </a>
             </Link>
             <Link href={property.bitly.map} passHref>
-                <a target='_blank'>
-                    Cómo llegar
+                <a target='_blank' id="como-llegar">
+                    <Button fullWidth variant="contained" className={classes.button}>
+                        Cómo llegar
+                    </Button>
                 </a>
             </Link>
             {/* Social Media Icons */}
@@ -313,17 +323,19 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 href='#'
                 text='Relacionados'
             />}
-            <HorizontalScroll>
-            {relatedProperties&&relatedProperties.map((property => {
-                return (
-                    <div key={property._id} className={classes.wrapperItem}>
-                        <PropertyCard 
-                            property={property}
-                        />
-                    </div>
-                )
-            }))}
-            </HorizontalScroll>
+            <nav>
+                <HorizontalScroll>
+                {relatedProperties&&relatedProperties.map((property => {
+                    return (
+                        <div key={property._id} className={classes.wrapperItem}>
+                            <PropertyCard 
+                                property={property}
+                            />
+                        </div>
+                    )
+                }))}
+                </HorizontalScroll>
+            </nav>
         </div>
     </>
     )

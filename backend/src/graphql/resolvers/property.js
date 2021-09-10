@@ -1,5 +1,5 @@
-const Property = require('../../models/properties')
-const Ticket = require('../../models/tickets')
+const PropertySchema = require('../../models/properties')
+const TicketSchema = require('../../models/tickets')
 const ObjectId = require('mongoose').Types.ObjectId
 const { isObjectIdValid } = require('../helper/validators')
 const { combineResolvers } = require('graphql-resolvers')
@@ -60,7 +60,8 @@ const CLIENT_PROPERTY = {
 
 module.exports = {
   Mutation: {
-    createProperty: combineResolvers(isAuthenticated, async (_, { property, vendors }) => {
+    createProperty: combineResolvers(isAuthenticated, async (_, { property, vendors }, context) => {
+      const Property = context.dbConn.model('properties', PropertySchema)
       const newProperty = new Property({ ...property, vendors })
       newProperty.meta.url = newProperty.title.replace(/\s+/g, '-').toLowerCase() + '-' + newProperty.code
       // Saving only youtube ID
@@ -83,7 +84,10 @@ module.exports = {
       }
     }),
 
-    deleteProperty: combineResolvers(isAuthenticated, async (_, { _id }) => {
+    deleteProperty: combineResolvers(isAuthenticated, async (_, { _id }, context) => {
+      const Property = context.dbConn.model('properties', PropertySchema)
+      const Ticket = context.dbConn.model('tickets', TicketSchema)
+
       let error = null
       // 400 Invalid user input
       if (!isObjectIdValid(_id)) {
@@ -131,14 +135,14 @@ module.exports = {
 
   },
   Query: {
-    getProperties: async (_, { filter, order, pagination }) => {
-      const mongoSkip = pagination.pageNumber > 0 ? (pagination.pageNumber - 1) * PROPERTIES_PER_PAGE : 0
+    getProperties: async (_, { filter, order, pagination }, context) => {
+      const Property = context.dbConn.model('properties', PropertySchema)
+      const mongoSkip = (pagination.pageNumber > 0) ? ((pagination.pageNumber - 1) * PROPERTIES_PER_PAGE): 0
       const mongoSort = {}
       const mongoFilter = {}
       let search = {}
       if (filter !== {}) {
         const keys = Object.keys(filter)
-
         // Get Fields for filter
         keys.forEach(key => {
           if (key === 'city') {
@@ -185,8 +189,9 @@ module.exports = {
         throw error
       }
     },
-    getProperty: async (_, { url }) => {
+    getProperty: async (_, { url },context) => {
       try {
+        const Property = context.dbConn.model('properties', PropertySchema)
         const property = await Property.findOne({ 'meta.url': url }, CLIENT_PROPERTY).exec()
         const mongooseFilter = {
           status: property.status,
@@ -206,7 +211,8 @@ module.exports = {
         throw error
       }
     },
-    getAdminProperties: combineResolvers(isAuthenticated, async (_, { filter, pagination }) => {
+    getAdminProperties: combineResolvers(isAuthenticated, async (_, { filter, pagination },context) => {
+      const Property = context.dbConn.model('properties', PropertySchema)
       const mongoSkip = pagination.pageNumber > 0 ? (pagination.pageNumber - 1) * PROPERTIES_PER_PAGE : 0
       let search = {}
       if (filter && filter.search) { search = { $text: { $search: filter.search } } }
@@ -220,8 +226,9 @@ module.exports = {
         throw error
       }
     }),
-    getAdminProperty: combineResolvers(isAuthenticated, async (_, { url }) => {
+    getAdminProperty: combineResolvers(isAuthenticated, async (_, { url },context) => {
       try {
+        const Property = context.dbConn.model('properties', PropertySchema)
         const property = await Property.findOne({ 'meta.url': url }, ADMIN_PROPERTY).exec()
         return property
       } catch (error) {
@@ -230,8 +237,9 @@ module.exports = {
         throw error
       }
     }),
-    getAllProperties: async (isAdminCard) =>{
+    getAllProperties: async (isAdminCard,_,context) =>{
       try{  
+        const Property = context.dbConn.model('properties', PropertySchema)
         const allProperties = await Property.find({}, isAdminCard? ADMIN_PROPERTY_CARD:CLIENT_PROPERTY_CARD).exec()
         return allProperties
       }catch(error){
@@ -240,8 +248,9 @@ module.exports = {
         throw error
       }
     },
-    getFeaturedProperties: async () => {
+    getFeaturedProperties: async (_,args,context) => {
       try {
+        const Property = context.dbConn.model('properties', PropertySchema)
         const featuredProperties = await Property.find({ isFeatured: true }, CLIENT_PROPERTY_CARD).exec()
         return featuredProperties
       } catch (error) {
@@ -250,8 +259,9 @@ module.exports = {
         throw error
       }
     },
-    getAllProperties: async (isAdminCard) =>{
+    getAllProperties: async (isAdminCard,_,context) =>{
       try{  
+        const Property = context.dbConn.model('properties', PropertySchema)
         const allProperties = await Property.find({}, isAdminCard? ADMIN_PROPERTY_CARD:CLIENT_PROPERTY_CARD).exec()
         return allProperties
       }catch(error){
