@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 Allow: /sitemap.htm
-Sitemap: https://lca-frontend.vercel.app/sitemap.xml
+Sitemap: https://lcabienesraices.com/sitemap.xml
 
 
 # User agent "Googlebot" should not crawl the `http://lcabianesraices.com/admin1/` folder or any of its subdirectories.
