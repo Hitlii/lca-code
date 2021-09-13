@@ -45,6 +45,7 @@ const Home = ({ properties }) => {
     <Head>
         <title>LCA Bienes Raices | Juntos por tu patrimonio</title>
         <meta name="description" content="Somos una inmobiliaria y vendemos propiedades, grandes, chicas, medianas, baratas, con vista o planos, nuestro fuerte son los terrenos en zona campestre, nos aseguramos que nuestras propiedades esten al margen de la ley y que tu estes lo mas informado posible."/>
+        <meta name="facebook-domain-verification" content="ypixfr58fbk5xgf4f5h3p91upnzzm9" />
         <meta name="robots"  content="index,follow"/>
         <meta http-equiv="refresh" content="200"/>
     </Head>
