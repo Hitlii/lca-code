@@ -166,6 +166,27 @@ export default function SinglePropertyPage({ property, relatedProperties }){
         <Head>
             <title>{property.title}</title>
             <meta name="description" content={property.meta.description}/>
+            {/* Twitter */}
+            <meta name="twitter:card" content="producto"/>
+            <meta name="twitter:site" content="www.lcabienesraices.com"/>
+            <meta name="twitter:title" content={property.title}/>
+            <meta name="twitter:description" content={property.meta.description}/> 
+            <meta name="twitter:creator" content="@lcabienesraices"/>
+            <meta name="twitter:image" content={property.media.images[0]}/>
+            <meta name="twitter:data1" content={property.price}/> 
+            <meta name="twitter:label1" content="Price"/>
+            <meta name="twitter:data2" content={property.zone}/>
+            <meta name="twitter:label2" content="Zona"/>
+
+            {/* <!-- Open Graph data --> */}
+            <meta property="og:title" content={property.title} /> 
+            <meta property="og:type" content="article" />
+            <meta property="og:url" content={`https://lcabienesraices.com/${property.meta.url}`} />
+            <meta property="og:image" content={property.media.images[0]} />
+            <meta property="og:description" content={property.meta.description} />
+            <meta property="og:site_name" content="www.lcabienesraices.com" />
+            <meta property="og:price:amount" content={property.price} />
+            <meta property="og:price:currency" content="USD" />
         </Head>
         <Pixel name='FACEBOOK_PIXEL_1'/>
         <div className={classes.root}>
@@ -271,7 +292,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 }
             </div>
             {/* Contact Button */}
-            <Link href= {`https://api.whatsapp.com/send?phone=526653937090&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} passHref>
+            <Link href= {`https://api.whatsapp.com/send?phone=526653926857&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} passHref>
                 <a target='_blank'>
                     <GreenLgButton>Contactar</GreenLgButton>
                 </a>

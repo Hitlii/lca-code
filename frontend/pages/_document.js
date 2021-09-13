@@ -5,7 +5,7 @@ import { ServerStyleSheets } from '@material-ui/core/styles'
 export default class MyDocument extends Document {
   render () {
     return (
-      <Html lang="en">
+      <Html lang="en" itemscope itemtype="http://schema.org/Product">
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" />
