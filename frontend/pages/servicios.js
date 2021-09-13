@@ -28,6 +28,7 @@ function Servicios() {
        <Head>
             <title>LCA - Servicios</title>
             <meta name="description" content="Quieres vender tu propiedad, pero no sabes por dónde empezar? Vender una propiedad por cuenta propia es posible, pero requiere de mucho tiempo extra y de varias herramientas para que tu propiedad destaque sobre las otras, es por esto que nuestro equipo en LCA Bienes Raíces te ayuda a vender tu propiedad sin problemas."/>
+            <meta name="robots"  content="index,follow"/>
       </Head>
       <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />

@@ -13,9 +13,7 @@ const Pixel1 = () =>
       fbq('init', '145843694377830');
       fbq('track', 'PageView');` }}
     />
-    <noscript dangerouslySetInnerHTML={{ __html: `<img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=145843694377830&ev=PageView&noscript=1" />` }}
-    />
+    <noscript dangerouslySetInnerHTML={{ __html: `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=145843694377830&ev=PageView&noscript=1"/>`}}/>
   </React.Fragment> 
 
 export default Pixel1

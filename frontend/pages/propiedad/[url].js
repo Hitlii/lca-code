@@ -165,6 +165,8 @@ export default function SinglePropertyPage({ property, relatedProperties }){
         <>
         <Head>
             <title>{property.title}</title>
+            <meta http-equiv="refresh" content="1000"/>
+            <meta name="robots"  content="index,follow"/>
             <meta name="description" content={property.meta.description}/>
             {/* Twitter */}
             <meta name="twitter:card" content="producto"/>
@@ -175,8 +177,6 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             <meta name="twitter:image" content={property.media.images[0]}/>
             <meta name="twitter:data1" content={property.price}/> 
             <meta name="twitter:label1" content="Price"/>
-            <meta name="twitter:data2" content={property.zone}/>
-            <meta name="twitter:label2" content="Zona"/>
 
             {/* <!-- Open Graph data --> */}
             <meta property="og:title" content={property.title} /> 
@@ -187,6 +187,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             <meta property="og:site_name" content="www.lcabienesraices.com" />
             <meta property="og:price:amount" content={property.price} />
             <meta property="og:price:currency" content="USD" />
+            <link rel="canonical" href={`https://lcabienesraices/propiedad/${property.meta.url}`} />
         </Head>
         <Pixel name='FACEBOOK_PIXEL_1'/>
         <div className={classes.root}>
@@ -212,7 +213,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                                 className={classes.img}
                                 src={image} 
                                 layout='responsive'
-                                alt={i===0&&`${property.title}`}
+                                alt={property.title+i}
                                 width={1200}
                                 height={1200}
                             />
@@ -224,9 +225,9 @@ export default function SinglePropertyPage({ property, relatedProperties }){
 
             {/* Type of property */}
             <header>
-                <h1 id="titulo">
+                <h3 id="titulo">
                     {property.title}
-                </h1>
+                </h3>
                 {/* Location */}
                 <Typography variant="body2" className={classes.location} gutterBottom>
                     {property.location.address}, {property.location.city}, {property.location.state} | {property.location.postalCode}
@@ -249,6 +250,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             </main>
 
             {/* Video */}
+            {property.media.video !== ""&&<>
             <div className={classes.iconDiv}>
                 <PlayArrowIcon className={classes.icon}/>
                 <Typography gutterBottom className={classes.iconText} id="video">Video</Typography>
@@ -260,7 +262,7 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                     frameBorder='0'
                     allowFullScreen
                 />
-            </div>
+            </div></>}
             {/* Google Maps */}
             <div className={classes.iconDiv}>
                 <LocationOnIcon className={classes.icon}/>
@@ -285,7 +287,8 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                         <img
                             width="100%"
                             src='/dontChargeMeGoogleMaps.png'
-                            alt="Da click al mapa para activarlo"
+                            alt="Da click para activar el mapa"
+                            title="Click para activar el mapa"
                         />
                     </IconButton>
                     </>

@@ -5,15 +5,20 @@ import { ServerStyleSheets } from '@material-ui/core/styles'
 export default class MyDocument extends Document {
   render () {
     return (
-      <Html lang="en" itemscope itemtype="http://schema.org/Product">
+      <Html lang="en" prefix="og: https://ogp.me/ns#">
         <Head>
           {/* PWA primary color */}
-          <meta name="theme-color" />
+          <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black"/>
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+
           <link
             rel="stylesheet"
+            property="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
-          <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
+          <link 
+          property="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
         </Head>
         <body>
           <Main />

@@ -25,6 +25,7 @@ function Nosotros() {
       <Head>
             <title>LCA - Nosotros</title>
             <meta name="description" content="Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil, industrial y de sistemas"/>
+            <meta name="robots"  content="index,follow"/>
       </Head>
       <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />
