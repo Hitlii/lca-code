@@ -36,6 +36,10 @@ import { lightNeutral } from '../../colors'
 
 import { makeStyles } from "@material-ui/core/styles"
 
+// Google Analytics
+import * as ga from '../../lib/google-analytics'
+
+
 const useStyles = makeStyles(({
     root: {
         maxWidth: 800,
@@ -160,12 +164,28 @@ export default function SinglePropertyPage({ property, relatedProperties }){
     function onClickMap() { 
         setMap(current => !current)
     }
+
+    const contact = ()=>{
+        ga.event({
+            action: "contact",
+            params : {
+              path: `www.lcabienesraices.com/${property.meta.url}`
+            }
+          })
+    }
+    const googleMapsDirections = ()=>{
+        ga.event({
+            action: "googleMapsDirections",
+            params : {
+              path: `www.lcabienesraices.com/${property.meta.url}`
+            }
+          })
+    }
      
     return(
         <>
         <Head>
             <title>{property.title}</title>
-            <meta http-equiv="refresh" content="1000"/>
             <meta name="robots"  content="index,follow"/>
             <meta name="description" content={property.meta.description}/>
             {/* Twitter */}
@@ -201,7 +221,6 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 autoplay={false}
                 animation='slide'
                 indicators={true}
-                timeout={500}
                 navButtonsAlwaysVisible={true}
                 navButtonsAlwaysInvisible={false}
             >
@@ -295,12 +314,12 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                 }
             </div>
             {/* Contact Button */}
-            <Link href= {`https://api.whatsapp.com/send?phone=526653926857&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} passHref>
+            <Link href= {`https://api.whatsapp.com/send?phone=526653926857&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} onClick={()=> contact()} passHref>
                 <a target='_blank'>
                     <GreenLgButton>Contactar</GreenLgButton>
                 </a>
             </Link>
-            <Link href={property.bitly.map} passHref>
+            <Link href={property.bitly.map} passHref onClick={()=> googleMapsDirections()}>
                 <a target='_blank' id="como-llegar">
                     <Button fullWidth variant="contained" className={classes.button}>
                         Cómo llegar

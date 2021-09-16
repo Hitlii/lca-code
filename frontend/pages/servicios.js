@@ -26,9 +26,26 @@ function Servicios() {
   return (
     <div className={classes.root}>
        <Head>
-            <title>LCA - Servicios</title>
+            <title>LCA Bienes Raices - Servicios</title>
             <meta name="description" content="Quieres vender tu propiedad, pero no sabes por dónde empezar? Vender una propiedad por cuenta propia es posible, pero requiere de mucho tiempo extra y de varias herramientas para que tu propiedad destaque sobre las otras, es por esto que nuestro equipo en LCA Bienes Raíces te ayuda a vender tu propiedad sin problemas."/>
             <meta name="robots"  content="index,follow"/>
+
+            {/* Twitter */}
+            <meta name="twitter:card" content="producto"/>
+            <meta name="twitter:site" content="www.lcabienesraices.com"/>
+            <meta name="twitter:title" content="LCA Bienes Raices - Servicios"/>
+            <meta name="twitter:description" content="Quieres vender tu propiedad, pero no sabes por dónde empezar? Vender una propiedad por cuenta propia es posible, pero requiere de mucho tiempo extra y de varias herramientas para que tu propiedad destaque sobre las otras, es por esto que nuestro equipo en LCA Bienes Raíces te ayuda a vender tu propiedad sin problemas."/> 
+            <meta name="twitter:creator" content="@lcabienesraices"/>
+            <meta name="twitter:image" content="./servicios_proceso-de-venta_9-16.png"/>
+
+            {/* <!-- Open Graph data --> */}
+            <meta property="og:title" content="LCA Bienes Raices - Servicios"/> 
+            <meta property="og:type" content="article" />
+            <meta property="og:url" content={`https://lcabienesraices.com`} />
+            <meta property="og:image" content="./servicios_proceso-de-venta_9-16.png"/>
+            <meta property="og:description" content="Quieres vender tu propiedad, pero no sabes por dónde empezar? Vender una propiedad por cuenta propia es posible, pero requiere de mucho tiempo extra y de varias herramientas para que tu propiedad destaque sobre las otras, es por esto que nuestro equipo en LCA Bienes Raíces te ayuda a vender tu propiedad sin problemas." />
+            <meta property="og:site_name" content="www.lcabienesraices.com"/>
+            <link rel="canonical" href="https://lcabienesraices"/>
       </Head>
       <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />

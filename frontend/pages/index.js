@@ -47,7 +47,23 @@ const Home = ({ properties }) => {
         <meta name="description" content="Somos una inmobiliaria y vendemos propiedades, grandes, chicas, medianas, baratas, con vista o planos, nuestro fuerte son los terrenos en zona campestre, nos aseguramos que nuestras propiedades esten al margen de la ley y que tu estes lo mas informado posible."/>
         <meta name="facebook-domain-verification" content="ypixfr58fbk5xgf4f5h3p91upnzzm9" />
         <meta name="robots"  content="index,follow"/>
-        <meta http-equiv="refresh" content="200"/>
+
+         {/* Twitter */}
+            <meta name="twitter:card" content="producto"/>
+            <meta name="twitter:site" content="www.lcabienesraices.com"/>
+            <meta name="twitter:title" content="LCA Bienes Raices | Juntos por tu patrimonio"/>
+            <meta name="twitter:description" content="Somos una inmobiliaria y vendemos propiedades, grandes, chicas, medianas, baratas, con vista o planos, nuestro fuerte son los terrenos en zona campestre, nos aseguramos que nuestras propiedades esten al margen de la ley y que tu estes lo mas informado posible."/> 
+            <meta name="twitter:creator" content="@lcabienesraices"/>
+            <meta name="twitter:image" content="./main.png"/>
+
+            {/* <!-- Open Graph data --> */}
+            <meta property="og:title" content="LCA Bienes Raices | Juntos por tu patrimonio" /> 
+            <meta property="og:type" content="article" />
+            <meta property="og:url" content={`https://lcabienesraices.com`} />
+            <meta property="og:image" content="./main.png" />
+            <meta property="og:description" content="Somos una inmobiliaria y vendemos propiedades, grandes, chicas, medianas, baratas, con vista o planos, nuestro fuerte son los terrenos en zona campestre, nos aseguramos que nuestras propiedades esten al margen de la ley y que tu estes lo mas informado posible." />
+            <meta property="og:site_name" content="www.lcabienesraices.com" />
+            <link rel="canonical" href="https://lcabienesraices" />
     </Head>
     <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />

@@ -10,6 +10,7 @@ import { GET_PROPERTIES } from "../../graphql/queries";
 import OrderFilterPropertiesForm from '../../components/OrderFilterPropertiesForm';
 export default function AllPropertiesPage(props) {
 
+ 
    return (
     <div>
       <Head>

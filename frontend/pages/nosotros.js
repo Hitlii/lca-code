@@ -23,9 +23,24 @@ function Nosotros() {
   return (
     <div className={classes.root}>
       <Head>
-            <title>LCA - Nosotros</title>
+            <title>LCA Bienes Raices - Nosotros</title>
             <meta name="description" content="Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil, industrial y de sistemas"/>
             <meta name="robots"  content="index,follow"/>
+            {/* Twitter */}
+            <meta name="twitter:card" content="producto"/>
+            <meta name="twitter:site" content="www.lcabienesraices.com"/>
+            <meta name="twitter:title" content="LCA Bienes Raices | Nosotros"/>
+            <meta name="twitter:description" content="Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil, industrial y de sistemas"/> 
+            <meta name="twitter:creator" content="@lcabienesraices"/>
+
+            {/* <!-- Open Graph data --> */}
+            <meta property="og:title" content="LCA Bienes Raices | Nostros" /> 
+            <meta property="og:type" content="article" />
+            <meta property="og:url" content="https://lcabienesraices.com/nosotros" />
+            <meta property="og:description" content="Somos una agencia inmobiliaria y de asistencia profesional con amplio sentido de servicio, profesionalismo y atención personalizada en la búsqueda y obtención de tu patrimonio, así como en la promoción de tus bienes y asitencia en áreas de ingeniería civil, industrial y de sistemas" />
+            <meta property="og:site_name" content="www.lcabienesraices.com" />
+            <link rel="canonical" href="https://lcabienesraices/propiedad/nosotrosl" />
+            
       </Head>
       <Pixel name='FACEBOOK_PIXEL_1'/>
       <Navbar />

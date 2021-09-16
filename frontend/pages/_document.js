@@ -2,14 +2,14 @@ import React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 
+
+
 export default class MyDocument extends Document {
   render () {
     return (
       <Html lang="en" prefix="og: https://ogp.me/ns#">
         <Head>
-          {/* PWA primary color */}
-          <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black"/>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+         
 
           <link
             rel="stylesheet"
@@ -19,6 +19,23 @@ export default class MyDocument extends Document {
           <link 
           property="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
+          <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.googleAnalyticsKey}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.googleAnalyticsKey}', {
+            page_path: window.location.pathname,
+          });
+        `,
+          }}
+        />
         </Head>
         <body>
           <Main />
