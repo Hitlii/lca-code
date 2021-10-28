@@ -167,7 +167,7 @@ module.exports = {
             mongoFilter[key] = { $lte: maxArea, $gte: minArea }
             return
           }
-
+          
           mongoFilter[key] = filter[key]
         })
       }

@@ -250,6 +250,7 @@ export const GET_PROPERTY = gql`
       media {
         video
         images
+        image360
       }
       location {
         city
@@ -303,6 +304,7 @@ export const GET_PROPERTY = gql`
       }
       media {
         images
+        
       }
       meta {
         url

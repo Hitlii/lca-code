@@ -38,6 +38,7 @@ import { makeStyles } from "@material-ui/core/styles"
 
 // Google Analytics
 import * as ga from '../../lib/google-analytics'
+import { StylesContext } from '@material-ui/styles'
 
 
 const useStyles = makeStyles(({
@@ -154,7 +155,22 @@ const useStyles = makeStyles(({
     },
     a: {
         textDecoration: 'none'
-    }
+    },
+    virtualTour:{
+        width:"100%", 
+        height:800,
+        border:0,
+        overflow:"hidden",
+        borderRadius:15,
+
+    },
+    virtualTourContainer: {
+        position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        paddingBottom: "100%",
+        marginBottom: 20
+    },
 }))
 
 export default function SinglePropertyPage({ property, relatedProperties }){
@@ -296,23 +312,31 @@ export default function SinglePropertyPage({ property, relatedProperties }){
                     />
                     :
                     <> 
-                    <Typography style={{marginLeft: 10}} className={classes.socialMediaText}>
-                        Da clic en el mapa para activarlo!
-                    </Typography>
-                    <IconButton 
-                        className={classes.socialMediaButton}
-                        onClick={onClickMap}
-                    >
-                        <img
-                            width="100%"
-                            src='/dontChargeMeGoogleMaps.png'
-                            alt="Da click para activar el mapa"
-                            title="Click para activar el mapa"
-                        />
-                    </IconButton>
+                        <Typography style={{marginLeft: 10}} className={classes.socialMediaText}>
+                            Da clic en el mapa para activarlo!
+                        </Typography>
+                        <IconButton 
+                            className={classes.socialMediaButton}
+                            onClick={onClickMap}
+                        >
+                            <img
+                                width="100%"
+                                src='/dontChargeMeGoogleMaps.png'
+                                alt="Da click para activar el mapa"
+                                title="Click para activar el mapa"
+                            />
+                        </IconButton>
                     </>
                 }
             </div>
+            {property.media.image360 !== undefined&&<>
+                <div className={classes.iconDiv}>
+                    <Typography className={classes.iconText} id="recorrido360">Recorrido 360</Typography>
+                </div>
+                <div className={classes.virtualTourContainer}>
+                    <iframe src={property.media.image360} allowFullScreen frameBorder="0" scrolling="no" className={classes.video}> <p> Your browser doesn't support iframes </p> </iframe>
+                </div>
+            </>}
             {/* Contact Button */}
             <Link href= {`https://api.whatsapp.com/send?phone=526653926857&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} onClick={()=> contact()} passHref>
                 <a target='_blank'>

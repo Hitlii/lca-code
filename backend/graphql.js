@@ -76,7 +76,6 @@ const server = new ApolloServer({
     if (!err.originalError) {
       return err
     }
-    console.log(err)
     // Returning our own errors
     const data = err.originalError.data
     const message = err.message || 'An error ocurred'
@@ -105,13 +104,13 @@ const server = new ApolloServer({
 
 
 //Production
-  const handler = server.createHandler({
-    cors: {
-      origin: "https://studio.apollographql.com",
-      credentials: true,
-      methods:"POST"
-    },
-  });
+const handler = server.createHandler({
+  cors: {
+    origin: "https://studio.apollographql.com",
+    credentials: true,
+    methods:"POST GET"
+  },
+});
 
 
 exports.graphqlHandler = handler

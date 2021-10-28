@@ -130,6 +130,8 @@ module.exports = gql`
         images: [String!]
         "Video of the property, should be a youtube URL"
         video: String
+        "Image360"
+        image360:String
     }
 
     "Metadescriptor Input"
@@ -312,6 +314,8 @@ module.exports = gql`
         images: [String!]
         "Video of the property, should be a youtube URL"
         video: String
+        "Image360"
+        image360:String
     }
 
     "Property and related properties when we query getProperty"
