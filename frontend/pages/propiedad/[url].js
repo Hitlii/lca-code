@@ -334,13 +334,14 @@ export default function SinglePropertyPage({ property, relatedProperties }){
             </div>
         
             {/* Contact Button */}
+            {property.media.image360 !== "" && <>
             <Link href={property.media.image360} passHref onClick={()=> virtualTour()}>
                 <a target='_blank' id="recorrido-360">
                     <Button fullWidth variant="contained" className={classes.button360}>
                         Ver Recorrido 360
                     </Button>
                 </a>
-            </Link>
+            </Link></>}
             <Link href= {`https://api.whatsapp.com/send?phone=526653926857&text=Hola,%20me%20interesa%20esta%20propiedad%20https://lcabienesraices.com/propiedad/${property.meta.url}`} onClick={()=> contact()} passHref>
                 <a target='_blank'>
                     <GreenLgButton>Contactar</GreenLgButton>
